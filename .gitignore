@@ -1,0 +1,14 @@
+# Jekyll build output
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+
+# Original draft files
+*.odt
+*.txt
+
+# OS files
+.DS_Store
+Thumbs.db
