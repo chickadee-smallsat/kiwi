@@ -307,7 +307,7 @@ body {
 
 .manual-sheet {
   width: min(1080px, calc(100% - 2rem));
-  margin: 1.5rem auto 4rem;
+  margin: 1.5rem auto 0;
   padding: clamp(1.5rem, 3vw, 3rem);
   border: 1px solid var(--sheet-border);
   border-radius: 2rem;
@@ -316,6 +316,14 @@ body {
   position: relative;
   z-index: 1;
   backdrop-filter: blur(10px);
+}
+
+.manual-sheet + .manual-sheet {
+  margin-top: 2rem;
+}
+
+.manual-sheet:last-of-type {
+  margin-bottom: 4rem;
 }
 
 .manual-sheet h1,

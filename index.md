@@ -20,8 +20,6 @@ layout: default
 
 <section class="manual-sheet" id="manual-start" markdown="1">
 
---- 
-
 # Description
 
 Kiwi is a small and compact satellite that combines multiple sensors, radios and data storage solutions on a single printed circuit board (PCB).
@@ -41,9 +39,9 @@ Please look at the contact information section towards the end if you're interes
 > Use caution while handling.
 {: .callout-warning }
 
----
+</section>
 
---- 
+<section class="manual-sheet" markdown="1">
 
 # TABLE OF CONTENTS
 {: .no_toc }
@@ -51,11 +49,9 @@ Please look at the contact information section towards the end if you're interes
 * TOC
 {:toc}
 
----
+</section>
 
-
-
----
+<section class="manual-sheet" markdown="1">
 
 # Materials / Equipment Required
 
@@ -63,9 +59,9 @@ Please look at the contact information section towards the end if you're interes
 - A USB-micro B cable (bring-your-own) to power the Kiwi
 - A personal computer (desktop, laptop, MacBook or iMac, etc., bring-your-own) to view data coming from the Kiwi
 
----
+</section>
 
----
+<section class="manual-sheet" markdown="1">
 
 # Get to know your Kiwi
 
@@ -79,9 +75,9 @@ The following sections will introduce you to various parts of a Kiwi - some that
 
 ### The Firmware
 
----
+</section>
 
----
+<section class="manual-sheet" markdown="1">
 
 # Powering up your Kiwi
 
@@ -109,13 +105,19 @@ The following sections will introduce you to various parts of a Kiwi - some that
 >   - Contact us.
 {: .callout-tip }
 
+</section>
+
+<section class="manual-sheet" markdown="1">
+
 # Connecting to Kiwi
 
 By default, Kiwi transmits data through the self-hosted `kiwi-ap` WiFi access point.
 To receive measurements from your Kiwi, you will need to use a WiFi-enabled computer. 
 After the data visualization tool, Kiwi Plotter, has been set up on your computer, connect your computer to the `kiwi-ap` WiFi access point.
 
+</section>
 
+<section class="manual-sheet" markdown="1">
 
 # Configuring your Kiwi
 
@@ -287,16 +289,14 @@ Then type in “help” to get help.
     const nextBtn = document.getElementById("anchor-next");
     const prevLabel = prevBtn?.querySelector(".anchor-nav__label");
     const nextLabel = nextBtn?.querySelector(".anchor-nav__label");
-    const sheet = document.querySelector(".manual-sheet");
-
-    if (!prevBtn || !nextBtn || !prevLabel || !nextLabel || !sheet) {
+    if (!prevBtn || !nextBtn || !prevLabel || !nextLabel) {
       return;
     }
 
     prevBtn.dataset.label = prevLabel.textContent || "";
     nextBtn.dataset.label = nextLabel.textContent || "";
 
-    const getAnchors = () => Array.from(sheet.querySelectorAll("h1[id], h2[id], h3[id], h4[id]")).filter(Boolean);
+    const getAnchors = () => Array.from(document.querySelectorAll(".manual-sheet h1[id], .manual-sheet h2[id], .manual-sheet h3[id], .manual-sheet h4[id]")).filter(Boolean);
 
     const setButtonLabel = (btn, labelNode, nextValue) => {
       const label = (nextValue || "").trim();
