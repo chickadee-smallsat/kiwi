@@ -20,7 +20,7 @@ layout: default
 
 <section class="manual-sheet" id="manual-start" markdown="1">
 
-### Description
+# Description
 
 Kiwi is a small and compact satellite that combines multiple sensors, radios and data storage solutions on a single printed circuit board (PCB).
 It is designed to be accessible, programmable, and easily customizable through custom expansion boards.
@@ -41,7 +41,7 @@ Please look at the contact information section towards the end if you're interes
 
 --- 
 
-## TABLE OF CONTENTS
+# TABLE OF CONTENTS
 {: .no_toc }
 
 * TOC
@@ -53,7 +53,7 @@ Please look at the contact information section towards the end if you're interes
 
 ---
 
-## Materials / Equipment Required
+# Materials / Equipment Required
 
 - The Kiwi satellite (provided)
 - A USB-micro B cable (bring-your-own) to power the Kiwi
@@ -97,12 +97,13 @@ The following sections will introduce you to various parts of a Kiwi - some that
   At this point, the Kiwi is turned on, and by default, creates an open WiFi access point called `kiwi-ap`.
   Kiwi broadcasts various sensor measurements over WiFi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
 
-#### Troubleshooting
-- Give it up to a minute for the WiFi network to show up.
-- If the default `kiwi-ap` network does not show up, disconnect and reconnect the device.
-- If the problem persists,
-  - Optionally short the `PWLED_EN` jumper to verify both the red (5V power) and green (3.3V power) LEDs are lighting up.
-  - Contact us.
+> **Troubleshooting**
+> - Give it up to a minute for the WiFi network to show up.
+> - If the default `kiwi-ap` network does not show up, disconnect and reconnect the device.
+> - If the problem persists,
+>   - Optionally short the `PWLED_EN` jumper to verify both the red (5V power) and green (3.3V power) LEDs are lighting up.
+>   - Contact us.
+{: .callout-tip }
 
 # Connecting to Kiwi
 
@@ -126,6 +127,9 @@ The built-in firmware supports changing the WiFi settings, and updating the uniq
 Depending on your operating system, use the links in the following table to get the correct version of CoolTerm.
 For most users, the first (Windows users) and second (Mac users) should be sufficient.
 
+
+<p class="table-caption">Table 1. CoolTerm download options by platform and CPU architecture.</p>
+
 |--|--|
 | Computer | Operating System | Architecture | Link |
 |--|--|
@@ -133,14 +137,16 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 | MacBook / iMac | macOS (Universal) | `x86_64` / `arm64` | [Link](https://freeware.the-meiers.org/CoolTermMac.dmg) |
 | Windows PC / Laptop (before 2010) | Windows 32-bit | `x86` / `i686` | [Link](https://freeware.the-meiers.org/CoolTermWin32Bit.zip) |
 | Windows PC / Laptop with Snapdragon Chip | Windows ARM64 | `arm64` | [Link](https://freeware.the-meiers.org/CoolTermWinARM64Bit.zip) |
-| Linux PC / Laptop | -- | -- | [32-bit](https://freeware.the-meiers.org/CoolTermLinux32Bit.zip) [64-bit](https://freeware.the-meiers.org/CoolTermLinux64Bit.zip) |
-| Raspberry Pi | -- | -- | [32-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi.zip) [64-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi64Bit.zip) |
+| Linux PC / Laptop | Linux | `x86` / `x86_64` | [32-bit](https://freeware.the-meiers.org/CoolTermLinux32Bit.zip) [64-bit](https://freeware.the-meiers.org/CoolTermLinux64Bit.zip) |
+| Raspberry Pi | Linux | `armv7` / `arm64` | [32-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi.zip) [64-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi64Bit.zip) |
+
 
 
 ### Windows PC
 
 ## Available Commands
-### `help`
+
+#### `help`
 
 ## Configuring Kiwi on a Windows PC
 Before you can configure the Kiwi using your connected Windows PC (or laptop), you need to obtain a piece of software that allows your computer to communicate with serial devices, called [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html).
@@ -259,5 +265,160 @@ to log into your Mac.
 Then type in “help” to get help.
 
 </section>
+
+<nav class="anchor-nav" aria-label="Section navigation">
+  <button type="button" class="anchor-nav__btn anchor-nav__btn--prev" id="anchor-prev" aria-label="Go to previous section">
+    <span class="anchor-nav__icon" aria-hidden="true">◀</span>
+    <span class="anchor-nav__label">Previous section</span>
+  </button>
+  <button type="button" class="anchor-nav__btn anchor-nav__btn--next" id="anchor-next" aria-label="Go to next section">
+    <span class="anchor-nav__label">Next section</span>
+    <span class="anchor-nav__icon" aria-hidden="true">▶</span>
+  </button>
+</nav>
+
+<script>
+  (() => {
+    const prevBtn = document.getElementById("anchor-prev");
+    const nextBtn = document.getElementById("anchor-next");
+    const prevLabel = prevBtn?.querySelector(".anchor-nav__label");
+    const nextLabel = nextBtn?.querySelector(".anchor-nav__label");
+    const sheet = document.querySelector(".manual-sheet");
+
+    if (!prevBtn || !nextBtn || !prevLabel || !nextLabel || !sheet) {
+      return;
+    }
+
+    prevBtn.dataset.label = prevLabel.textContent || "";
+    nextBtn.dataset.label = nextLabel.textContent || "";
+
+    const getAnchors = () => Array.from(sheet.querySelectorAll("h1[id], h2[id], h3[id], h4[id]")).filter(Boolean);
+
+    const setButtonLabel = (btn, labelNode, nextValue) => {
+      const label = (nextValue || "").trim();
+      if ((btn.dataset.label || "") === label) {
+        return;
+      }
+
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReduced) {
+        labelNode.textContent = label;
+        btn.dataset.label = label;
+        return;
+      }
+
+      const startHeight = btn.getBoundingClientRect().height;
+      btn.style.height = `${startHeight}px`;
+      btn.classList.add("is-morphing");
+
+      requestAnimationFrame(() => {
+        labelNode.textContent = label;
+        btn.dataset.label = label;
+        const endHeight = btn.scrollHeight;
+        btn.style.height = `${endHeight}px`;
+      });
+
+      const cleanup = (event) => {
+        if (event.propertyName !== "height") {
+          return;
+        }
+        btn.style.removeProperty("height");
+        btn.classList.remove("is-morphing");
+        btn.removeEventListener("transitionend", cleanup);
+      };
+
+      btn.addEventListener("transitionend", cleanup);
+    };
+
+    const labelForAnchor = (el) => {
+      if (!el) {
+        return "";
+      }
+      return (el.textContent || "").replace(/\s+/g, " ").trim();
+    };
+
+    const goToAnchor = (el) => {
+      if (!el || !el.id) {
+        return;
+      }
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "start" });
+      history.replaceState(null, "", `#${el.id}`);
+    };
+
+    const currentIndex = (anchors) => {
+      const triggerLine = 140;
+      let idx = 0;
+      for (let i = 0; i < anchors.length; i += 1) {
+        if (anchors[i].getBoundingClientRect().top <= triggerLine) {
+          idx = i;
+        } else {
+          break;
+        }
+      }
+      return idx;
+    };
+
+    const refreshState = () => {
+      const desktop = window.matchMedia("(min-width: 901px)").matches;
+      if (!desktop) {
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        setButtonLabel(prevBtn, prevLabel, "Previous section");
+        setButtonLabel(nextBtn, nextLabel, "Next section");
+        prevBtn.dataset.targetId = "";
+        nextBtn.dataset.targetId = "";
+        return;
+      }
+
+      const anchors = getAnchors();
+      const idx = currentIndex(anchors);
+      const prevTarget = idx > 0 ? anchors[idx - 1] : null;
+      const nextTarget = idx < anchors.length - 1 ? anchors[idx + 1] : null;
+
+      prevBtn.disabled = false;
+      nextBtn.disabled = !nextTarget;
+      prevBtn.dataset.targetId = prevTarget ? prevTarget.id : "--top--";
+      nextBtn.dataset.targetId = nextTarget ? nextTarget.id : "";
+      setButtonLabel(prevBtn, prevLabel, prevTarget ? labelForAnchor(prevTarget) : "Start");
+      setButtonLabel(nextBtn, nextLabel, nextTarget ? labelForAnchor(nextTarget) : "End");
+      prevBtn.setAttribute("aria-label", prevTarget ? `Go to ${labelForAnchor(prevTarget)}` : "Go to cover page");
+      nextBtn.setAttribute("aria-label", nextTarget ? `Go to ${labelForAnchor(nextTarget)}` : "No next section");
+    };
+
+    let refreshQueued = false;
+    const scheduleRefresh = () => {
+      if (refreshQueued) {
+        return;
+      }
+      refreshQueued = true;
+      requestAnimationFrame(() => {
+        refreshQueued = false;
+        refreshState();
+      });
+    };
+
+    prevBtn.addEventListener("click", () => {
+      if (prevBtn.dataset.targetId === "--top--") {
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        window.scrollTo({ top: 0, behavior: prefersReduced ? "auto" : "smooth" });
+        history.replaceState(null, "", window.location.pathname);
+        return;
+      }
+      const target = document.getElementById(prevBtn.dataset.targetId || "");
+      goToAnchor(target);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      const target = document.getElementById(nextBtn.dataset.targetId || "");
+      goToAnchor(target);
+    });
+
+    window.addEventListener("scroll", scheduleRefresh, { passive: true });
+    window.addEventListener("resize", scheduleRefresh);
+    window.addEventListener("load", scheduleRefresh);
+    scheduleRefresh();
+  })();
+</script>
 
 
