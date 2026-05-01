@@ -3,58 +3,43 @@ title: "Kiwi: The Single-Board Satellite Manual"
 layout: default
 ---
 
-Written by: Naira Poleo Sanchez
+<section class="cover-hero" aria-labelledby="cover-title">
+  <div class="cover-hero__panel">
+    <p class="cover-hero__eyebrow">Kiwi Manual</p>
+    <h1 id="cover-title" class="cover-hero__word">KIWI</h1>
+    <p class="cover-hero__subtitle">Single-Board Satellite</p>
+  </div>
+  <a class="cover-hero__scroll" href="#manual-start">Enter manual</a>
+</section>
 
-Supervised by: Sunip K. Mukherjee
-
-
----
-
-# Kiwi: The Single-Board Satellite Manual
-
+<section class="manual-sheet" id="manual-start" markdown="1">
 
 ### Description
 
-The Kiwi: Single-Board Satellite is a small and compact satellite
-mainboard that contains multiple functions mainly made for tabletop
-experiments and other educational purposes for people interested in STEM
-related activities or careers. It is made for teens & adults, and it is
-accessible in windows and iOS desktop devices (laptops and/or PCs).
+Kiwi is a small and compact satellite that combines multiple sensors, radios and data storage solutions on a single printed circuit board (PCB).
+It is designed to be accessible, programmable, and easily customizable through custom expansion boards.
+Kiwi primarily designed for tabletop experiments, to be used as a tool in STEM education.
 
-This is a manual made easy to follow for people with some knowledge of
-technology and science. It will be split into multiple sections
-depending on the level of knowledge someone has such as
-beginner/intermediate level and advanced level. Please look at the
-contact information section towards the end if you’re interested in any
-further information or have questions!
+This document introduces Kiwi, and the functions it provides out-of-the-box.
+
+This is a manual made easy to follow for people with some knowledge of technology and science.
+Please look at the contact information section towards the end if you're interested in any further information or have questions!
 
 ### WARNINGS & Safety Measures!
 
 Electrical devices connected to this product cannot be near any liquids
-and/or certain temperature environments as it can cause internal or
+and/or high temperature environments (above 85°C, 185°F) as it can cause internal or
 external damage to the product, your device connected to the product,
-and/or even yourself. This is a low powered product and cannot exceed 3V
-of power (further information in section “key functions” and/or inside
-one of the “contact information” links).
-
+and/or even yourself. Kiwi is designed primarily to be powered over USB (5V), consuming
+around 250 mW of power.
 
 --- 
 
-### TABLE OF CONTENTS
+## TABLE OF CONTENTS
+{: .no_toc }
 
-| Section | Page |
-|---|---|
-| Title & Description | 1 |
-| Warnings & Safety Measures | 1 |
-| Materials / Equipment required | 2 |
-| Step by Step Installation Process (Part 1) — Windows Version | 3 |
-| Step by Step Installation Process (Part 1) — Mac Version | 9 |
-| Step by Step Installation Process (Part 2) — Windows Version | — |
-| Step by Step Installation Process (Part 2) — Mac Version | — |
-| Key Functions | — |
-| Troubleshooting | — |
-| Contact Information | — |
-| References / Citations | — |
+* TOC
+{:toc}
 
 ---
 
@@ -62,39 +47,93 @@ one of the “contact information” links).
 
 ---
 
-### MATERIALS / EQUIPMENT REQUIRED!
+## Materials / Equipment Required
 
-- Kiwi satellite mainboard (This is provided)
-- A laptop, pc, and/or a desktop device (This is NOT provided)
+- The Kiwi satellite (provided)
+- A USB-micro B cable (bring-your-own) to power the Kiwi
+- A personal computer (desktop, laptop, MacBook or iMac, etc., bring-your-own) to view data coming from the Kiwi
 
 ---
 
+---
+
+# Get to know your Kiwi
+
+### The Hardware
+
+### The Firmware
+
+### Data Visualization
+
+---
+
+---
+
+# Powering up your Kiwi
+
+-  Locate the USB port on your computer. 
+
+  ![USB port on a computer](assets/computer%20usb%20port%20-%20cropped.png)
+
+  ![USB Type-A to Micro-B cable](assets/kiwi-manual-media/media/image3.png)
+
+- Plug in the USB-A side of the cable into the computer's USB Port. 
+  Connect the micro-B side into the Kiwi (as shown).
+
+  ![USB cable plugged into computer](assets/kiwi-manual-media/media/image4.jpeg)
+
+  ![Micro-B cable plugged into Kiwi board](assets/kiwi-manual-media/media/image5.jpeg)
+
+  At this point, the Kiwi is turned on, and by default, creates an open WiFi access point called `kiwi-ap`.
+  Kiwi broadcasts various sensor measurements over WiFi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
+
+#### Troubleshooting
+- Give it up to a minute for the WiFi network to show up.
+- If the default `kiwi-ap` network does not show up, disconnect and reconnect the device.
+- If the problem persists,
+  - Optionally short the `PWLED_EN` jumper to verify both the red (5V power) and green (3.3V power) LEDs are lighting up.
+  - Contact us.
+
+# Connecting to Kiwi
+
+By default, Kiwi transmits data through the self-hosted `kiwi-ap` WiFi access point.
+To receive measurements from your Kiwi, you will need to use a WiFi-enabled computer. 
+After the data visualization tool, Kiwi Plotter, has been set up on your computer, connect your computer to the `kiwi-ap` WiFi access point.
 
 
 
-### Step by Step Installation Process (Part 1) — Windows Version
+# Configuring your Kiwi
 
- *Step 1a)* Make sure your device has a USB Port. 
+Kiwi exposes a simple configuration interface over [universal serial asynchronous receiver-transmitter (UART)](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter), better known as a ['serial port'](https://en.wikipedia.org/wiki/Serial_communication).
+This serial port is accessible to the computer connected to Kiwi over the USB port.
+The configuration interfaces uses text commands to configure the Kiwi.
+The built-in firmware supports changing the WiFi settings, and updating the unique identifier of the Kiwi (`Kiwi#XXXX` by default).
 
-![USB port on a computer](assets/computer%20usb%20port%20-%20cropped.png)
+## Connecting to Serial Port
 
-Also, you must either buy or have your own USB cable A/microb (as it
-is not provided). This is required for you to take the following
-steps!
+### CoolTerm
+[CoolTerm](https://freeware.the-meiers.org/) is a free software that provides an interface to communicate with a device over the serial port.
+Depending on your operating system, use the links in the following table to get the correct version of CoolTerm.
+For most users, the first (Windows users) and second (Mac users) should be sufficient.
 
-![USB Type-A to Micro-B cable](assets/kiwi-manual-media/media/image3.png)
+|--|--|
+| Computer | Operating System | Architecture | Link |
+|--|--|
+| Windows PC / Laptop | Windows 64-bit | `x86_64` | [Link](https://freeware.the-meiers.org/CoolTermWin64Bit.zip) |
+| MacBook / iMac | macOS (Universal) | `x86_64` / `arm64` | [Link](https://freeware.the-meiers.org/CoolTermMac.dmg) |
+| Windows PC / Laptop (before 2010) | Windows 32-bit | `x86` / `i686` | [Link](https://freeware.the-meiers.org/CoolTermWin32Bit.zip) |
+| Windows PC / Laptop with Snapdragon Chip | Windows ARM64 | `arm64` | [Link](https://freeware.the-meiers.org/CoolTermWinARM64Bit.zip) |
+| Linux PC / Laptop | -- | -- | [32-bit](https://freeware.the-meiers.org/CoolTermLinux32Bit.zip) [64-bit](https://freeware.the-meiers.org/CoolTermLinux64Bit.zip) |
+| Raspberry Pi | -- | -- | [32-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi.zip) [64-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi64Bit.zip) |
 
 
+### Windows PC
 
+## Available Commands
+### `help`
 
-*Step 1b)* Plug in the cable-A side into the computer’s USB Port and connect the
-micro b side into the kiwi main board (as shown in the following images) 
-
-![USB cable plugged into computer](assets/kiwi-manual-media/media/image4.jpeg)
-
-![Micro-B cable plugged into Kiwi board](assets/kiwi-manual-media/media/image5.jpeg)
-
-
+## Configuring Kiwi on a Windows PC
+Before you can configure the Kiwi using your connected Windows PC (or laptop), you need to obtain a piece of software that allows your computer to communicate with serial devices, called [PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html).
 *Step 2*: Go to the website Putty.org
 
 ![PuTTY website homepage](assets/kiwi-manual-media/media/image6.png)
@@ -208,5 +247,7 @@ to log into your Mac.
 
 
 Then type in “help” to get help.
+
+</section>
 
 
