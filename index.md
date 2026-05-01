@@ -5,9 +5,15 @@ layout: default
 
 <section class="cover-hero" aria-labelledby="cover-title">
   <div class="cover-hero__panel">
-    <p class="cover-hero__eyebrow">Kiwi Manual</p>
-    <h1 id="cover-title" class="cover-hero__word">KIWI</h1>
-    <p class="cover-hero__subtitle">Single-Board Satellite</p>
+    <div class="cover-hero__topline">
+      <h1 id="cover-title" class="cover-hero__word">KIWI</h1>
+      <p class="cover-hero__title-block">The<br>Single-board<br>Satellite</p>
+    </div>
+    <div class="cover-hero__artframe" aria-hidden="true">
+      <div class="cover-hero__artbackdrop"></div>
+      <img class="cover-hero__bird" src="{{ '/assets/backdrop/logo-with-wire.png' | relative_url }}" alt="">
+    </div>
+    <p class="cover-hero__manual">MANUAL</p>
   </div>
   <a class="cover-hero__scroll" href="#manual-start">Enter manual</a>
 </section>
