@@ -65,11 +65,14 @@ around 250 mW of power.
 
 # Get to know your Kiwi
 
+Kiwi is a single-board satellite.
+Meaning, it is a single, printed-circuit board (PCB) with different components attached to it that perform different functions.
+The following sections will introduce you to various parts of a Kiwi - some that are visible, and some that are not.
+
 ### The Hardware
 
 ### The Firmware
 
-### Data Visualization
 
 ---
 

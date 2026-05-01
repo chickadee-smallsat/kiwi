@@ -64,8 +64,8 @@ body {
   background: var(--cover-panel);
   box-shadow: var(--shadow);
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: clamp(0.1rem, 0.45vw, 0.3rem);
+  grid-template-rows: 1fr 2fr 1fr;
+  gap: 0;
   overflow: hidden;
   position: relative;
   isolation: isolate;
@@ -83,8 +83,8 @@ body {
 .cover-hero__topline {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: clamp(0.75rem, 2vw, 1.5rem);
-  align-items: start;
   justify-self: center;
   width: fit-content;
   margin-top: 0;
@@ -184,8 +184,12 @@ body {
   z-index: 2;
   width: 100%;
   text-align: center;
-  transform: scaleY(1.6);
-  transform-origin: top center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  transform: scaleY(2.0) translateY(18px);
+  transform-origin: center center;
 }
 
 .cover-hero__scroll {
