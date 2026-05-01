@@ -1,0 +1,22 @@
+5147.260270 [INFO ] Data rate: 22.90005 kbps, Packet rate: 122.1336/s (<crate> └─ <invalid location: defmt frame-index: 19>:0)
+5149.266225 [INFO ] Data rate: 22.817953 kbps, Packet rate: 121.695755/s (<crate> └─ <invalid location: defmt frame-index: 19>:0)
+5152.012263 [ERROR] Task wifi_task_spawner has starved the watchdog (<crate> └─ <invalid location: defmt frame-index: 104>:0)
+5154.012257 [ERROR] Task wifi_task_spawner has starved the watchdog (<crate> └─ <invalid location: defmt frame-index: 104>:0)
+Firmware exited unexpectedly: Exception
+Core 0
+    Frame 0: {"package":"smoltcp","tag":"defmt_write","data":"{}/{=u8}","disambiguator":"12453413938308011855","crate_name":"smoltcp"} @ 0x000000a0> @ 0x00000000000000a0
+
+Core 1
+    Frame 0: {"package":"smoltcp","tag":"defmt_write","data":"{}/{=u8}","disambiguator":"12453413938308011855","crate_name":"smoltcp"} @ 0x000001c6> @ 0x00000000000001c6
+
+Error: Exception
+❯ probe-rs attach ../../target/thumbv8m.main-none-eabihf/release/ap-udp-demo
+ WARN probe_rs::util::rtt::processing: Insufficient DWARF info; compile your program with `debug = 2` to enable location info.
+0.019762 [INFO ] Kiwi Mainboard Demo FW starting up... (<crate> └─ <invalid location: defmt frame-index: 39>:0)
+0.019830 [INFO ] Reset due to hardware watchdog timeout (<crate> └─ <invalid location: defmt frame-index: 40>:0)
+0.031790 [INFO ] Watchdog started (<crate> └─ <invalid location: defmt frame-index: 45>:0)
+0.080421 [INFO ] Wi-Fi firmware and CLM verified (<crate> └─ <invalid location: defmt frame-index: 32>:0)
+0.081281 [INFO ] Device credentials loaded from flash: DeviceConfig { wifi: Client Mode: SSID='"Kiwi-50-Base0"', Password='"uvnulling"', ident: "Kiwi#0010" } (<crate> └─ <invalid location: defmt frame-index: 20>:0)
+0.081427 [INFO ] Wi-Fi PIO initialized (<crate> └─ <invalid location: defmt frame-index: 28>:0)
+0.081565 [INFO ] Wi-Fi SPI initialized (<crate> └─ <invalid location: defmt frame-index: 29>:0)
+0.081861 [INFO ] Wi-Fi state initialized (<crate> └─ <invalid location: defmt frame-index: 35>:0)

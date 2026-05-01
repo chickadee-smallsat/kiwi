@@ -346,7 +346,8 @@ Then type in “help” to get help.
         return;
       }
       const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      el.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "start" });
+      const scrollTarget = (el.tagName === "H1" && el.closest(".manual-sheet")) ? el.closest(".manual-sheet") : el;
+      scrollTarget.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "start" });
       history.replaceState(null, "", `#${el.id}`);
     };
 
