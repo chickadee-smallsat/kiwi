@@ -49,16 +49,16 @@ body {
 }
 
 .cover-hero {
-  min-height: 100svh;
+  height: 100svh;
   display: grid;
   place-items: center;
-  padding: 3rem 1.5rem 6rem;
+  padding: 2rem 1.5rem;
   position: relative;
 }
 
 .cover-hero__panel {
   width: min(1080px, calc(100% - 2rem));
-  min-height: min(88svh, 980px);
+  min-height: min(calc(100svh - 4rem), 960px);
   padding: clamp(0.45rem, 1.2vw, 0.9rem) clamp(0.7rem, 1.6vw, 1.2rem);
   border-radius: 2rem;
   background: var(--cover-panel);
@@ -307,7 +307,7 @@ body {
 
 .manual-sheet {
   width: min(1080px, calc(100% - 2rem));
-  margin: -4rem auto 4rem;
+  margin: 1.5rem auto 4rem;
   padding: clamp(1.5rem, 3vw, 3rem);
   border: 1px solid var(--sheet-border);
   border-radius: 2rem;

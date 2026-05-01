@@ -20,6 +20,8 @@ layout: default
 
 <section class="manual-sheet" id="manual-start" markdown="1">
 
+--- 
+
 # Description
 
 Kiwi is a small and compact satellite that combines multiple sensors, radios and data storage solutions on a single printed circuit board (PCB).
@@ -38,6 +40,8 @@ Please look at the contact information section towards the end if you're interes
 > Kiwi is an exposed PCB, with electronic components sensitive to static discharge.
 > Use caution while handling.
 {: .callout-warning }
+
+---
 
 --- 
 
@@ -348,7 +352,7 @@ Then type in “help” to get help.
 
     const currentIndex = (anchors) => {
       const triggerLine = 140;
-      let idx = 0;
+      let idx = -1;
       for (let i = 0; i < anchors.length; i += 1) {
         if (anchors[i].getBoundingClientRect().top <= triggerLine) {
           idx = i;
@@ -374,7 +378,7 @@ Then type in “help” to get help.
       const anchors = getAnchors();
       const idx = currentIndex(anchors);
       const prevTarget = idx > 0 ? anchors[idx - 1] : null;
-      const nextTarget = idx < anchors.length - 1 ? anchors[idx + 1] : null;
+      const nextTarget = idx < anchors.length - 1 ? anchors[idx + 1] : (idx === -1 ? anchors[0] : null);
 
       prevBtn.disabled = false;
       nextBtn.disabled = !nextTarget;
