@@ -31,13 +31,13 @@ This document introduces Kiwi, and the functions it provides out-of-the-box.
 This is a manual made easy to follow for people with some knowledge of technology and science.
 Please look at the contact information section towards the end if you're interested in any further information or have questions!
 
-### WARNINGS & Safety Measures!
-
-Electrical devices connected to this product cannot be near any liquids
-and/or high temperature environments (above 85°C, 185°F) as it can cause internal or
-external damage to the product, your device connected to the product,
-and/or even yourself. Kiwi is designed primarily to be powered over USB (5V), consuming
-around 250 mW of power.
+> **WARNINGS & Safety Measures**
+> Electrical devices connected to Kiwi cannot be near any liquids and/or high temperature environments (above 85°C, 185°F) as it can cause internal or external damage to the Kiwi, your device connected to the Kiwi, and/or even yourself.
+> Kiwi is designed primarily to be powered over USB (5V), consuming around 250 mW of power.
+> 
+> Kiwi is an exposed PCB, with electronic components sensitive to static discharge.
+> Use caution while handling.
+{: .callout-warning }
 
 --- 
 
@@ -71,8 +71,9 @@ The following sections will introduce you to various parts of a Kiwi - some that
 
 ### The Hardware
 
-### The Firmware
 
+
+### The Firmware
 
 ---
 
@@ -82,9 +83,9 @@ The following sections will introduce you to various parts of a Kiwi - some that
 
 -  Locate the USB port on your computer. 
 
-  ![USB port on a computer](assets/computer%20usb%20port%20-%20cropped.png)
+  ![USB port on a computer](assets/media/computer-usb-port.png)
 
-  ![USB Type-A to Micro-B cable](assets/kiwi-manual-media/media/image3.png)
+  ![USB Type-A to Micro-B cable](assets/media/usb-a-micro-b-cable.png)
 
 - Plug in the USB-A side of the cable into the computer's USB Port. 
   Connect the micro-B side into the Kiwi (as shown).
