@@ -108,16 +108,16 @@ A [MicroPython](https://micropython.org/) interpreter is also available for the 
 
 -  Locate the USB port on your computer. 
 
-  ![USB port on a computer](assets/media/computer-usb-port.png){: #fig-usb-port-pc style="filter: invert(1)" }
+  ![USB port on a computer](assets/media/computer-usb-port.png){: #fig-usb-port-pc style="filter: invert(1); width: 40%" }
 
-  ![USB Type-A to Micro-B cable](assets/media/usb-a-micro-b-cable.png){: #fig-usb-cable style="filter: invert(1)" }
+  ![USB Type-A to Micro-B cable](assets/media/usb-a-micro-b-cable.png){: #fig-usb-cable style="filter: invert(1); width: 40%" }
 
 - Plug in the USB-A side of the cable into the computer's USB Port (<a href="#fig-usb-plugged-pc" class="figref"></a>).
   Connect the micro-B side into the Kiwi (as shown in <a href="#fig-usb-plugged-kiwi" class="figref"></a>).
 
-  ![USB cable plugged into computer](assets/media/pc-usb-plugged.jpeg){: #fig-usb-plugged-pc style="width: 80%" }
+  ![USB cable plugged into computer](assets/media/pc-usb-plugged.jpeg){: #fig-usb-plugged-pc style="width: 60%" }
 
-  ![Micro-B cable plugged into Kiwi board](assets/media/kiwi-usb-plugged.jpeg){: #fig-usb-plugged-kiwi style="width: 78%" }
+  ![Micro-B cable plugged into Kiwi board](assets/media/kiwi-usb-plugged.jpeg){: #fig-usb-plugged-kiwi style="width: 60%" }
 
   At this point, the Kiwi is turned on, and by default, creates an open WiFi access point called `kiwi-ap`.
   Kiwi broadcasts various sensor measurements over WiFi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
@@ -183,6 +183,18 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
   On first launch, you will be prompted to set up the preferences for CoolTerm.
   Use the default settings (press "Use Defaults" button).
   ![Opening CoolTerm on Mac](assets/media/coolterm-mac-startup.png){: style="width: 40%" }
+- After CoolTerm opens, click on "▼" on the left of the bottom bar.
+- Select the serial port that corresponds to your Kiwi (e.g., `usbmodem2025_0011`) under "Port".
+- In the "▼" menu, click "Connect" to connect to the Kiwi serial port.
+- Hit the `Return` key. You should see a prompt that looks like `> `, which indicates you are connected to the Kiwi serial console.
+- Type `help` and hit `Return` to see the list of available commands.
+
+<figure style="width: 80%; margin: 1.5rem auto">
+  <video controls style="width: 100%; margin: 0; border-radius: 1rem">
+    <source src="{{ '/assets/media/coolterm-mac-connect.mp4' | relative_url }}" type="video/mp4">
+  </video>
+  <figcaption>Connecting to the Kiwi serial port on macOS using CoolTerm.</figcaption>
+</figure>
 
 ### Windows PC
 

@@ -1248,8 +1248,11 @@ function linkify(text) {
       if (m) return '<a href="' + esc(m[1]) + '" target="_blank" rel="noopener">' + esc(m[2]) + '<\/a>';
       return esc(part);
     }
-    return part.split(/(https?:\\/\\/[^\\s<>"]+)/).map(function(p, j) {
-      return j % 2 === 1 ? '<a href="' + esc(p) + '" target="_blank" rel="noopener">' + esc(p) + '<\/a>' : esc(p);
+    return part.split(/(\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)|https?:\\/\\/[^\\s<>"]+)/).map(function(p, j) {
+      if (j % 2 === 0) return esc(p);
+      var md = p.match(/^\\[([^\\]]+)\\]\\((https?:\\/\\/[^)]+)\\)$/);
+      if (md) return '<a href="' + esc(md[2]) + '" target="_blank" rel="noopener">' + esc(md[1]) + '<\/a>';
+      return '<a href="' + esc(p) + '" target="_blank" rel="noopener">' + esc(p) + '<\/a>';
     }).join('');
   }).join('');
 }
