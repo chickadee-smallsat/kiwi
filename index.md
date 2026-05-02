@@ -71,7 +71,18 @@ The following sections will introduce you to various parts of a Kiwi - some that
 
 ### The Hardware
 
+The interactive diagram below shows the front and back of the Kiwi PCB.
+Hover over or click any highlighted region to see the component's designation, part number, and description.
 
+<div class="pcb-viewer-wrap">
+  <iframe src="{{ '/assets/media/kiwi-pcb-viewer.html' | relative_url }}"
+          title="Kiwi PCB Interactive Viewer"
+          loading="lazy"
+          scrolling="no"
+          id="pcb-viewer-frame"
+          onload="this.style.height=(this.contentWindow.document.body.scrollHeight+32)+'px'; (function(f){window.addEventListener('message',function(e){if(e.data&&e.data.type==='pcb-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+  </iframe>
+</div>
 
 ### The Firmware
 

@@ -9,8 +9,8 @@
   --cover-panel: #0e3247;
   --cover-light: #c7ebf8;
   --cover-accent: rgba(128, 188, 220, 0.48);
-  --manual-font-size: clamp(3.9rem, 12vw, 8.4rem);
-  --cutout-size: clamp(3.9rem, 12vw, 8.4rem);
+  --manual-font-size: clamp(2.5rem, min(12vw, calc((100svh - 4rem) / 8)), 8.4rem);
+  --cutout-size: clamp(2.5rem, min(12vw, calc((100svh - 4rem) / 8)), 8.4rem);
   --sheet: #0e3247;
   --sheet-border: rgba(199, 235, 248, 0.12);
   --ink: #e8f7fd;
@@ -52,14 +52,14 @@ body {
   height: 100svh;
   display: grid;
   place-items: center;
-  padding: 2rem 1.5rem;
+  padding: 2rem 0;
   position: relative;
 }
 
 .cover-hero__panel {
   width: min(1080px, calc(100% - 2rem));
-  min-height: min(calc(100svh - 4rem), 960px);
-  padding: clamp(0.45rem, 1.2vw, 0.9rem) clamp(0.7rem, 1.6vw, 1.2rem);
+  height: calc(100svh - 4rem);
+  padding: clamp(0.45rem, min(1.2vw, 1.5svh), 0.9rem) clamp(0.7rem, min(1.6vw, 2svh), 1.2rem);
   border-radius: 2rem;
   background: var(--cover-panel);
   box-shadow: var(--shadow);
@@ -82,9 +82,10 @@ body {
 
 .cover-hero__topline {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: clamp(0.75rem, 2vw, 1.5rem);
+  gap: clamp(0.75rem, min(2vw, 2.5svh), 1.5rem);
   justify-self: center;
   width: fit-content;
   margin-top: 0;
@@ -94,14 +95,14 @@ body {
   margin: 0;
   flex: 0 0 auto;
   font-family: "Archivo Black", sans-serif;
-  font-size: clamp(5rem, 13.8vw, 10.2rem);
+  font-size: clamp(3rem, min(13.8vw, calc((100svh - 4rem) / 8)), 10.2rem);
   line-height: 1.16;
   letter-spacing: 0;
   text-transform: uppercase;
   color: var(--cover-light);
   white-space: nowrap;
   text-align: center;
-  transform: scaleY(1.6);
+  transform: scaleY(1.8) translateY(0.05em);
   transform-origin: center center;
 }
 
@@ -111,11 +112,11 @@ body {
   align-self: center;
   color: var(--cover-light);
   font-family: "Archivo Black", sans-serif;
-  font-size: clamp(1.35rem, 3.35vw, 2.7rem);
+  font-size: clamp(1rem, min(3.35vw, calc((100svh - 4rem) / 28)), 2.7rem);
   line-height: 0.98;
   text-transform: none;
   text-align: left;
-  transform: scaleY(1.6) translateY(12px);
+  transform: scaleY(1.6) translateY(0.45em);
   transform-origin: center center;
 }
 
@@ -162,10 +163,10 @@ body {
 .cover-hero__bird {
   position: absolute;
   left: 50%;
-  bottom: -15%;
+  bottom: -12%;
   z-index: 10;
   width: min(calc(var(--cutout-size) * 4.8), calc(100% - 2rem));
-  max-height: none;
+  max-height: calc(65svh);
   max-width: none;
   object-fit: contain;
   filter: brightness(0) invert(1) sepia(6%) saturate(603%) hue-rotate(162deg) brightness(101%) contrast(96%)
@@ -190,7 +191,7 @@ body {
   align-items: center;
   justify-content: center;
   align-self: stretch;
-  transform: scaleY(2.0) translateY(32px);
+  transform: scaleY(2.0) translateY(0.25em);
   transform-origin: center center;
 }
 
@@ -506,42 +507,26 @@ body {
 }
 
 @media (max-width: 700px) {
-  .cover-hero {
-    padding-inline: 1rem;
-  }
-
-  .cover-hero__panel {
-    min-height: 70svh;
-    border-radius: 1.5rem;
-  }
-
-  .cover-hero__topline {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    justify-items: center;
-    width: 100%;
-  }
-
-  .cover-hero__title-block {
-    flex-basis: auto;
-  }
-
-  .cover-hero__artbackdrop {
-    inset: 1% 1.5% 6%;
-  }
-
-  .cover-hero__bird {
-    width: 104%;
-    max-height: 110%;
-    bottom: -4%;
-    transform: translateX(-50%);
-  }
-
   .manual-sheet {
     width: min(100% - 1rem, 1080px);
     margin-top: -2.5rem;
     padding: 1.25rem;
     border-radius: 1.5rem;
   }
+}
+
+/* ── PCB Interactive Viewer ─────────────────────────────────────── */
+.pcb-viewer-wrap {
+  width: 100%;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(199, 235, 248, 0.15);
+  background: #1a1a2e;
+  margin: 1rem 0;
+}
+
+.pcb-viewer-wrap iframe {
+  display: block;
+  width: 100%;
+  border: none;
 }

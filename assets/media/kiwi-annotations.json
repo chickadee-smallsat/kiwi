@@ -1,0 +1,261 @@
+{
+  "annotations": [
+    {
+      "id": 1,
+      "side": "front",
+      "x": 759.5238095238095,
+      "y": 457.14285714285717,
+      "w": 269.04761904761915,
+      "h": 283.3333333333333,
+      "designation": "U5",
+      "partNumber": "RP2350B",
+      "description": "Raspberry Pi RP2350 Microcontroller, the brains of the operation"
+    },
+    {
+      "id": 2,
+      "side": "front",
+      "x": 1183.3333333333335,
+      "y": 866.6666666666667,
+      "w": 433.33333333333326,
+      "h": 380.95238095238096,
+      "designation": "J4",
+      "partNumber": "",
+      "description": "micro-SD Card slot for on-board data storage"
+    },
+    {
+      "id": 3,
+      "side": "front",
+      "x": 1397.6190476190477,
+      "y": 416.6666666666667,
+      "w": 126.19047619047615,
+      "h": 140.47619047619042,
+      "designation": "J2",
+      "partNumber": "JST SM03B-SRSS-TB",
+      "description": "Debug connector. Connect to the debug port of the <a href=\"https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html\">Raspberry Pi Debug Probe</a> for low-level debugging of the RP2350B microcontroller."
+    },
+    {
+      "id": 4,
+      "side": "front",
+      "x": 1116.6666666666667,
+      "y": 614.2857142857143,
+      "w": 59.523809523809405,
+      "h": 71.42857142857144,
+      "designation": "PWLED_EN",
+      "partNumber": "",
+      "description": "Short this jumper to activate the power status indicator LEDs"
+    },
+    {
+      "id": 5,
+      "side": "front",
+      "x": 1076.1904761904761,
+      "y": 442.8571428571429,
+      "w": 30.952380952380963,
+      "h": 54.76190476190476,
+      "designation": "D1",
+      "partNumber": "Red LED",
+      "description": "Red LED, indicating 5V supply is present"
+    },
+    {
+      "id": 6,
+      "side": "front",
+      "x": 1190.4761904761906,
+      "y": 442.8571428571429,
+      "w": 23.809523809523625,
+      "h": 59.52380952380952,
+      "designation": "D2",
+      "partNumber": "Green LED",
+      "description": "Green LED, indicating 3.3V is being generated from 5V input."
+    },
+    {
+      "id": 7,
+      "side": "front",
+      "x": 1000,
+      "y": 1092.857142857143,
+      "w": 80.95238095238096,
+      "h": 80.95238095238096,
+      "designation": "U6",
+      "partNumber": "Bosch Sensortec BME680",
+      "description": "A combined humidity, air quality index (AQI), temperature and pressure sensor."
+    },
+    {
+      "id": 8,
+      "side": "front",
+      "x": 495.23809523809524,
+      "y": 1116.6666666666667,
+      "w": 92.85714285714283,
+      "h": 69.04761904761904,
+      "designation": "U10",
+      "partNumber": "Bosch Sensortec BMI323",
+      "description": "Combined accelerometer and gyroscope."
+    },
+    {
+      "id": 9,
+      "side": "front",
+      "x": 488.09523809523813,
+      "y": 835.7142857142858,
+      "w": 88.09523809523813,
+      "h": 138.09523809523807,
+      "designation": "U3",
+      "partNumber": "TE Conn. MS560702BA03",
+      "description": "High-precision (24-bit), high-altitude (10 mbar) pressure and temperature sensor."
+    },
+    {
+      "id": 10,
+      "side": "front",
+      "x": 230.95238095238096,
+      "y": 1111.904761904762,
+      "w": 45.23809523809524,
+      "h": 54.761904761904816,
+      "designation": "U7",
+      "partNumber": "Texas Instruments OPT3001",
+      "description": "Incident light sensor, reports the amount of light (in lux) incident on the sensor."
+    },
+    {
+      "id": 11,
+      "side": "front",
+      "x": 83.33333333333334,
+      "y": 995.2380952380953,
+      "w": 107.14285714285714,
+      "h": 66.66666666666663,
+      "designation": "SW1",
+      "partNumber": "",
+      "description": "Holding down this button while connecting the USB cable to the board puts it in flash storage mode. Copying a UF2 firmware file to this storage from the connected computer loads the firmware onto the board."
+    },
+    {
+      "id": 12,
+      "side": "front",
+      "x": 4.761904761904762,
+      "y": 719.047619047619,
+      "w": 173.80952380952382,
+      "h": 195.2380952380953,
+      "designation": "J1",
+      "partNumber": "USB micro-B socket",
+      "description": "USB micro-B socket to connect the Kiwi to a PC/Mac for configuration and firmware updates."
+    },
+    {
+      "id": 13,
+      "side": "front",
+      "x": 76.19047619047619,
+      "y": 142.85714285714286,
+      "w": 297.6190476190476,
+      "h": 307.1428571428571,
+      "designation": "J3",
+      "partNumber": "Molex Picoblade 0532610671",
+      "description": "6-pin socket providing 3.3V power, a UART channel, and a GPIO to a connected peripheral."
+    },
+    {
+      "id": 14,
+      "side": "front",
+      "x": 621.4285714285714,
+      "y": 73.80952380952381,
+      "w": 488.0952380952382,
+      "h": 114.28571428571429,
+      "designation": "TOP1",
+      "partNumber": "Amphenol Bergstack 10132797-065100LF",
+      "description": "This receptacle allows another board to connect to this Kiwi board. This connector distributes 5V power up and down the stack of boards."
+    },
+    {
+      "id": 15,
+      "side": "front",
+      "x": 616.6666666666667,
+      "y": 1452.3809523809525,
+      "w": 483.33333333333326,
+      "h": 109.5238095238094,
+      "designation": "TOP2",
+      "partNumber": "Amphenol Bergstack 10132797-065100LF",
+      "description": "This connector passes GPIO pins from U5 to a board above this Kiwi board. Do not connect traces to this connector on a custom expansion board."
+    },
+    {
+      "id": 16,
+      "side": "back",
+      "x": 54.761904761904766,
+      "y": 647.6190476190476,
+      "w": 466.6666666666667,
+      "h": 407.1428571428572,
+      "designation": "U1",
+      "partNumber": "Raspberry Pi RM2",
+      "description": "The Raspberry Pi Radio Module 2. Provides WiFi and Bluetooth Low Energy communication capabilities to Kiwi."
+    },
+    {
+      "id": 17,
+      "side": "back",
+      "x": 983.3333333333334,
+      "y": 1179.7619047619048,
+      "w": 80.95238095238085,
+      "h": 83.33333333333326,
+      "designation": "MMC1",
+      "partNumber": "Memsic MMC5983MA",
+      "description": "High precision (18-bit) magnetometer, measuring magnetic field around the device."
+    },
+    {
+      "id": 18,
+      "side": "back",
+      "x": 1476.1904761904761,
+      "y": 1145.2380952380952,
+      "w": 57.14285714285734,
+      "h": 66.66666666666674,
+      "designation": "U8",
+      "partNumber": "Texas Instruments OPT3001",
+      "description": "Incident light sensor, reports the amount of light (in lux) incident on the sensor."
+    },
+    {
+      "id": 19,
+      "side": "back",
+      "x": 435.7142857142857,
+      "y": 498.80952380952385,
+      "w": 57.14285714285717,
+      "h": 83.33333333333326,
+      "designation": "DBGLED_EN",
+      "partNumber": "",
+      "description": "Short this jumper to enable D3 and D4 LED circuits.",
+      "labelX": 211.71428571428572,
+      "labelY": 550.8095238095239
+    },
+    {
+      "id": 20,
+      "side": "back",
+      "x": 597.6190476190476,
+      "y": 505.95238095238096,
+      "w": 61.904761904761926,
+      "h": 30.952380952380963,
+      "designation": "D3",
+      "partNumber": "Amber LED",
+      "description": "An amber LED controlled by GPIO 27 (software index, not physical pin number) on the RP2350B."
+    },
+    {
+      "id": 22,
+      "side": "back",
+      "x": 600,
+      "y": 548.8095238095239,
+      "w": 54.761904761904816,
+      "h": 30.952380952380963,
+      "designation": "D4",
+      "partNumber": "Amber LED",
+      "description": "An amber LED controlled by GPIO 28 (software index, not physical pin number) on the RP2350B.",
+      "labelX": 600,
+      "labelY": 616.8095238095239
+    },
+    {
+      "id": 23,
+      "side": "back",
+      "x": 650.152099609375,
+      "y": 107.97824096679688,
+      "w": 480,
+      "h": 100,
+      "designation": "BOT1",
+      "partNumber": "Amphenol BergStack 10132798-062100LF",
+      "description": "This plug allows this Kiwi board to connect to a board below it. This connector distributes 5V power up and down the stack of boards."
+    },
+    {
+      "id": 24,
+      "side": "back",
+      "x": 642.152099609375,
+      "y": 1471.9782409667969,
+      "w": 464,
+      "h": 116,
+      "designation": "BOT2",
+      "partNumber": "Amphenol BergStack 10132798-062100LF",
+      "description": "This plug connector passes GPIO pins from U5 to a board below this Kiwi board."
+    }
+  ]
+}
