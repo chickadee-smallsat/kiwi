@@ -385,6 +385,21 @@ body {
   color: #000000;
 }
 
+kbd {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  font-family: inherit;
+  font-size: 0.85em;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #dff0f8;
+  background: #1a3a52;
+  border: 1px solid rgba(199, 235, 248, 0.35);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
 .manual-sheet img,
 .manual-sheet video {
   display: block;

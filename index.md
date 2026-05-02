@@ -186,8 +186,8 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 - After CoolTerm opens, click on "▼" on the left of the bottom bar.
 - Select the serial port that corresponds to your Kiwi (e.g., `usbmodem2025_0011`) under "Port".
 - In the "▼" menu, click "Connect" to connect to the Kiwi serial port.
-- Hit the `Return` key. You should see a prompt that looks like `> `, which indicates you are connected to the Kiwi serial console.
-- Type `help` and hit `Return` to see the list of available commands.
+- Hit the <kbd>Return</kbd> key. You should see a prompt that looks like `> `, which indicates you are connected to the Kiwi serial console.
+- Type `help` and hit <kbd>Return</kbd> to see the list of available commands.
 
 <figure style="width: 80%; margin: 1.5rem auto">
   <video controls style="width: 100%; margin: 0; border-radius: 1rem">
