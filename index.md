@@ -108,16 +108,16 @@ A [MicroPython](https://micropython.org/) interpreter is also available for the 
 
 -  Locate the USB port on your computer. 
 
-  ![USB port on a computer](assets/media/computer-usb-port.png)
+  ![USB port on a computer](assets/media/computer-usb-port.png){: #fig-usb-port-pc style="filter: invert(1)" }
 
-  ![USB Type-A to Micro-B cable](assets/media/usb-a-micro-b-cable.png)
+  ![USB Type-A to Micro-B cable](assets/media/usb-a-micro-b-cable.png){: #fig-usb-cable style="filter: invert(1)" }
 
-- Plug in the USB-A side of the cable into the computer's USB Port. 
-  Connect the micro-B side into the Kiwi (as shown).
+- Plug in the USB-A side of the cable into the computer's USB Port (<a href="#fig-usb-plugged-pc" class="figref"></a>).
+  Connect the micro-B side into the Kiwi (as shown in <a href="#fig-usb-plugged-kiwi" class="figref"></a>).
 
-  ![USB cable plugged into computer](assets/media/pc-usb-plugged.jpeg)
+  ![USB cable plugged into computer](assets/media/pc-usb-plugged.jpeg){: #fig-usb-plugged-pc style="width: 80%" }
 
-  ![Micro-B cable plugged into Kiwi board](assets/media/kiwi-usb-plugged.jpeg)
+  ![Micro-B cable plugged into Kiwi board](assets/media/kiwi-usb-plugged.jpeg){: #fig-usb-plugged-kiwi style="width: 78%" }
 
   At this point, the Kiwi is turned on, and by default, creates an open WiFi access point called `kiwi-ap`.
   Kiwi broadcasts various sensor measurements over WiFi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
@@ -151,7 +151,7 @@ This serial port is accessible to the computer connected to Kiwi over the USB po
 The configuration interfaces uses text commands to configure the Kiwi.
 The built-in firmware supports changing the WiFi settings, and updating the unique identifier of the Kiwi (`Kiwi#XXXX` by default).
 
-## Connecting to Serial Port
+## Connecting to Kiwi Serial Port
 
 ### CoolTerm
 [CoolTerm](https://freeware.the-meiers.org/) is a free software that provides an interface to communicate with a device over the serial port.
@@ -166,12 +166,23 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 |--|--|
 | Windows PC / Laptop | Windows 64-bit | `x86_64` | [Link](https://freeware.the-meiers.org/CoolTermWin64Bit.zip) |
 | MacBook / iMac | macOS (Universal) | `x86_64` / `arm64` | [Link](https://freeware.the-meiers.org/CoolTermMac.dmg) |
-| Windows PC / Laptop (before 2010) | Windows 32-bit | `x86` / `i686` | [Link](https://freeware.the-meiers.org/CoolTermWin32Bit.zip) |
+| Windows PC / Laptop (before 2010) | Windows 32-bit | `x86` | [Link](https://freeware.the-meiers.org/CoolTermWin32Bit.zip) |
 | Windows PC / Laptop with Snapdragon Chip | Windows ARM64 | `arm64` | [Link](https://freeware.the-meiers.org/CoolTermWinARM64Bit.zip) |
 | Linux PC / Laptop | Linux | `x86` / `x86_64` | [32-bit](https://freeware.the-meiers.org/CoolTermLinux32Bit.zip) [64-bit](https://freeware.the-meiers.org/CoolTermLinux64Bit.zip) |
 | Raspberry Pi | Linux | `armv7` / `arm64` | [32-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi.zip) [64-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi64Bit.zip) |
 
+### MacBook / iMac
 
+#### Installation
+- Download the macOS version of CoolTerm from the table above.
+- Open the downloaded `CoolTermMac.dmg` file, and drag the CoolTerm application to your Applications folder.
+  ![Dragging CoolTerm to Applications folder](assets/media/coolterm-mac-install.png){: style="width: 60%" }
+
+#### Usage
+- Open CoolTerm from the Applications folder.
+  On first launch, you will be prompted to set up the preferences for CoolTerm.
+  Use the default settings (press "Use Defaults" button).
+  ![Opening CoolTerm on Mac](assets/media/coolterm-mac-startup.png){: style="width: 40%" }
 
 ### Windows PC
 
@@ -449,6 +460,32 @@ Then type in “help” to get help.
     window.addEventListener("load", scheduleRefresh);
     scheduleRefresh();
   })();
+</script>
+
+<script>
+  var figMap = {};
+  var figCount = 0;
+  document.querySelectorAll('.manual-sheet img[alt]').forEach(function(img) {
+    if (!img.alt) return;
+    figCount++;
+    var figure = document.createElement('figure');
+    var caption = document.createElement('figcaption');
+    caption.textContent = 'Figure ' + figCount + ': ' + img.alt;
+    if (img.id) {
+      figMap[img.id] = figCount;
+      figure.id = img.id;
+      img.removeAttribute('id');
+    }
+    img.parentNode.insertBefore(figure, img);
+    figure.appendChild(img);
+    figure.appendChild(caption);
+  });
+  document.querySelectorAll('a.figref').forEach(function(a) {
+    var id = (a.getAttribute('href') || '').replace(/^#/, '');
+    if (figMap[id] !== undefined) {
+      a.textContent = 'Figure ' + figMap[id];
+    }
+  });
 </script>
 
 
