@@ -122,6 +122,11 @@ A [MicroPython](https://micropython.org/) interpreter is also available for the 
   At this point, the Kiwi is turned on, and by default, creates an open WiFi access point called `kiwi-ap`.
   Kiwi broadcasts various sensor measurements over WiFi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
 
+> **Note**
+> If you are using a MacBook or iMac, or a Windows PC without an accessible USB type-A port, you may need a USB-C to USB-A adapter to connect the USB cable to your computer.
+> Optionally, you can also use a [USB-C to micro-B cable](https://www.adafruit.com/product/3878) to connect the Kiwi directly to your Mac or PC without an adapter.
+{: .callout-note }
+
 > **Troubleshooting**
 > - Give it up to a minute for the WiFi network to show up.
 > - If the default `kiwi-ap` network does not show up, disconnect and reconnect the device.
@@ -186,7 +191,7 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 - After CoolTerm opens, click on "▼" on the left of the bottom bar.
 - Select the serial port that corresponds to your Kiwi (e.g., `usbmodem2025_0011`) under "Port".
 - In the "▼" menu, click "Connect" to connect to the Kiwi serial port.
-- Hit the <kbd>Return</kbd> key. You should see a prompt that looks like `> `, which indicates you are connected to the Kiwi serial console.
+- Hit the <kbd>Return</kbd> key. You should see a prompt that looks like `> `, which indicates you are connected to the Kiwi serial console, and your Kiwi is ready to receive commands.
 - Type `help` and hit <kbd>Return</kbd> to see the list of available commands.
 
 <figure style="width: 80%; margin: 1.5rem auto">
