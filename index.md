@@ -72,7 +72,7 @@ The following sections will introduce you to various parts of a Kiwi - some that
 ### The Hardware
 
 The interactive diagram below shows the front and back of the Kiwi PCB.
-Hover over or click any highlighted region to see the component's designation, part number, and description.
+Click the rectangle around a component to see its designation, part number, and description.
 
 <div class="pcb-viewer-wrap">
   <iframe src="{{ '/assets/media/kiwi-pcb-viewer.html' | relative_url }}"
@@ -84,7 +84,21 @@ Hover over or click any highlighted region to see the component's designation, p
   </iframe>
 </div>
 
+The central component of the Kiwi is the Raspberry Pi RP2350B microcontroller, which serves as the "brain" of Kiwi, managing its operations in processing sensor data and handling communications.
+Kiwi contains a 2 MiB (1 MiB = 1024 KiB = 1024 &times; 1024 bytes) flash memory chip, which is used to store the software program executed by the microcontroller.
+Additional peripherals can be stacked on top of Kiwi through the 60-pin expansion sockets (`TOP1` and `TOP2`) and plugs (`BOT1` and `BOT2`).
+Kiwi also contains a variety of sensors, including an accelerometer, gyroscope, magnetometer, barometer, temperature sensor, air quality index (AQI) and humidity sensor, and light sensors on each side of the board.
+Kiwi has a built-in WiFi (2.4 GHz) radio for wireless communication, and a USB port for power and configuration updates.
+There is also an on-board micro-SD card slot for additional data storage.
+
 ### The Firmware
+
+[Firmware](https://en.wikipedia.org/wiki/Firmware) is the software that runs on the microcontroller on-board the Kiwi, controlling its hardware functions and defining its operations.
+Kiwis come pre-loaded with a firmware that provides the basic functionality of reading out various sensor measurements, and broadcasting them over WiFi.
+
+The firmware is upgradable (requires a computer and the [Raspberry Pi Debug Tool](https://www.raspberrypi.com/documentation/computers/debug-tool/)).
+Custom firmware can also be developed and flashed onto the Kiwi, allowing for custom behavior and functionality.
+A [MicroPython](https://micropython.org/) interpreter is also available for the Kiwi, allowing users to write and execute Python code directly on the device.
 
 </section>
 
@@ -101,9 +115,9 @@ Hover over or click any highlighted region to see the component's designation, p
 - Plug in the USB-A side of the cable into the computer's USB Port. 
   Connect the micro-B side into the Kiwi (as shown).
 
-  ![USB cable plugged into computer](assets/kiwi-manual-media/media/image4.jpeg)
+  ![USB cable plugged into computer](assets/media/pc-usb-plugged.jpeg)
 
-  ![Micro-B cable plugged into Kiwi board](assets/kiwi-manual-media/media/image5.jpeg)
+  ![Micro-B cable plugged into Kiwi board](assets/media/kiwi-usb-plugged.jpeg)
 
   At this point, the Kiwi is turned on, and by default, creates an open WiFi access point called `kiwi-ap`.
   Kiwi broadcasts various sensor measurements over WiFi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
@@ -112,15 +126,15 @@ Hover over or click any highlighted region to see the component's designation, p
 > - Give it up to a minute for the WiFi network to show up.
 > - If the default `kiwi-ap` network does not show up, disconnect and reconnect the device.
 > - If the problem persists,
->   - Optionally short the `PWLED_EN` jumper to verify both the red (5V power) and green (3.3V power) LEDs are lighting up.
->   - Contact us.
+>   - Short the `PWLED_EN` jumper to verify both the red (5V power) and green (3.3V power) LEDs are lighting up.
+>   - Write to us at [kiwi@uml.edu](mailto:kiwi@uml.edu).
 {: .callout-tip }
 
 </section>
 
 <section class="manual-sheet" markdown="1">
 
-# Connecting to Kiwi
+# Receiving Data from your Kiwi
 
 By default, Kiwi transmits data through the self-hosted `kiwi-ap` WiFi access point.
 To receive measurements from your Kiwi, you will need to use a WiFi-enabled computer. 
