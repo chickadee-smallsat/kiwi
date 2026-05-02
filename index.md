@@ -88,13 +88,13 @@ The central component of the Kiwi is the Raspberry Pi RP2350B microcontroller, w
 Kiwi contains a 2 MiB (1 MiB = 1024 KiB = 1024 &times; 1024 bytes) flash memory chip, which is used to store the software program executed by the microcontroller.
 Additional peripherals can be stacked on top of Kiwi through the 60-pin expansion sockets (`TOP1` and `TOP2`) and plugs (`BOT1` and `BOT2`).
 Kiwi also contains a variety of sensors, including an accelerometer, gyroscope, magnetometer, barometer, temperature sensor, air quality index (AQI) and humidity sensor, and light sensors on each side of the board.
-Kiwi has a built-in WiFi (2.4 GHz) radio for wireless communication, and a USB port for power and configuration updates.
+Kiwi has a built-in Wi-Fi (2.4 GHz) radio for wireless communication, and a USB port for power and configuration updates.
 There is also an on-board micro-SD card slot for additional data storage.
 
 ### The Firmware
 
 [Firmware](https://en.wikipedia.org/wiki/Firmware) is the software that runs on the microcontroller on-board the Kiwi, controlling its hardware functions and defining its operations.
-Kiwis come pre-loaded with a firmware that provides the basic functionality of reading out various sensor measurements, and broadcasting them over WiFi.
+Kiwis come preloaded with a firmware that provides the basic functionality of reading out various sensor measurements, and broadcasting them over Wi-Fi.
 
 The firmware is upgradable (requires a computer and the [Raspberry Pi Debug Tool](https://www.raspberrypi.com/documentation/computers/debug-tool/)).
 Custom firmware can also be developed and flashed onto the Kiwi, allowing for custom behavior and functionality.
@@ -119,8 +119,8 @@ A [MicroPython](https://micropython.org/) interpreter is also available for the 
 
   ![Micro-B cable plugged into Kiwi board](assets/media/kiwi-usb-plugged.jpeg){: #fig-usb-plugged-kiwi style="width: 60%" }
 
-  At this point, the Kiwi is turned on, and by default, creates an open WiFi access point called `kiwi-ap`.
-  Kiwi broadcasts various sensor measurements over WiFi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
+  At this point, the Kiwi is turned on, and by default, creates an open Wi-Fi access point called `kiwi-ap`.
+  Kiwi broadcasts various sensor measurements over Wi-Fi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
 
 > **Note**
 > If you are using a MacBook or iMac, or a Windows PC without an accessible USB type-A port, you may need a USB-C to USB-A adapter to connect the USB cable to your computer.
@@ -128,7 +128,7 @@ A [MicroPython](https://micropython.org/) interpreter is also available for the 
 {: .callout-note }
 
 > **Troubleshooting**
-> - Give it up to a minute for the WiFi network to show up.
+> - Give it up to a minute for the Wi-Fi network to show up.
 > - If the default `kiwi-ap` network does not show up, disconnect and reconnect the device.
 > - If the problem persists,
 >   - Short the `PWLED_EN` jumper to verify both the red (5V power) and green (3.3V power) LEDs are lighting up.
@@ -141,9 +141,9 @@ A [MicroPython](https://micropython.org/) interpreter is also available for the 
 
 # Receiving Data from your Kiwi
 
-By default, Kiwi transmits data through the self-hosted `kiwi-ap` WiFi access point.
-To receive measurements from your Kiwi, you will need to use a WiFi-enabled computer. 
-After the data visualization tool, Kiwi Plotter, has been set up on your computer, connect your computer to the `kiwi-ap` WiFi access point.
+By default, Kiwi transmits data through the self-hosted `kiwi-ap` Wi-Fi access point.
+To receive measurements from your Kiwi, you will need to use a Wi-Fi-enabled computer. 
+After the data visualization tool, Kiwi Plotter, has been set up on your computer, connect your computer to the `kiwi-ap` Wi-Fi access point.
 
 </section>
 
@@ -154,7 +154,7 @@ After the data visualization tool, Kiwi Plotter, has been set up on your compute
 Kiwi exposes a simple configuration interface over [universal serial asynchronous receiver-transmitter (UART)](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter), better known as a ['serial port'](https://en.wikipedia.org/wiki/Serial_communication).
 This serial port is accessible to the computer connected to Kiwi over the USB port.
 The configuration interfaces uses text commands to configure the Kiwi.
-The built-in firmware supports changing the WiFi settings, and updating the unique identifier of the Kiwi (`Kiwi#XXXX` by default).
+The built-in firmware supports changing the Wi-Fi settings, and updating the unique identifier of the Kiwi (`Kiwi#XXXX` by default).
 
 ## Connecting to Kiwi Serial Port
 
