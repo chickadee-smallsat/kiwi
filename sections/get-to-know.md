@@ -37,4 +37,24 @@ The firmware is upgradable (requires a computer and the [Raspberry Pi Debug Tool
 Custom firmware can also be developed and flashed onto the Kiwi, allowing for custom behavior and functionality.
 A [MicroPython](https://micropython.org/) interpreter is also available for the Kiwi, allowing users to write and execute Python code directly on the device.
 
+### Kiwi Plotter
+
+[Kiwi Plotter](https://github.com/chickadee-smallsat/kiwi-clients/releases/latest) is a free, cross-platform software that allows you to visualize, and collect data from various sensors on your Kiwi over Wi-Fi.
+Kiwi Plotter is available for Windows, macOS (ARM-based) and Linux (as an AppImage).
+
+#### Windows Installation
+Download `Kiwi Plotter Setup <Version> x64.zip`.
+Navigate to the location of the ZIP archive, and double-click on the file to open it.
+The archive contains a single file `Kiwi Plotter Setup <Version>-x64.exe`.
+Double-click on this file to open it.
+You will be presented with the Windows SmartScreen filter dialog, since the Kiwi Plotter installer is not signed by a digital signature.
+Click on "More Info", then <ui-btn>Run Anyway</ui-btn> to proceed with the installation.
+![Windows SmartScreen Filter](assets/media/windows/windows_smart_screen.png){: style="width: 50%" .collapsible }
+![Windows SmartScreen Filter: Run Anyway](assets/media/windows/windows_smart_screen_run_anyway.png){: style="width: 50%" .collapsible }
+As long as it is downloaded from [here](https://github.com/chickadee-smallsat/kiwi-clients/releases/latest), it should be completely safe to install and execute.
+The source code for the plotter is available [here](https://github.com/chickadee-smallsat/kiwi-clients).
+Upon installation, the Kiwi Plotter will start automatically.
+
+#### macOS Installation
+
 </section>
