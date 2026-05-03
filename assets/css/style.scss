@@ -548,6 +548,80 @@ a.figref {
   font-style: italic;
 }
 
+/* ── Collapsible headings ───────────────────────────────────── */
+.manual-sheet details {
+  margin: 0;
+}
+
+.manual-sheet details > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  user-select: none;
+}
+
+.manual-sheet details > summary::-webkit-details-marker { display: none; }
+
+.manual-sheet details > summary::before {
+  content: "\25B6";
+  font-size: 0.55em;
+  opacity: 0.6;
+  flex-shrink: 0;
+  transition: transform 180ms ease;
+  transform: rotate(0deg);
+}
+
+.manual-sheet details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.manual-sheet details > summary > * {
+  margin: 0;
+}
+
+/* ── OS Variant Toggle ──────────────────────────────────────────── */
+.os-toggle-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+}
+
+.os-toggle-wrap img {
+  width: 100%;
+  display: block;
+}
+
+.os-toggle {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.os-toggle__btn {
+  border: 1px solid rgba(199, 235, 248, 0.4);
+  background: rgba(14, 50, 71, 0.72);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font: inherit;
+  font-size: 0.72em;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.os-toggle__btn:hover {
+  background: rgba(14, 50, 71, 0.9);
+}
+
+.os-toggle__btn.is-active {
+  background: rgba(199, 235, 248, 0.22);
+  border-color: rgba(199, 235, 248, 0.75);
+  font-weight: 500;
+}
+
 /* ── PCB Interactive Viewer ─────────────────────────────────────── */
 .pcb-viewer-wrap {
   width: 100%;

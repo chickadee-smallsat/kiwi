@@ -178,13 +178,34 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 {: #tbl-coolterm }
 
 ### Windows PC
-
+{: .collapsible}
+<!-- {: .collapsible .collapsible-open} -->
 #### Installation
 - Download the version of CoolTerm compatible with your Windows PC from <a href="#tbl-coolterm" class="tblref"></a>.
-- Follow the prompts to install CoolTerm on your Windows PC.
+- Navigate to the location where the file was downloaded on 
+- Extract the files from the downloaded `.zip` archive.
+  - Right click on the `.zip` archive to open the context menu and select the "Extract All..." option
+    {% include os-toggle.html id="fig-coolterm-extract" src1="assets/media/windows/coolterm_extract_win11.png" alt1="Extract CoolTerm (Windows 11)" src2="assets/media/windows/coolterm_extract_win10.png" alt2="Extract CoolTerm (Windows 10)" label1="Windows 11" label2="Windows10" style="width: 100%" %}
+  - Click the "Extract" button in the extraction dialog.
+    ![Extract the `.zip` file](assets/media/windows/coolterm_extract_dialog.png){: style="width: 60%" }
+  - Navigate into the extracted `CoolTermWin64Bit` directory, and launch the `CoolTerm` executable.
+    ![Launch CoolTerm](assets/media/windows/coolterm_program.png){: style="width: 80%" }
+
+#### Usage
+- Upon launching CoolTerm, you will be prompted to set the preferences for CoolTerm. Use default preferences.
+  ![Use Default Preferences](assets/media/windows/coolterm_preferences.png)
+- After CoolTerm opens, click on "▼" on the left of the bottom bar.
+- Select a serial port under "Port". Your computer may have multiple serial connections available depending on which peripherals are connected to it.
+  ![Select a serial device](assets/media/windows/coolterm_port_selection.png)
+- Click "Connect" to connect to the Kiwi serial port.
+  ![Connect to a serial device](assets/media/windows/coolterm_connect.png)
+- Hit the <kbd>Enter</kbd> key. You should see a prompt that looks like `> `, which indicates you are connected to the Kiwi serial console, and your Kiwi is ready to receive commands.
+- If the `> ` does not show up and you have multiple serial devices under "Ports", switch to a different port, connect to it, and hit <kbd>Enter</kbd>.
+- 
+  
 
 ### MacBook / iMac
-
+{: .collapsible}
 #### Installation
 - Download the macOS version of CoolTerm from <a href="#tbl-coolterm" class="tblref"></a>.
 - Open the downloaded `CoolTermMac.dmg` file, and drag the CoolTerm application to your Applications folder.
@@ -408,6 +429,54 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
     var id = (a.getAttribute('href') || '').replace(/^#/, '');
     if (tblMap[id] !== undefined) {
       a.textContent = 'Table ' + tblMap[id];
+    }
+  });
+</script>
+
+<script>
+  /* ── OS variant image toggle ─────────────────────────────── */
+  document.querySelectorAll('.os-toggle__btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var figure = document.querySelector(btn.dataset.target);
+      var img = figure ? figure.querySelector('img') : null;
+      if (!img) return;
+
+      img.src = btn.dataset.src;
+      if (btn.dataset.alt) {
+        img.alt = btn.dataset.alt;
+        var cap = figure.querySelector('figcaption');
+        if (cap) cap.textContent = cap.textContent.replace(/:.+$/, ': ' + btn.dataset.alt);
+      }
+
+      var group = btn.closest('.os-toggle');
+      if (group) {
+        group.querySelectorAll('.os-toggle__btn').forEach(function(b) {
+          b.classList.remove('is-active');
+        });
+      }
+      btn.classList.add('is-active');
+    });
+  });
+</script>
+
+<script>
+  /* ── Collapsible headings ───────────────────────────── */
+  document.querySelectorAll('.manual-sheet .collapsible').forEach(function(heading) {
+    var level = parseInt(heading.tagName[1]);
+    var details = document.createElement('details');
+    if (heading.classList.contains('collapsible-open')) details.open = true;
+    var summary = document.createElement('summary');
+    heading.classList.remove('collapsible', 'collapsible-open');
+    heading.parentNode.insertBefore(details, heading);
+    summary.appendChild(heading);
+    details.appendChild(summary);
+    var next = details.nextElementSibling;
+    while (next) {
+      var m = next.tagName.match(/^H(\d)$/i);
+      if (m && parseInt(m[1]) <= level) break;
+      var toMove = next;
+      next = next.nextElementSibling;
+      details.appendChild(toMove);
     }
   });
 </script>
