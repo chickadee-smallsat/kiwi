@@ -164,7 +164,7 @@ Depending on your operating system, use the links in the following table to get 
 For most users, the first (Windows users) and second (Mac users) should be sufficient.
 
 
-<p class="table-caption">Table 1. CoolTerm download options by platform and CPU architecture.</p>
+<p class="table-caption">CoolTerm download options by platform and CPU architecture.</p>
 
 |--|--|
 | Computer | Operating System | Architecture | Link |
@@ -175,11 +175,18 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 | Windows PC / Laptop with Snapdragon Chip | Windows ARM64 | `arm64` | [Link](https://freeware.the-meiers.org/CoolTermWinARM64Bit.zip) |
 | Linux PC / Laptop | Linux | `x86` / `x86_64` | [32-bit](https://freeware.the-meiers.org/CoolTermLinux32Bit.zip) [64-bit](https://freeware.the-meiers.org/CoolTermLinux64Bit.zip) |
 | Raspberry Pi | Linux | `armv7` / `arm64` | [32-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi.zip) [64-bit](https://freeware.the-meiers.org/CoolTermRaspberryPi64Bit.zip) |
+{: #tbl-coolterm }
+
+### Windows PC
+
+#### Installation
+- Download the version of CoolTerm compatible with your Windows PC from <a href="#tbl-coolterm" class="tblref"></a>.
+- Follow the prompts to install CoolTerm on your Windows PC.
 
 ### MacBook / iMac
 
 #### Installation
-- Download the macOS version of CoolTerm from the table above.
+- Download the macOS version of CoolTerm from <a href="#tbl-coolterm" class="tblref"></a>.
 - Open the downloaded `CoolTermMac.dmg` file, and drag the CoolTerm application to your Applications folder.
   ![Dragging CoolTerm to Applications folder](assets/media/coolterm-mac-install.png){: style="width: 60%" }
 
@@ -200,8 +207,6 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
   </video>
   <figcaption>Connecting to the Kiwi serial port on macOS using CoolTerm.</figcaption>
 </figure>
-
-### Windows PC
 
 ## Available Commands
 
@@ -501,6 +506,24 @@ Then type in “help” to get help.
     var id = (a.getAttribute('href') || '').replace(/^#/, '');
     if (figMap[id] !== undefined) {
       a.textContent = 'Figure ' + figMap[id];
+    }
+  });
+  var tblMap = {};
+  var tblCount = 0;
+  document.querySelectorAll('.manual-sheet table').forEach(function(tbl) {
+    tblCount++;
+    if (tbl.id) {
+      tblMap[tbl.id] = tblCount;
+    }
+    var prev = tbl.previousElementSibling;
+    if (prev && prev.classList.contains('table-caption')) {
+      prev.textContent = 'Table ' + tblCount + '. ' + prev.textContent.replace(/^Table\s+\d+[.:]\s*/i, '');
+    }
+  });
+  document.querySelectorAll('a.tblref').forEach(function(a) {
+    var id = (a.getAttribute('href') || '').replace(/^#/, '');
+    if (tblMap[id] !== undefined) {
+      a.textContent = 'Table ' + tblMap[id];
     }
   });
 </script>
