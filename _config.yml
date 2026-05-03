@@ -4,6 +4,5 @@ theme: jekyll-theme-cayman
 
 # Exclude source/draft files from the built site
 exclude:
-  - "Kiwi Main Board Manual stuff - Poleo Sanchez, Naira - 2026.txt"
-  - "Kiwi Main Board Manual stuff - Poleo Sanchez, Naira - 2026.odt"
   - README.md
+  - TYPESET.md

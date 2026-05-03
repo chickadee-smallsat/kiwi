@@ -95,8 +95,65 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
   <figcaption>Connecting to the Kiwi serial port on macOS using CoolTerm.</figcaption>
 </figure>
 
-## Available Commands
+## Configuration Commands
+Kiwi serial commands are strings, identified by one or more command keywords.
+These command keywords are selected to be small, memorable mnemonics of the operation they perform.
+Most commands are made of one or two keywords, separated by a single space.
 
-#### `help`
+Some commands also accept input parameters, some of which may be optional.
+Required input parameters are indicated by `<>` symbols, and optional parameters are indicated by `[]`.
+
+<p class="table-caption">Available configuration commands</p>
+
+|--|--|
+| Mnemonic | Description | Inputs |
+|--|--|
+| `help` | Shows a help message describing what commands are available | -- |
+| `ident get` | Get the currently set identity for the Kiwi | -- |
+| `ident set <ID>` | Set a new identity | `ID`: New identity string (12 characters max.) |
+| `wifi status` | Current status of the Wi-Fi connection, and broadcast data rate if a connection has been established | -- |
+| `wifi ap <ssid> [pw]` | Kiwi creates a Wi-Fi access point | `ssid`: Wi-Fi access point name<br>`pw`: Optional password for the access point |
+| `wifi ap <ssid> [pw]` | Kiwi joins a Wi-Fi network | `ssid`: Name of the Wi-Fi network<br>`pw`: Optional password for the Wi-Fi network |
+| `store` | Update the identity, or Wi-Fi configuration of Kiwi. This operation causes the device to reset. | -- |
+| `reset` | Trigger a software reset of the device | -- |
+| `clear` | Use ANSI escape sequences to clear the terminal screen. This may not work on CoolTerm on Windows. | -- |
+{: #tbl-commands }
+
+### `help`
+{: .no_toc }
+The `help` command prints the available commands in the console.
+
+### Identity Commands
+{: .no_toc }
+Each Kiwi board stores a unique identity string (12 characters) on board.
+
+#### `ident get`
+{: .no_toc }
+Typing in `ident get` in the console and pressing <kbd>Enter</kbd> or <kbd>Return</kbd> prints the currently set identity string on the console.
+
+#### `ident set`
+{: .no_toc }
+The `ident set` command takes a single parameter, the new identity to be set.
+For example, if you want to set the identity string to `MyKiwi`, execute the following command:
+```
+ident set MyKiwi
+``` 
+Note, this does not update the identity string immediately.
+Execute the `store` command for the update to take effect.
+
+#### `wifi status`
+{: .no_toc }
+The `wifi status` command does not take any parameters.
+This command outputs the current status of the Wi-Fi connection.
+For example, the Kiwi with device ID `Kiwi#0002`, set up in access point (Kiwi creates the Wi-Fi network) called `kiwi_ap` (this is what the Wi-Fi network shows up as in your PC/laptop/phone) without a password, returns the following output on `wifi status` command:
+```
+> wifi status
+Device ID: Kiwi#0002
+WiFi Credentials:
+  Mode: Access Point
+  SSID: kiwi_ap
+  Open network
+Data rate: 23.195875 kbps, Packet rate: 123.711334 pkt/s
+```
 
 </section>

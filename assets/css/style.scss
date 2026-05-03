@@ -355,6 +355,17 @@ body {
   background: rgba(127, 212, 240, 0.95);
 }
 
+/* h4 without the left bar — use with {: .no_toc} to hide from TOC  */
+/* Usage:  #### My label          */
+/*         {: .no_toc}            */
+.manual-sheet h4.no_toc {
+  padding-left: 0;
+}
+
+.manual-sheet h4.no_toc::before {
+  display: none;
+}
+
 .manual-sheet p,
 .manual-sheet li,
 .manual-sheet table,
@@ -383,6 +394,37 @@ body {
 .manual-sheet :not(pre) > code {
   background: rgba(255, 255, 255, 0.5);
   color: #000000;
+}
+
+.manual-sheet div.highlighter-rouge {
+  background: #0d0d0d;
+  border: 1px solid #2a2a2a;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.manual-sheet div.highlighter-rouge div.highlight {
+  background: transparent;
+}
+
+.manual-sheet pre {
+  background: transparent;
+  color: #c8c8c8;
+  border: none;
+  border-radius: 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.manual-sheet pre > code {
+  background: transparent !important;
+  color: inherit;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.875em;
 }
 
 kbd {
