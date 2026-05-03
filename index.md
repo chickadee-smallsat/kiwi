@@ -178,18 +178,18 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 {: #tbl-coolterm }
 
 ### Windows PC
-{: .collapsible}
-<!-- {: .collapsible .collapsible-open} -->
+{: .collapsible .collapsible-open}
+<!-- {: .collapsible} -->
 #### Installation
 - Download the version of CoolTerm compatible with your Windows PC from <a href="#tbl-coolterm" class="tblref"></a>.
 - Navigate to the location where the file was downloaded on 
 - Extract the files from the downloaded `.zip` archive.
-  - Right click on the `.zip` archive to open the context menu and select the "Extract All..." option
-    {% include os-toggle.html id="fig-coolterm-extract" src1="assets/media/windows/coolterm_extract_win11.png" alt1="Extract CoolTerm (Windows 11)" src2="assets/media/windows/coolterm_extract_win10.png" alt2="Extract CoolTerm (Windows 10)" label1="Windows 11" label2="Windows10" style="width: 100%" %}
+  - Right click on the `.zip` archive to open the context menu and select the "Extract All..." option.
+    {% include os-toggle.html id="fig-coolterm-extract" src1="assets/media/windows/coolterm_extract_win11.png" alt1="Extract CoolTerm (Windows 11)" src2="assets/media/windows/coolterm_extract_win10.png" alt2="Extract CoolTerm (Windows 10)" label1="Windows 11" label2="Windows10" style="width: 100%" collapsible=true %}
   - Click the "Extract" button in the extraction dialog.
-    ![Extract the `.zip` file](assets/media/windows/coolterm_extract_dialog.png){: style="width: 60%" }
+    ![Extract the `.zip` file](assets/media/windows/coolterm_extract_dialog.png){: .collapsible style="width: 60%" }
   - Navigate into the extracted `CoolTermWin64Bit` directory, and launch the `CoolTerm` executable.
-    ![Launch CoolTerm](assets/media/windows/coolterm_program.png){: style="width: 80%" }
+    ![Launch CoolTerm](assets/media/windows/coolterm_program.png){: .collapsible style="width: 80%" }
 
 #### Usage
 - Upon launching CoolTerm, you will be prompted to set the preferences for CoolTerm. Use default preferences.
@@ -198,11 +198,27 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 - Select a serial port under "Port". Your computer may have multiple serial connections available depending on which peripherals are connected to it.
   ![Select a serial device](assets/media/windows/coolterm_port_selection.png)
 - Click "Connect" to connect to the Kiwi serial port.
-  ![Connect to a serial device](assets/media/windows/coolterm_connect.png)
+  ![Connect to a serial device](assets/media/windows/coolterm_connect.png){: .collapsible }
+  ![Serial device is connected](assets/media/windows/coolterm_after_connect.png){: .collapsible }
 - Hit the <kbd>Enter</kbd> key. You should see a prompt that looks like `> `, which indicates you are connected to the Kiwi serial console, and your Kiwi is ready to receive commands.
+  ![Kiwi is connected!](assets/media/windows/coolterm_connect_caret.png)
 - If the `> ` does not show up and you have multiple serial devices under "Ports", switch to a different port, connect to it, and hit <kbd>Enter</kbd>.
-- 
-  
+- Type `help` and hit <kbd>Enter</kbd> to see the list of available commands.
+  ![Available serial commands on Kiwi](assets/media/windows/coolterm_connected_help_menu.png)
+
+> **Identify the Kiwi COM Port**
+> The COM port presented by Kiwi can be identified in the `Device Manager` program in case multiple COM ports are present.
+> To open Device Manager, first click on the 'Start' ({% include icon-windows.html %}) button on your desktop, or the <kbd>Windows {% include icon-windows.html %}</kbd> key on your keyboard.
+> Then, type in 'device manager', and 'Device Manager (Control Panel)' should show up in the search results.
+> ![Search result for device manager](assets/media/windows/device_manager_prompt.png){: style="width: 60%" .collapsible }
+> Open Device Manager, and navigate to <ui-menu>Ports (COM & LPT)</ui-menu> in the device tree.
+> ![Ports (COM & LPT) in Device Manager tree](assets/media/windows/device_manager_ports_com_lpt.png){: .collapsible }
+> Then, right click on a COM port under the <ui-menu>Ports (COM & LPT)</ui-menu> devices and select **Properties**.
+> ![Properties of a COM device](assets/media/windows/device_manager_properties.png){: .collapsible }
+> In the device properties dialog box, navigate to <ui-tab>Details</ui-tab>, and select <ui-btn>Bus reported device description</ui-btn> under the <ui-menu>Property</ui-menu> dropdown. A Kiwi will report itself as `Kiwi Mainboard Rev. B`.
+> ![Detecting a Kiwi](assets/media/windows/device_manager_identity.png)
+> Note the COM port number once the Kiwi is found. Hit 'OK' to close the Properties dialog box, and close Device Manager.
+{: .callout-tip .collapsible }
 
 ### MacBook / iMac
 {: .collapsible}
@@ -434,6 +450,40 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 </script>
 
 <script>
+  /* ── Collapsible figures ─────────────────────────────────── */
+  document.querySelectorAll('.manual-sheet figure').forEach(function(fig) {
+    var parent = fig.parentElement;
+    var img = fig.querySelector('img.collapsible');
+    var isOsToggle = parent && parent.classList.contains('os-toggle-wrap') && parent.classList.contains('collapsible');
+    if (!img && !isOsToggle && !(parent && parent.classList.contains('collapsible'))) return;
+
+    var cap = fig.querySelector('figcaption');
+    var capText = cap ? cap.textContent : 'Figure';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'collapsible-fig';
+    var body = document.createElement('div');
+    body.className = 'collapsible-fig__body';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'collapsible-fig__toggle';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.textContent = capText;
+
+    var target = isOsToggle ? parent : fig;
+    target.parentNode.insertBefore(wrap, target);
+    body.appendChild(target);
+    wrap.appendChild(body);
+    wrap.appendChild(btn);
+
+    btn.addEventListener('click', function() {
+      var isOpen = wrap.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+</script>
+
+<script>
   /* ── OS variant image toggle ─────────────────────────────── */
   document.querySelectorAll('.os-toggle__btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -461,7 +511,7 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 
 <script>
   /* ── Collapsible headings ───────────────────────────── */
-  document.querySelectorAll('.manual-sheet .collapsible').forEach(function(heading) {
+  document.querySelectorAll('.manual-sheet h1.collapsible, .manual-sheet h2.collapsible, .manual-sheet h3.collapsible, .manual-sheet h4.collapsible, .manual-sheet h5.collapsible, .manual-sheet h6.collapsible').forEach(function(heading) {
     var level = parseInt(heading.tagName[1]);
     var details = document.createElement('details');
     if (heading.classList.contains('collapsible-open')) details.open = true;
@@ -478,6 +528,45 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
       next = next.nextElementSibling;
       details.appendChild(toMove);
     }
+  });
+</script>
+
+<script>
+  /* ── Collapsible callouts ───────────────────────────── */
+  document.querySelectorAll('.manual-sheet .callout-note.collapsible, .manual-sheet .callout-tip.collapsible, .manual-sheet .callout-warning.collapsible, .manual-sheet .callout-caution.collapsible').forEach(function(box) {
+    var badge = box.querySelector('p:first-child > strong:first-child');
+    if (!badge) return;
+
+    box.classList.add('callout--collapsible');
+    var isOpen = box.classList.contains('collapsible-open');
+    if (isOpen) box.classList.add('callout--open');
+
+    /* lift badge out into its own toggle row */
+    var toggle = document.createElement('div');
+    toggle.className = 'callout__toggle';
+    toggle.setAttribute('role', 'button');
+    toggle.setAttribute('tabindex', '0');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    badge.parentNode.removeChild(badge);
+    toggle.appendChild(badge);
+
+    /* wrap all remaining box children in body > inner (grid trick needs 1 child) */
+    var body = document.createElement('div');
+    body.className = 'callout__body';
+    var inner = document.createElement('div');
+    body.appendChild(inner);
+    while (box.firstChild) { inner.appendChild(box.firstChild); }
+
+    box.appendChild(toggle);
+    box.appendChild(body);
+
+    toggle.addEventListener('click', function() {
+      var open = box.classList.toggle('callout--open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    toggle.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+    });
   });
 </script>
 

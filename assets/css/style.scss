@@ -400,6 +400,58 @@ kbd {
   white-space: nowrap;
 }
 
+/* ── UI element labels ──────────────────────────────────────────── */
+/* Tab bar item:   <ui-tab>File</ui-tab>                            */
+/* Dropdown item:  <ui-menu>Options ▾</ui-menu>                     */
+/* Button:         <ui-btn>Connect</ui-btn>                         */
+ui-tab, ui-menu, ui-btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 0.85em;
+  line-height: 1.4;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+/* Tab — flat, underline accent */
+ui-tab {
+  padding: 0.1em 0.6em 0.1em;
+  color: #dff0f8;
+  background: rgba(199, 235, 248, 0.1);
+  border: 1px solid rgba(199, 235, 248, 0.22);
+  border-bottom: 2px solid rgba(199, 235, 248, 0.6);
+  border-radius: 4px 4px 0 0;
+  font-weight: 500;
+}
+
+/* Dropdown — chevron suffix */
+ui-menu {
+  padding: 0.1em 0.55em;
+  color: #dff0f8;
+  background: rgba(199, 235, 248, 0.08);
+  border: 1px solid rgba(199, 235, 248, 0.28);
+  border-radius: 4px;
+  gap: 0.3em;
+}
+
+ui-menu::after {
+  content: "\25BE";
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+/* Button — filled, slightly raised */
+ui-btn {
+  padding: 0.12em 0.7em;
+  color: #dff0f8;
+  background: rgba(199, 235, 248, 0.16);
+  border: 1px solid rgba(199, 235, 248, 0.35);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
 .manual-sheet img {
   display: block;
   margin: 1.5rem auto;
@@ -449,10 +501,10 @@ kbd {
   border-color: rgba(255, 100, 80, 0.9);
 }
 
-.callout-note strong,
-.callout-tip strong,
-.callout-warning strong,
-.callout-caution strong {
+.callout-note > p:first-child > strong:first-child,
+.callout-tip > p:first-child > strong:first-child,
+.callout-warning > p:first-child > strong:first-child,
+.callout-caution > p:first-child > strong:first-child {
   display: flex;
   width: fit-content;
   align-items: center;
@@ -468,43 +520,110 @@ kbd {
   color: #ffffff;
 }
 
-.callout-note strong {
+.callout-note > p:first-child > strong:first-child {
   background: #3aaad1;
 }
 
-.callout-tip strong {
+.callout-tip > p:first-child > strong:first-child {
   background: #34b776;
 }
 
-.callout-warning strong {
+.callout-warning > p:first-child > strong:first-child {
   background: #d7a521;
 }
 
-.callout-caution strong {
+.callout-caution > p:first-child > strong:first-child {
   background: #d95340;
 }
 
-.callout-note strong::before {
+.callout-note > p:first-child > strong:first-child::before {
   content: "i";
   font-weight: 700;
 }
 
-.callout-tip strong::before {
+.callout-tip > p:first-child > strong:first-child::before {
   content: "✓";
   font-weight: 700;
 }
 
-.callout-warning strong::before {
+.callout-warning > p:first-child > strong:first-child::before {
   content: "!";
   font-weight: 700;
 }
 
-.callout-caution strong::before {
+.callout-caution > p:first-child > strong:first-child::before {
   content: "⚠";
   font-weight: 700;
 }
 /* ── End Callouts ─────────────────────────────────────── */
+/* ── Collapsible callouts ────────────────────────────────── */
+.manual-sheet .callout__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  gap: 0.5rem;
+}
 
+.manual-sheet .callout__toggle::after {
+  content: "\25B2";
+  font-size: 0.72em;
+  opacity: 0.55;
+  flex-shrink: 0;
+  transition: transform 220ms ease;
+  transform: rotate(180deg);
+}
+
+.manual-sheet .callout--open .callout__toggle::after {
+  transform: rotate(0deg);
+}
+
+/* badge when lifted into .callout__toggle */
+.callout-note > .callout__toggle > strong,
+.callout-tip > .callout__toggle > strong,
+.callout-warning > .callout__toggle > strong,
+.callout-caution > .callout__toggle > strong {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.callout-note > .callout__toggle > strong { background: #3aaad1; }
+.callout-tip > .callout__toggle > strong { background: #34b776; }
+.callout-warning > .callout__toggle > strong { background: #d7a521; }
+.callout-caution > .callout__toggle > strong { background: #d95340; }
+
+.callout-note > .callout__toggle > strong::before { content: "i"; font-weight: 700; }
+.callout-tip > .callout__toggle > strong::before { content: "✓"; font-weight: 700; }
+.callout-warning > .callout__toggle > strong::before { content: "!"; font-weight: 700; }
+.callout-caution > .callout__toggle > strong::before { content: "⚠"; font-weight: 700; }
+
+.manual-sheet .callout__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 260ms ease;
+  overflow: hidden;
+}
+
+.manual-sheet .callout--open .callout__body {
+  grid-template-rows: 1fr;
+}
+
+.manual-sheet .callout__body > div {
+  min-height: 0;
+  padding-top: 0.6rem;
+}
 #markdown-toc {
   padding: 1.5rem 1.75rem;
   border-radius: 1.25rem;
@@ -579,6 +698,62 @@ a.figref {
 
 .manual-sheet details > summary > * {
   margin: 0;
+}
+
+/* ── Collapsible figures ──────────────────────────────────────────── */
+.manual-sheet .collapsible-fig {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.manual-sheet .collapsible-fig__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms ease;
+  overflow: hidden;
+  width: 100%;
+}
+
+.manual-sheet .collapsible-fig.is-open > .collapsible-fig__body {
+  grid-template-rows: 1fr;
+}
+
+.manual-sheet .collapsible-fig__body > figure,
+.manual-sheet .collapsible-fig__body > .os-toggle-wrap {
+  min-height: 0;
+  margin: 0;
+}
+
+.manual-sheet .collapsible-fig figure figcaption {
+  display: none;
+}
+
+.manual-sheet .collapsible-fig__toggle {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 0.82em;
+  font-style: italic;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0.35rem 0 0;
+  text-align: center;
+}
+
+.manual-sheet .collapsible-fig__toggle::before {
+  content: "\25B2";
+  margin-right: 0.4em;
+  font-style: normal;
+  font-size: 0.8em;
+  opacity: 0.6;
+  display: inline-block;
+  transition: transform 280ms ease;
+}
+
+.manual-sheet .collapsible-fig.is-open .collapsible-fig__toggle::before {
+  transform: rotate(180deg);
 }
 
 /* ── OS Variant Toggle ──────────────────────────────────────────── */
