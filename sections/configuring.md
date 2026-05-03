@@ -102,6 +102,8 @@ Most commands are made of one or two keywords, separated by a single space.
 
 Some commands also accept input parameters, some of which may be optional.
 Required input parameters are indicated by `<>` symbols, and optional parameters are indicated by `[]`.
+The inputs are positional, meaning the position after the command keywords determines which parameter is set by a passed value.
+Commands are executed when the <kbd>Enter</kbd> or <kbd>Return</kbd> key is pressed.
 
 <p class="table-caption">Available configuration commands</p>
 
@@ -112,8 +114,8 @@ Required input parameters are indicated by `<>` symbols, and optional parameters
 | `ident get` | Get the currently set identity for the Kiwi | -- |
 | `ident set <ID>` | Set a new identity | `ID`: New identity string (12 characters max.) |
 | `wifi status` | Current status of the Wi-Fi connection, and broadcast data rate if a connection has been established | -- |
-| `wifi ap <ssid> [pw]` | Kiwi creates a Wi-Fi access point | `ssid`: Wi-Fi access point name<br>`pw`: Optional password for the access point |
-| `wifi ap <ssid> [pw]` | Kiwi joins a Wi-Fi network | `ssid`: Name of the Wi-Fi network<br>`pw`: Optional password for the Wi-Fi network |
+| `wifi ap <ssid> [pw]` | Kiwi creates a Wi-Fi access point | `ssid`: Wi-Fi access point name (32 characters max.)<br>`pw`: Optional password for the access point (32 characters max.) |
+| `wifi ap <ssid> [pw]` | Kiwi joins a Wi-Fi network | `ssid`: Name of the Wi-Fi network (32 characters max.)<br>`pw`: Optional password for the Wi-Fi network (32 characters max.) |
 | `store` | Update the identity, or Wi-Fi configuration of Kiwi. This operation causes the device to reset. | -- |
 | `reset` | Trigger a software reset of the device | -- |
 | `clear` | Use ANSI escape sequences to clear the terminal screen. This may not work on CoolTerm on Windows. | -- |
@@ -140,6 +142,7 @@ ident set MyKiwi
 ``` 
 Note, this does not update the identity string immediately.
 Execute the `store` command for the update to take effect.
+Identity strings must be alphanumeric, and can not contain a space.
 
 #### `wifi status`
 {: .no_toc }
@@ -155,5 +158,51 @@ WiFi Credentials:
   Open network
 Data rate: 23.195875 kbps, Packet rate: 123.711334 pkt/s
 ```
+If the Kiwi is unable to create the access point, or join a Wi-Fi network, it will report `WiFi not ready` instead of showing a data rate.
+
+#### `wifi ap`
+{: .no_toc }
+The `wifi ap` command configures the Kiwi to host a Wi-Fi hotspot for you to connect to.
+Kiwi broadcasts its measurements over this Wi-Fi hotspot.
+This command takes two parameters:
+- `ssid`: The service-set identifier (SSID) is the name of the Wi-Fi hotspot Kiwi creates.
+- `pw`: An optional password for the Wi-Fi hotspot. If `pw` is not provided as an input, Kiwi will host an open network that can be joined without entering a password.
+
+For example, executing `kiwi ap kiwi-network` will configure the Kiwi to set up an open network hotspot that will show up as `kiwi-network` on your device.
+Executing `kiwi ap kiwi-private SecurePassword` will configure Kiwi to set up a network hotspot `kiwi-private` that will require `SecurePassword` for a device to join that network.
+
+#### `wifi cl`
+{: .no_toc }
+The `wifi cl` command configures the Kiwi to connect to an open, or [WPA/WPA2](https://en.wikipedia.org/wiki/Wi-Fi_Protected_Access) protected network.
+Most home/private networks use this form of authentication, where a passsword is entered to join the network.
+The [eduroam](https://en.wikipedia.org/wiki/Eduroam) network uses more complex authentication methods, and Kiwi can not join such a network.
+`wifi cl` command accepts the SSID (required) and password (optional) parameters.
+To connect Kiwi to `MyHomeWiFi` secured by `MySecurePassword`, execute the following command:
+```
+wifi cl MyHomeWiFi MySecurePassword
+```
+Omit the password if you are connecting to an open network.
+
+> **Wi-Fi SSID and Password Formatting**
+> Wi-Fi SSID is an alphanumeric string of up to 32 characters, supporting characters *a--z*, *A--Z*, *0--9*, dashes (-) and underscores (_).
+> Due to the positional parameter inputs to `wifi ap` and `wifi cl` commands, any space in the SSID will cause the part before the space to be interpreted as the SSID and the part after the space as the password.
+> Special characters are **not** supported.
+>
+> Wi-Fi passwords are up to 32 characters long.
+{: .callout-note .collapsible .collapsible-open }
+
+#### `store`
+{: .no_toc }
+The `store` command stores any changes to Kiwi configuration (identity or Wi-Fi configuration), and resets the device for the settings to take effect.
+
+#### `reset`
+{: .no_toc }
+The `reset` command triggers a software reset of the Kiwi.
+The `store` command uses this trigger to reload the new configuration.
+
+#### `clear`
+{: .no_toc }
+The `clear` command sends a set of characters to the terminal to clear any previous commands and their outputs.
+This command may not work as intended in CoolTerm on Windows.
 
 </section>
