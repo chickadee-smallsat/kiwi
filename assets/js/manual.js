@@ -183,6 +183,62 @@ document.querySelectorAll('a.tblref').forEach(function(a) {
   }
 });
 
+/* ── Slideshow auto-numbering & slide navigation ─────────────────── */
+var sldMap = {};
+var sldCount = 0;
+document.querySelectorAll('.manual-sheet [data-slideshow]').forEach(function(wrap) {
+  if (!wrap.id) return;
+  sldCount++;
+  sldMap[wrap.id] = sldCount;
+});
+document.querySelectorAll('a.sldref').forEach(function(a) {
+  var href = a.getAttribute('href') || '';
+  var id = href.replace(/^#/, '');
+  var slide = a.dataset.slide ? parseInt(a.dataset.slide, 10) : null;
+  var num = sldMap[id];
+  if (num === undefined) return;
+  a.textContent = slide ? 'Slideshow\u00a0' + num + ',\u00a0Step\u00a0' + slide : 'Slideshow\u00a0' + num;
+});
+document.querySelectorAll('a.sldref').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    var id = (a.getAttribute('href') || '').replace(/^#/, '');
+    var wrap = document.getElementById(id);
+    if (!wrap) return;
+    // Scroll to slideshow wrapper
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    history.replaceState(null, '', '#' + id);
+    // If a slide number is given, tell the iframe to navigate there
+    var slide = a.dataset.slide ? parseInt(a.dataset.slide, 10) : null;
+    if (!slide) return;
+    var iframe = wrap.querySelector('iframe');
+    if (!iframe) return;
+    var tryPost = function() {
+      try {
+        iframe.contentWindow.postMessage({ type: 'gotoSlide', slide: slide }, '*');
+      } catch (_) {}
+    };
+    // Post immediately and again after load settles
+    tryPost();
+    setTimeout(tryPost, 600);
+  });
+});
+
+// Listen for slideshowReady from iframes to apply aspect-ratio automatically
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'slideshowReady') return;
+  var vpW = e.data.viewportW, vpH = e.data.viewportH;
+  if (!vpW || !vpH) return;
+  // Find the iframe that sent this message
+  document.querySelectorAll('[data-slideshow] iframe').forEach(function(iframe) {
+    try {
+      if (iframe.contentWindow === e.source) {
+        iframe.style.aspectRatio = vpW + ' / ' + vpH;
+      }
+    } catch (_) {}
+  });
+});
+
 /* ── Collapsible figures ────────────────────────────────────────── */
 document.querySelectorAll('.manual-sheet figure').forEach(function(fig) {
   var parent = fig.parentElement;
