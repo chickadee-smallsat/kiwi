@@ -11,6 +11,7 @@ _includes/
   head-custom.html       # Injects assets/js/manual.js into <head>
   os-toggle.html         # OS-variant image toggle include
   icon-windows.html      # Inline Windows logo SVG
+  pdf-embed.html         # PDF viewer embed (PDF.js CDN)
 
 assets/
   css/style.scss         # All custom styles (compiled by Jekyll)
@@ -25,6 +26,7 @@ sections/                # One file per manual section (included by index.md)
   powering-up.md
   receiving-data.md
   configuring.md
+  advanced-usage.md
 
 index.md                 # Thin shell — frontmatter + {% include_relative %} calls
 ```
@@ -78,6 +80,30 @@ Press the <kbd>Windows {% include icon-windows.html %}</kbd> key.
 ### `_includes/head-custom.html`
 
 Injected into `<head>` automatically by the Cayman theme layout. Loads `assets/js/manual.js` with `defer`.
+
+---
+
+### `_includes/pdf-embed.html`
+
+Embeds a PDF using the [Mozilla PDF.js](https://mozilla.github.io/pdf.js/) viewer served from the official CDN. Renders consistently across all browsers including Safari/iOS. A plain download link is always shown below the viewer as a fallback.
+
+**Parameters:**
+
+| Parameter | Required | Default | Description |
+|---|---|---|---|
+| `src` | ✓ | — | Path to the PDF relative to the site root (e.g. `/assets/media/datasheet.pdf`) |
+| `label` | | `PDF document` | Accessible `title` for the iframe and text for the fallback download link |
+| `height` | | `700px` | CSS height of the iframe (any valid CSS length) |
+
+**Usage:**
+```liquid
+{% include pdf-embed.html src="/assets/media/datasheet.pdf" label="Kiwi Datasheet" %}
+
+{# custom height #}
+{% include pdf-embed.html src="/assets/media/datasheet.pdf" label="Kiwi Datasheet" height="900px" %}
+```
+
+Place the PDF file in `assets/media/` (or any path under `assets/`) before building the site.
 
 ---
 
@@ -175,6 +201,7 @@ Imports the Cayman base theme, then adds custom sections (in file order):
 | OS variant toggle | `.os-toggle-wrap`, `.os-toggle`, `.os-toggle__btn` |
 | Anchor navigation | `.anchor-nav`, `.anchor-nav__btn` |
 | PCB interactive viewer | `.pcb-viewer-wrap`, `#pcb-viewer-frame` |
+| PDF embed | `.pdf-embed-wrap`, `.pdf-embed-fallback` |
 
 ### Non-TOC Heading Label
 

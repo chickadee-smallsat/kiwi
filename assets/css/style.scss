@@ -873,6 +873,37 @@ a.sldref {
   border: none;
 }
 
+/* ── PDF Embed ──────────────────────────────────────────────────── */
+.pdf-embed-wrap {
+  width: 100%;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(199, 235, 248, 0.15);
+  background: #1a1a2e;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.pdf-embed-wrap iframe {
+  display: block;
+  width: 100%;
+  border: none;
+  min-height: 300px;
+}
+
+.pdf-embed-fallback {
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  background: rgba(0,0,0,0.25);
+  margin: 0;
+}
+
+.pdf-embed-fallback a {
+  color: #7ec8e3;
+}
+
 /* ── Site Footer ────────────────────────────────────────────────── */
 .site-footer {
   background: #061624;

@@ -1,0 +1,15 @@
+{% assign _pdf_src = include.src | relative_url %}
+{% assign _pdf_viewer = "https://mozilla.github.io/pdf.js/web/viewer.html?file=" | append: site.url | append: _pdf_src %}
+{% assign _pdf_height = include.height | default: "700px" %}
+{% assign _pdf_label = include.label | default: "PDF document" %}
+<div class="pdf-embed-wrap">
+  <iframe
+    src="{{ _pdf_viewer }}"
+    style="height:{{ _pdf_height }}"
+    title="{{ _pdf_label }}"
+    loading="lazy">
+  </iframe>
+  <p class="pdf-embed-fallback">
+    <a href="{{ _pdf_src }}">Download {{ _pdf_label }}</a>
+  </p>
+</div>
