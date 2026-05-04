@@ -51,10 +51,14 @@ You will be presented with the Windows SmartScreen filter dialog, since the Kiwi
 Click on "More Info", then <ui-btn>Run Anyway</ui-btn> to proceed with the installation.
 ![Windows SmartScreen Filter](assets/media/windows/windows_smart_screen.png){: style="width: 50%" .collapsible }
 ![Windows SmartScreen Filter: Run Anyway](assets/media/windows/windows_smart_screen_run_anyway.png){: style="width: 50%" .collapsible }
-As long as it is downloaded from [here](https://github.com/chickadee-smallsat/kiwi-clients/releases/latest), it should be completely safe to install and execute.
-The source code for the plotter is available [here](https://github.com/chickadee-smallsat/kiwi-clients).
 Upon installation, the Kiwi Plotter will start automatically.
 Kiwi Plotter can be opened later from the Start ({% include icon-windows.html %}) menu.
+
+> **Safety**
+> As long as it is downloaded from [here](https://github.com/chickadee-smallsat/kiwi-clients/releases/latest), it should be completely safe to install and execute.
+> The source code for the plotter is available [here](https://github.com/chickadee-smallsat/kiwi-clients).
+> Validate the SHA-256 checksum of the downloaded ZIP archive against the checksum posted with the release.
+{: .callout-note }
 
 #### macOS Installation
 
