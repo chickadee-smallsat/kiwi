@@ -110,15 +110,15 @@ Commands are executed when the <kbd>Enter</kbd> or <kbd>Return</kbd> key is pres
 |--|--|
 | Command | Description | Inputs |
 |--|--|
-| [`help`](https://google.com) | Shows a help message describing what commands are available | -- |
-| `ident get` | Get the currently set identity for the Kiwi | -- |
-| `ident set <ID>` | Set a new identity | `ID`: New identity string (12 characters max.) |
-| `wifi status` | Current status of the Wi-Fi connection, and broadcast data rate if a connection has been established | -- |
-| `wifi ap <ssid> [pw]` | Kiwi creates a Wi-Fi access point | `ssid`: Wi-Fi access point name (32 characters max.)<br>`pw`: Optional password for the access point (32 characters max.) |
-| `wifi ap <ssid> [pw]` | Kiwi joins a Wi-Fi network | `ssid`: Name of the Wi-Fi network (32 characters max.)<br>`pw`: Optional password for the Wi-Fi network (32 characters max.) |
-| `store` | Update the identity, or Wi-Fi configuration of Kiwi. This operation causes the device to reset. | -- |
-| `reset` | Trigger a software reset of the device | -- |
-| `clear` | Use ANSI escape sequences to clear the terminal screen. This may not work on CoolTerm on Windows. | -- |
+| [`help`](/#help) | Shows a help message describing what commands are available | -- |
+| [`ident get`](/#ident-get) | Get the currently set identity for the Kiwi | -- |
+| [`ident set <ID>`](/#ident-set) | Set a new identity | `ID`: New identity string (12 characters max.) |
+| [`wifi status`](/#wifi-status) | Current status of the Wi-Fi connection, and broadcast data rate if a connection has been established | -- |
+| [`wifi ap <ssid> [pw]`](/#wifi-ap) | Kiwi creates a Wi-Fi access point | `ssid`: Wi-Fi access point name (32 characters max.)<br>`pw`: Optional password for the access point (32 characters max.) |
+| [`wifi cl <ssid> [pw]`](/#wifi-cl) | Kiwi joins a Wi-Fi network | `ssid`: Name of the Wi-Fi network (32 characters max.)<br>`pw`: Optional password for the Wi-Fi network (32 characters max.) |
+| [`store`](/#store) | Update the identity, or Wi-Fi configuration of Kiwi. This operation causes the device to reset. | -- |
+| [`reset`](/#reset) | Trigger a software reset of the device | -- |
+| [`clear`](/#clear) | Use ANSI escape sequences to clear the terminal screen. This may not work on CoolTerm on Windows. | -- |
 {: #tbl-commands }
 
 ### `help`
