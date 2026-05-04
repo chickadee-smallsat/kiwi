@@ -19,6 +19,8 @@ layout: default
 
 {% include_relative sections/configuring.md %}
 
+{% include_relative sections/advanced-usage.md %}
+
 <nav class="anchor-nav" aria-label="Section navigation">
   <button type="button" class="anchor-nav__btn anchor-nav__btn--prev" id="anchor-prev" aria-label="Go to previous section">
     <span class="anchor-nav__icon" aria-hidden="true">◀</span>
