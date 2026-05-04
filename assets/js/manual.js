@@ -36,7 +36,6 @@
       const endHeight = btn.scrollHeight;
       btn.style.height = `${endHeight}px`;
     });
-
     const cleanup = (event) => {
       if (event.propertyName !== "height") {
         return;
@@ -128,12 +127,10 @@
     const target = document.getElementById(prevBtn.dataset.targetId || "");
     goToAnchor(target);
   });
-
   nextBtn.addEventListener("click", () => {
     const target = document.getElementById(nextBtn.dataset.targetId || "");
     goToAnchor(target);
   });
-
   window.addEventListener("scroll", scheduleRefresh, { passive: true });
   window.addEventListener("resize", scheduleRefresh);
   window.addEventListener("load", scheduleRefresh);
@@ -182,7 +179,6 @@ document.querySelectorAll('a.tblref').forEach(function(a) {
     a.textContent = 'Table ' + tblMap[id];
   }
 });
-
 /* ── Slideshow auto-numbering & slide navigation ─────────────────── */
 var sldMap = {};
 var sldCount = 0;
@@ -223,21 +219,54 @@ document.querySelectorAll('a.sldref').forEach(function(a) {
     setTimeout(tryPost, 600);
   });
 });
-
 // Listen for slideshowReady from iframes to apply aspect-ratio automatically
+// and to send the current theme immediately
 window.addEventListener('message', function(e) {
-  if (!e.data || e.data.type !== 'slideshowReady') return;
-  var vpW = e.data.viewportW, vpH = e.data.viewportH;
-  if (!vpW || !vpH) return;
-  // Find the iframe that sent this message
-  document.querySelectorAll('[data-slideshow] iframe').forEach(function(iframe) {
-    try {
-      if (iframe.contentWindow === e.source) {
-        iframe.style.aspectRatio = vpW + ' / ' + vpH;
-      }
-    } catch (_) {}
-  });
+  if (!e.data) return;
+  if (e.data.type === 'slideshowReady') {
+    var vpW = e.data.viewportW, vpH = e.data.viewportH;
+    if (!vpW || !vpH) return;
+    document.querySelectorAll('[data-slideshow] iframe').forEach(function(iframe) {
+      try {
+        if (iframe.contentWindow === e.source) {
+          iframe.style.aspectRatio = vpW + ' / ' + vpH;
+          // Send current theme to the newly ready iframe
+          var theme = document.documentElement.dataset.theme || 'default';
+          iframe.contentWindow.postMessage({ type: 'setTheme', theme: theme }, '*');
+        }
+      } catch (_) {}
+    });
+  }
+  if (e.data.type === 'pcb-resize') {
+    // Forward height changes from PCB viewer iframes to auto-size them
+    document.querySelectorAll('.pcb-viewer-wrap iframe').forEach(function(iframe) {
+      try {
+        if (iframe.contentWindow === e.source) {
+          iframe.style.height = e.data.height + 'px';
+        }
+      } catch (_) {}
+    });
+  }
 });
+// Broadcast theme changes to all embedded iframes
+function broadcastThemeToIframes(theme) {
+  document.querySelectorAll('.pcb-viewer-wrap iframe, [data-slideshow] iframe').forEach(function(iframe) {
+    try { iframe.contentWindow.postMessage({ type: 'setTheme', theme: theme }, '*'); } catch (_) {}
+  });
+}
+
+// Listen for theme changes dispatched by the theme-switcher include
+document.addEventListener('kiwi-theme', function(e) {
+  broadcastThemeToIframes(e.detail || 'default');
+});
+// On page load, push current theme to any iframes already in the DOM
+(function() {
+  var theme = document.documentElement.dataset.theme || 'default';
+  if (theme !== 'default') {
+    // Defer to let iframes start loading
+    setTimeout(function() { broadcastThemeToIframes(theme); }, 800);
+  }
+})();
 
 /* ── Collapsible figures ────────────────────────────────────────── */
 document.querySelectorAll('.manual-sheet figure').forEach(function(fig) {
@@ -270,7 +299,6 @@ document.querySelectorAll('.manual-sheet figure').forEach(function(fig) {
     btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   });
 });
-
 /* ── OS variant image toggle ────────────────────────────────────── */
 document.querySelectorAll('.os-toggle__btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
@@ -294,7 +322,6 @@ document.querySelectorAll('.os-toggle__btn').forEach(function(btn) {
     btn.classList.add('is-active');
   });
 });
-
 /* ── Collapsible headings ───────────────────────────────────────── */
 document.querySelectorAll('.manual-sheet h1.collapsible, .manual-sheet h2.collapsible, .manual-sheet h3.collapsible, .manual-sheet h4.collapsible, .manual-sheet h5.collapsible, .manual-sheet h6.collapsible').forEach(function(heading) {
   var level = parseInt(heading.tagName[1]);
@@ -314,7 +341,6 @@ document.querySelectorAll('.manual-sheet h1.collapsible, .manual-sheet h2.collap
     details.appendChild(toMove);
   }
 });
-
 /* ── Collapsible callouts ───────────────────────────────────────── */
 document.querySelectorAll('.manual-sheet .callout-note.collapsible, .manual-sheet .callout-tip.collapsible, .manual-sheet .callout-warning.collapsible, .manual-sheet .callout-caution.collapsible').forEach(function(box) {
   var badge = box.querySelector('p:first-child > strong:first-child');

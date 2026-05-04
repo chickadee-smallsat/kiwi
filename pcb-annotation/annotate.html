@@ -1370,6 +1370,58 @@ function notifyParentHeight() {
   if (el) el.addEventListener('toggle', notifyParentHeight);
 });
 
+// Theme support via postMessage
+var THEME_CSS_PCB = {
+  'deuteranopia':
+    'body{background:#0d1e3c;color:#fff8e1}' +
+    '.board-img-wrap img{border-color:#1e3a6e}' +
+    '.anno-region{border-color:#f5a428;background:rgba(245,164,40,0.08)}' +
+    '.anno-region:hover{background:rgba(245,164,40,0.25);border-color:#f7c06e}' +
+    '.anno-label{background:#f5a428}' +
+    '#pcb-popup{background:#0d2c52;border-color:#f5a428}' +
+    '#pcb-popup .pp-desig{color:#f5a428}' +
+    '#pcb-popup .pp-close:hover{color:#f5a428}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#f5a428}' +
+    '.parts-table .td-desig{color:#f5a428}',
+  'high-contrast':
+    'body{background:#000;color:#fff}' +
+    '.board-img-wrap img{border-color:#fff}' +
+    '.anno-region{border-color:#ff0;background:rgba(255,255,0,0.07)}' +
+    '.anno-region:hover{background:rgba(255,255,0,0.2);border-color:#ffe}' +
+    '.anno-label{background:#7a7000;color:#ff0}' +
+    '#pcb-popup{background:#000;border-color:#ff0}' +
+    '#pcb-popup .pp-desig{color:#ff0}' +
+    '#pcb-popup .pp-close:hover{color:#ff0}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#ff0}' +
+    '.parts-section summary,.boards-section summary{background:#111;color:#fff}' +
+    '.parts-table{background:#000}.parts-table th{background:#111;color:#fff;border-color:#555}' +
+    '.parts-table td{border-color:#333}.parts-table tr:hover td{background:#1a1a1a}' +
+    '.parts-table .td-desig{color:#ff0}' +
+    '.parts-section details,.boards-section details{border-color:#555}',
+  'monochrome':
+    'body{background:#111;color:#e0e0e0}' +
+    '.board-img-wrap img{border-color:#444;filter:grayscale(1)}' +
+    '.anno-region{border-color:#aaa;background:rgba(170,170,170,0.07)}' +
+    '.anno-region:hover{background:rgba(170,170,170,0.2);border-color:#ccc}' +
+    '.anno-label{background:#555;color:#e0e0e0}' +
+    '#pcb-popup{background:#1a1a1a;border-color:#666}' +
+    '#pcb-popup .pp-desig{color:#ccc}' +
+    '#pcb-popup .pp-close:hover{color:#fff}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#aaa}' +
+    '.parts-section summary,.boards-section summary{background:#1e1e1e;color:#d0d0d0}' +
+    '.parts-table{background:#111}.parts-table th{background:#1a1a1a;color:#bbb;border-color:#333}' +
+    '.parts-table td{border-color:#222}.parts-table tr:hover td{background:#181818}' +
+    '.parts-table .td-desig{color:#c0c0c0}' +
+    '.parts-section details,.boards-section details{border-color:#333}'
+};
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'setTheme') return;
+  var t = e.data.theme || 'default';
+  var el = document.getElementById('_kiwi_theme_override');
+  if (!el) { el = document.createElement('style'); el.id = '_kiwi_theme_override'; document.head.appendChild(el); }
+  el.textContent = THEME_CSS_PCB[t] || '';
+});
+
 // Parts table
 (function buildPartsTable() {
   var tbody = document.getElementById('parts-tbody');

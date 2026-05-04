@@ -71,6 +71,7 @@
       }, 50);
     }
     try { localStorage.setItem(PREF_KEY, theme); } catch (e) {}
+    document.dispatchEvent(new CustomEvent('kiwi-theme', { detail: theme }));
   }
 
   // Sync button states with whatever theme was applied by the anti-FOUC script
