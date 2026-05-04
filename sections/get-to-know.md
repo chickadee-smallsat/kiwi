@@ -12,7 +12,7 @@ The interactive diagram below shows the front and back of the Kiwi PCB.
 Click the rectangle around a component to see its designation, part number, and description.
 
 <div class="pcb-viewer-wrap">
-  <iframe src="{{ '/assets/media/kiwi-pcb-viewer.html' | relative_url }}"
+  <iframe src="{{ '/assets/media/kiwi-pcb-viewer.html' | relative_url }}?front={{ '/pcb-annotation/kiwi_front.png' | relative_url }}&back={{ '/pcb-annotation/kiwi_back.png' | relative_url }}"
           title="Kiwi PCB Interactive Viewer"
           loading="lazy"
           scrolling="no"

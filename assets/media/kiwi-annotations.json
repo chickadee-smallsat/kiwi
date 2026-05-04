@@ -53,7 +53,7 @@
       "h": 54.76190476190476,
       "designation": "D1",
       "partNumber": "Red LED",
-      "description": "Red LED, indicating 5V supply is present"
+      "description": "Red LED, indicating 5V supply is present. It is disabled by default, enable by shorting PWLED_EN."
     },
     {
       "id": 6,
@@ -64,7 +64,7 @@
       "h": 59.52380952380952,
       "designation": "D2",
       "partNumber": "Green LED",
-      "description": "Green LED, indicating 3.3V is being generated from 5V input."
+      "description": "Green LED, indicating 3.3V is being generated from 5V input. It is disabled by default, enable by shorting PWLED_EN."
     },
     {
       "id": 7,
@@ -220,7 +220,7 @@
       "h": 30.952380952380963,
       "designation": "D3",
       "partNumber": "Amber LED",
-      "description": "An amber LED controlled by GPIO 27 (software index, not physical pin number) on the RP2350B."
+      "description": "An amber LED controlled by GPIO 27 (software index, not physical pin number) on the RP2350B. It is disabled by default, enable by shorting DBGLED_EN."
     },
     {
       "id": 22,
@@ -231,7 +231,7 @@
       "h": 30.952380952380963,
       "designation": "D4",
       "partNumber": "Amber LED",
-      "description": "An amber LED controlled by GPIO 28 (software index, not physical pin number) on the RP2350B.",
+      "description": "An amber LED controlled by GPIO 28 (software index, not physical pin number) on the RP2350B. It is disabled by default, enable by shorting DBGLED_EN.",
       "labelX": 600,
       "labelY": 616.8095238095239
     },

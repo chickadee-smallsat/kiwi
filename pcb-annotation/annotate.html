@@ -364,7 +364,8 @@
     <button class="btn-secondary" onclick="loadImages()">&#8635; Reload Images</button>
     <button class="btn-secondary" onclick="loadAnnotations()">&#128194; Load JSON</button>
     <button class="btn-secondary" onclick="saveAnnotations()">&#128190; Save JSON</button>
-    <button class="btn-export" onclick="exportViewer()">&#9654; Export Viewer</button>
+    <button class="btn-export" onclick="exportViewer('embed')">&#9654; Export Viewer</button>
+    <button class="btn-export" style="background:#156e3a" onclick="exportViewer('linked')">&#128279; Export (linked)</button>
   </div>
 </header>
 
@@ -460,6 +461,7 @@
 
 const SIDES = ['front', 'back'];
 const images = { front: null, back: null };
+const imageSrcs = { front: null, back: null };  // original filename/path for linked export
 let annotations = [];     // [{id, side, x, y, w, h, designation, partNumber, description}]
 let nextId = 1;
 let scale = 1;
@@ -476,9 +478,10 @@ let draggingLabel = null;       // {id, side, startMouseX, startMouseY, startLab
 // ─── Init ────────────────────────────────────────────────────────────────────
 
 function init() {
-  // Try to auto-load images from same directory
-  loadImageFromSrc('front', 'kiwi_front.png');
-  loadImageFromSrc('back', 'kiwi_back.png');
+  // Try to auto-load images — prefer ?front= / ?back= query params, fall back to defaults
+  const params = new URLSearchParams(window.location.search);
+  loadImageFromSrc('front', params.get('front') || 'kiwi_front.png');
+  loadImageFromSrc('back',  params.get('back')  || 'kiwi_back.png');
 
   // Scale slider
   const slider = document.getElementById('scale-slider');
@@ -530,6 +533,7 @@ function loadImageFromSrc(side, src) {
   const img = new Image();
   img.onload = () => {
     images[side] = img;
+    imageSrcs[side] = src;  // remember relative path
     // Recompute fit scale once we have at least one image
     applyFitScale();
     rerenderAll();
@@ -973,6 +977,7 @@ function loadImages() {
         const img = new Image();
         img.onload = () => {
           images[side] = img;
+          imageSrcs[side] = file.name;  // remember filename for linked export
           applyFitScale();
           rerenderAll();
           setStatus(`Loaded ${file.name} as ${side}`);
@@ -988,10 +993,18 @@ function loadImages() {
 
 // ─── Export viewer ────────────────────────────────────────────────────────────
 
-function exportViewer() {
+function exportViewer(imageMode) {
   if (!images.front && !images.back) {
     alert('No images loaded — cannot export.');
     return;
+  }
+
+  if (imageMode === 'linked') {
+    const missing = SIDES.filter(s => images[s] && !imageSrcs[s]);
+    if (missing.length) {
+      alert('Cannot use linked mode — no filename is known for: ' + missing.join(', ') + '.\nUse "Reload Images" to load files from disk.');
+      return;
+    }
   }
 
   // Convert images to data URLs at natural resolution
@@ -1004,14 +1017,18 @@ function exportViewer() {
     return c.toDataURL('image/png');
   }
 
-  const frontURL = imgToDataURL(images.front);
-  const backURL = imgToDataURL(images.back);
+  const frontURL = imageMode === 'linked' ? 'null' : (images.front ? JSON.stringify(imgToDataURL(images.front)) : 'null');
+  const backURL  = imageMode === 'linked' ? 'null' : (images.back  ? JSON.stringify(imgToDataURL(images.back))  : 'null');
+  // For linked mode, store the fallback filename so the viewer works without query params too
+  const frontFallback = imageMode === 'linked' ? JSON.stringify(imageSrcs.front || '') : 'null';
+  const backFallback  = imageMode === 'linked' ? JSON.stringify(imageSrcs.back  || '') : 'null';
   const frontW = images.front ? images.front.naturalWidth : 0;
   const frontH = images.front ? images.front.naturalHeight : 0;
   const backW = images.back ? images.back.naturalWidth : 0;
   const backH = images.back ? images.back.naturalHeight : 0;
 
   const annotationsJSON = JSON.stringify(annotations);
+  const exportFilename = imageMode === 'linked' ? 'kiwi-pcb-viewer-linked.html' : 'kiwi-pcb-viewer.html';
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -1039,6 +1056,49 @@ function exportViewer() {
     z-index: 5;
   }
   .anno-region:hover .anno-label { opacity: 1; }
+  .anno-region.is-highlighted {
+    background: rgba(255, 238, 0, 0.45);
+    border-color: #fff36a;
+    border-width: 3px;
+    border-style: solid;
+    z-index: 6;
+    animation: pcb-highlight-bloom 1.7s cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
+  }
+  .anno-region.is-highlighted .anno-label { opacity: 1; }
+  @keyframes pcb-highlight-bloom {
+    0% {
+      transform: scale(1);
+      box-shadow:
+        0 0 0 2px rgba(255, 238, 0, 0.95),
+        0 0 10px rgba(255, 238, 0, 0.85),
+        0 0 24px rgba(255, 214, 0, 0.55);
+      filter: brightness(1.25) saturate(1.2);
+    }
+    38% {
+      transform: scale(1.02);
+      box-shadow:
+        0 0 0 4px rgba(255, 238, 0, 0.75),
+        0 0 20px rgba(255, 234, 0, 0.75),
+        0 0 42px rgba(255, 188, 0, 0.55);
+      filter: brightness(1.5) saturate(1.35);
+    }
+    72% {
+      transform: scale(1.01);
+      box-shadow:
+        0 0 0 3px rgba(255, 238, 0, 0.55),
+        0 0 16px rgba(255, 238, 0, 0.45),
+        0 0 30px rgba(255, 188, 0, 0.25);
+      filter: brightness(1.25) saturate(1.15);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow:
+        0 0 0 2px rgba(255, 238, 0, 0),
+        0 0 8px rgba(255, 238, 0, 0),
+        0 0 18px rgba(255, 188, 0, 0);
+      filter: brightness(1) saturate(1);
+    }
+  }
   .anno-label {
     position: absolute;
     top: -20px;
@@ -1170,10 +1230,15 @@ function exportViewer() {
 </div>
 <script>
 var ANNOTATIONS = ${annotationsJSON};
-var IMAGES = {
-  front: { url: ${frontURL ? JSON.stringify(frontURL) : 'null'}, w: ${frontW}, h: ${frontH} },
-  back:  { url: ${backURL ? JSON.stringify(backURL) : 'null'}, w: ${backW}, h: ${backH} }
-};
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var frontFallback = ${frontFallback};
+  var backFallback  = ${backFallback};
+  window.IMAGES = {
+    front: { url: ${frontURL} || params.get('front') || frontFallback || null, w: ${frontW}, h: ${frontH} },
+    back:  { url: ${backURL}  || params.get('back')  || backFallback  || null, w: ${backW},  h: ${backH} }
+  };
+})();
 
 function esc(s) {
   if (!s) return '';
@@ -1316,8 +1381,19 @@ function notifyParentHeight() {
       '<td class="td-board">' + (a.side === 'front' ? 'Front' : 'Back') + '<\/td>';
     tr.style.cursor = 'pointer';
     tr.addEventListener('click', function(e) {
+      closePopup();
       var region = document.querySelector('[data-id="' + a.id + '"]');
-      if (region) { region.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      if (!region) return;
+      document.querySelectorAll('.anno-region.is-highlighted').forEach(function(el) {
+        el.classList.remove('is-highlighted');
+      });
+      region.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function() {
+        region.classList.add('is-highlighted');
+        region.addEventListener('animationend', function() {
+          region.classList.remove('is-highlighted');
+        }, { once: true });
+      }, 320);
     });
     tbody.appendChild(tr);
   });
@@ -1329,10 +1405,11 @@ function notifyParentHeight() {
   const blob = new Blob([html], { type: 'text/html' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'kiwi-pcb-viewer.html';
+  a.download = exportFilename;
   a.click();
   URL.revokeObjectURL(a.href);
-  setStatus('Viewer exported as kiwi-pcb-viewer.html — place it in your assets folder and embed in index.md.');
+  const linkedNote = imageMode === 'linked' ? ' — place it alongside the image files.' : ' — place it in your assets folder and embed in index.md.';
+  setStatus(`Viewer exported as ${exportFilename}${linkedNote}`);
 }
 
 // ─── Utils ────────────────────────────────────────────────────────────────────
