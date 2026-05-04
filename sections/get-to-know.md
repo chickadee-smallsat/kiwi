@@ -3,7 +3,7 @@
 # Get to know your Kiwi
 
 Kiwi is a single-board satellite.
-Meaning, it is a single, printed-circuit board (PCB) with different components attached to it that perform different functions.
+Meaning, it is a printed-circuit board (PCB) with various components attached to it, performing different functions.
 The following sections will introduce you to various parts of a Kiwi - some that are visible, and some that are not.
 
 ### The Hardware
@@ -31,10 +31,10 @@ There is also an on-board micro-SD card slot for additional data storage.
 ### The Firmware
 
 [Firmware](https://en.wikipedia.org/wiki/Firmware) is the software that runs on the microcontroller on-board the Kiwi, controlling its hardware functions and defining its operations.
-Kiwis come preloaded with a firmware that provides the basic functionality of reading out various sensor measurements, and broadcasting them over Wi-Fi.
+Kiwi comes preloaded with a firmware that provides the basic functionality of reading out various sensor measurements, and broadcasting them over Wi-Fi.
 
 The firmware is upgradable (requires a computer and the [Raspberry Pi Debug Tool](https://www.raspberrypi.com/documentation/computers/debug-tool/)).
-Custom firmware can also be developed and flashed onto the Kiwi, allowing for custom behavior and functionality.
+Custom firmware can be developed and flashed onto the Kiwi, allowing for custom behavior and functionality.
 A [MicroPython](https://micropython.org/) interpreter is also available for the Kiwi, allowing users to write and execute Python code directly on the device.
 
 ### Kiwi Plotter
@@ -54,6 +54,7 @@ Click on "More Info", then <ui-btn>Run Anyway</ui-btn> to proceed with the insta
 As long as it is downloaded from [here](https://github.com/chickadee-smallsat/kiwi-clients/releases/latest), it should be completely safe to install and execute.
 The source code for the plotter is available [here](https://github.com/chickadee-smallsat/kiwi-clients).
 Upon installation, the Kiwi Plotter will start automatically.
+Kiwi Plotter can be opened later from the Start ({% include icon-windows.html %}) menu.
 
 #### macOS Installation
 

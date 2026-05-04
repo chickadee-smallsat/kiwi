@@ -4,19 +4,21 @@
 
 -  Locate the USB port on your computer. 
 
-  ![USB port on a computer](assets/media/computer-usb-port.png){: #fig-usb-port-pc style="filter: invert(1); width: 40%" }
+  ![USB port on a computer](assets/media/computer-usb-port.png){: #fig-usb-port-pc style="filter: invert(1); width: 40%" .collapsible }
 
-  ![USB Type-A to Micro-B cable](assets/media/usb-a-micro-b-cable.png){: #fig-usb-cable style="filter: invert(1); width: 40%" }
+  ![USB Type-A to Micro-B cable](assets/media/usb-a-micro-b-cable.png){: #fig-usb-cable style="filter: invert(1); width: 40%" .collapsible }
 
 - Plug in the USB-A side of the cable into the computer's USB Port (<a href="#fig-usb-plugged-pc" class="figref"></a>).
   Connect the micro-B side into the Kiwi (as shown in <a href="#fig-usb-plugged-kiwi" class="figref"></a>).
 
-  ![USB cable plugged into computer](assets/media/pc-usb-plugged.jpeg){: #fig-usb-plugged-pc style="width: 60%" }
+  ![USB cable plugged into computer](assets/media/pc-usb-plugged.jpeg){: #fig-usb-plugged-pc style="width: 60%" .collapsible }
 
-  ![Micro-B cable plugged into Kiwi board](assets/media/kiwi-usb-plugged.jpeg){: #fig-usb-plugged-kiwi style="width: 60%" }
+  ![Micro-B cable plugged into Kiwi board](assets/media/kiwi-usb-plugged.jpeg){: #fig-usb-plugged-kiwi style="width: 60%" .collapsible }
 
   At this point, the Kiwi is turned on, and by default, creates an open Wi-Fi access point called `kiwi-ap`.
   Kiwi broadcasts various sensor measurements over Wi-Fi at [UDP](https://en.wikipedia.org/wiki/User_Datagram_Protocol) port `8099`.
+  The `kiwi-ap` network should show up in the list of available Wi-Fi networks on your computer.
+  Connect to the `kiwi-ap` network to start receiving data from the Kiwi.
 
 > **Note**
 > If you are using a MacBook or iMac, or a Windows PC without an accessible USB type-A port, you may need a USB-C to USB-A adapter to connect the USB cable to your computer.

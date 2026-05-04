@@ -2,8 +2,8 @@
 
 # Materials / Equipment Required
 
-- The Kiwi satellite (provided)
-- A USB-micro B cable (bring-your-own) to power the Kiwi
-- A personal computer (desktop, laptop, MacBook or iMac, etc., bring-your-own) to view data coming from the Kiwi
+- The Kiwi single-board satellite (provided)
+- A USB-micro B cable (not provided) to power the Kiwi
+- A personal computer (desktop, laptop, MacBook or iMac, etc., not provided) to view data coming from the Kiwi
 
 </section>

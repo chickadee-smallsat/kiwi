@@ -108,9 +108,9 @@ Commands are executed when the <kbd>Enter</kbd> or <kbd>Return</kbd> key is pres
 <p class="table-caption">Available configuration commands</p>
 
 |--|--|
-| Mnemonic | Description | Inputs |
+| Command | Description | Inputs |
 |--|--|
-| `help` | Shows a help message describing what commands are available | -- |
+| [`help`](https://google.com) | Shows a help message describing what commands are available | -- |
 | `ident get` | Get the currently set identity for the Kiwi | -- |
 | `ident set <ID>` | Set a new identity | `ID`: New identity string (12 characters max.) |
 | `wifi status` | Current status of the Wi-Fi connection, and broadcast data rate if a connection has been established | -- |
