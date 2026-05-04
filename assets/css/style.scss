@@ -924,3 +924,345 @@ a.sldref {
   color: rgba(199, 235, 248, 0.45);
   line-height: 1.5;
 }
+
+/* ── Math (MathJax 3) ───────────────────────────────────────────── */
+/* Block/display math — centered, scrollable on narrow viewports */
+.manual-sheet mjx-container[jax="CHTML"][display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.85rem 0;
+  color: var(--ink);
+}
+
+/* Inline math */
+.manual-sheet mjx-container[jax="CHTML"] {
+  color: var(--ink);
+}
+
+/* ── Screen-reader only ─────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Theme Switcher widget ──────────────────────────────────────── */
+.theme-switcher {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 200;
+}
+
+.theme-switcher__announce {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.theme-switcher__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: rgba(14, 50, 71, 0.88);
+  border: 1px solid rgba(199, 235, 248, 0.28);
+  color: #e8f7fd;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: background 120ms ease, border-color 120ms ease;
+  padding: 0;
+
+  &:hover, &:focus-visible {
+    background: rgba(14, 50, 71, 0.98);
+    border-color: rgba(199, 235, 248, 0.55);
+    outline: none;
+  }
+}
+
+.theme-switcher__panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 15rem;
+  background: #0d2a3e;
+  border: 1px solid rgba(199, 235, 248, 0.2);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.theme-switcher__heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(199, 235, 248, 0.5);
+  margin: 0 0 0.5rem 0.3rem;
+}
+
+.theme-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  color: rgba(220, 243, 252, 0.8);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 120ms ease, border-color 120ms ease;
+
+  &[aria-pressed="true"] {
+    background: rgba(199, 235, 248, 0.14);
+    border-color: rgba(199, 235, 248, 0.35);
+    color: #e8f7fd;
+    font-weight: 600;
+  }
+
+  &:hover, &:focus-visible {
+    background: rgba(199, 235, 248, 0.1);
+    outline: none;
+  }
+}
+
+.theme-opt__dot {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ── Color-blind-friendly themes ────────────────────────────────── */
+
+/* — Deuteranopia-friendly (amber + blue; safe for ~8% red-green color blindness) — */
+:root[data-theme="deuteranopia"] {
+  --backdrop: linear-gradient(180deg, #cce0ff 0%, #0d2e5e 100%);
+  --cover-panel: #0d2c52;
+  --cover-light: #ffe8a3;
+  --cover-accent: rgba(240, 170, 40, 0.4);
+  --sheet: #0d2c52;
+  --sheet-border: rgba(240, 200, 80, 0.18);
+  --ink: #fff8e1;
+  --muted: rgba(255, 248, 225, 0.92);
+  --shadow: 0 30px 80px rgba(5, 20, 50, 0.25);
+}
+
+[data-theme="deuteranopia"] {
+  .manual-sheet {
+    a { color: #f5a428; }
+    h4::before { background: rgba(245, 164, 40, 0.95); }
+    :not(pre) > code { background: rgba(245, 180, 60, 0.18); color: #fff8e1; }
+  }
+
+  // Callout-tip: swap green→sky-blue (green & red look alike for deuteranopes)
+  .callout-tip {
+    border-color: rgba(60, 160, 230, 0.85);
+    > p:first-child > strong:first-child,
+    > .callout__toggle > strong { background: #2a8fc8; }
+  }
+
+  // Callout-caution: swap red→orange (distinguishable from blue without green perception)
+  .callout-caution {
+    border-color: rgba(240, 120, 30, 0.9);
+    > p:first-child > strong:first-child,
+    > .callout__toggle > strong { background: #c85e10; }
+  }
+
+  .cover-hero__artbackdrop {
+    background:
+      linear-gradient(180deg, rgba(255, 220, 140, 0.72) 0%, rgba(200, 150, 50, 0.55) 100%);
+  }
+
+  a.sldref {
+    background: rgba(245, 180, 60, 0.1);
+    border-color: rgba(245, 180, 60, 0.25);
+  }
+
+  .site-footer a { color: #f5a428; }
+
+  .theme-switcher__panel { background: #0d2040; border-color: rgba(245, 180, 60, 0.2); }
+  .theme-switcher__heading { color: rgba(255, 240, 180, 0.5); }
+  .theme-opt { color: rgba(255, 248, 225, 0.8); }
+  .theme-opt[aria-pressed="true"] {
+    background: rgba(245, 180, 60, 0.14);
+    border-color: rgba(245, 180, 60, 0.35);
+    color: #fff8e1;
+  }
+  .theme-opt:hover { background: rgba(245, 180, 60, 0.08); }
+}
+
+/* — High Contrast (WCAG AAA — black + white + yellow) — */
+:root[data-theme="high-contrast"] {
+  --backdrop: #000000;
+  --cover-panel: #060606;
+  --cover-light: #ffffff;
+  --cover-accent: rgba(255, 220, 0, 0.22);
+  --sheet: #080808;
+  --sheet-border: rgba(255, 255, 255, 0.55);
+  --ink: #ffffff;
+  --muted: #f8f8f8;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.95);
+}
+
+[data-theme="high-contrast"] {
+  body { background-attachment: scroll; }
+
+  .manual-sheet {
+    a { color: #ffff00; text-decoration: underline; }
+    h4::before { background: #ffff00; }
+    :not(pre) > code { background: #1c1c00; color: #ffff00; border: 1px solid rgba(255, 255, 0, 0.45); }
+    img { border-color: rgba(255, 255, 255, 0.4); }
+  }
+
+  .callout-note {
+    border-color: #00cfff;
+    > p:first-child > strong:first-child,
+    > .callout__toggle > strong { background: #006fa0; }
+  }
+  .callout-tip {
+    border-color: #00ff80;
+    > p:first-child > strong:first-child,
+    > .callout__toggle > strong { background: #007840; }
+  }
+  .callout-warning {
+    border-color: #ffd000;
+    > p:first-child > strong:first-child,
+    > .callout__toggle > strong { background: #7a6000; }
+  }
+  .callout-caution {
+    border-color: #ff6040;
+    > p:first-child > strong:first-child,
+    > .callout__toggle > strong { background: #a01400; }
+  }
+
+  kbd { color: #ffff00; background: #1c1c00; border-color: rgba(255, 255, 0, 0.45); }
+
+  .anchor-nav__btn {
+    background: #000;
+    border-color: rgba(255, 255, 255, 0.65);
+    color: #fff;
+    &:hover, &:focus-visible { background: #111; }
+  }
+
+  .site-footer { background: #000; border-top-color: rgba(255, 255, 255, 0.5); }
+  .site-footer a { color: #ffff00; }
+  .site-footer-owner,
+  .site-footer-copyright,
+  .site-footer-contact,
+  .site-footer-credits { color: rgba(255, 255, 255, 0.85); }
+  .site-footer-disclaimer { color: rgba(255, 255, 255, 0.5); }
+
+  a.sldref { background: rgba(255, 255, 0, 0.08); border-color: rgba(255, 255, 0, 0.4); color: #fff; }
+
+  .cover-hero__artbackdrop { background: #111; }
+  .cover-hero__bird { filter: brightness(0) invert(1); }
+
+  #markdown-toc { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.35); }
+
+  .theme-switcher__toggle { background: #000; border-color: rgba(255, 255, 255, 0.6); color: #fff; }
+  .theme-switcher__panel { background: #000; border-color: rgba(255, 255, 255, 0.6); }
+  .theme-switcher__heading { color: rgba(255, 255, 255, 0.55); }
+  .theme-opt { color: #fff; }
+  .theme-opt[aria-pressed="true"] {
+    background: rgba(255, 255, 0, 0.12);
+    border-color: #ffff00;
+    color: #ffff00;
+  }
+  .theme-opt:hover { background: rgba(255, 255, 0, 0.06); }
+}
+
+/* — Monochrome (grayscale — for achromatopsia / complete color blindness) — */
+:root[data-theme="monochrome"] {
+  --backdrop: linear-gradient(180deg, #606060 0%, #111111 100%);
+  --cover-panel: #1a1a1a;
+  --cover-light: #eeeeee;
+  --cover-accent: rgba(180, 180, 180, 0.3);
+  --sheet: #1e1e1e;
+  --sheet-border: rgba(200, 200, 200, 0.2);
+  --ink: #f0f0f0;
+  --muted: rgba(228, 228, 228, 0.92);
+  --shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="monochrome"] {
+  .manual-sheet {
+    a { color: #d8d8d8; text-decoration: underline; }
+    h4::before { background: rgba(200, 200, 200, 0.9); }
+    :not(pre) > code { background: rgba(255, 255, 255, 0.12); color: #e8e8e8; }
+    img { filter: grayscale(1); }
+  }
+
+  .callout-note,
+  .callout-tip,
+  .callout-warning,
+  .callout-caution { border-color: rgba(200, 200, 200, 0.6); }
+
+  .callout-note > p:first-child > strong:first-child,
+  .callout-note > .callout__toggle > strong,
+  .callout-tip > p:first-child > strong:first-child,
+  .callout-tip > .callout__toggle > strong,
+  .callout-warning > p:first-child > strong:first-child,
+  .callout-warning > .callout__toggle > strong,
+  .callout-caution > p:first-child > strong:first-child,
+  .callout-caution > .callout__toggle > strong { background: #4a4a4a; }
+
+  kbd { color: #e0e0e0; background: #2a2a2a; border-color: rgba(200, 200, 200, 0.35); }
+
+  .anchor-nav__btn {
+    background: rgba(28, 28, 28, 0.9);
+    border-color: rgba(200, 200, 200, 0.3);
+  }
+
+  .site-footer a { color: #d8d8d8; text-decoration: underline; }
+  .site-footer-owner,
+  .site-footer-copyright,
+  .site-footer-contact,
+  .site-footer-credits { color: rgba(220, 220, 220, 0.8); }
+  .site-footer-disclaimer { color: rgba(200, 200, 200, 0.4); }
+
+  a.sldref { background: rgba(200, 200, 200, 0.1); border-color: rgba(200, 200, 200, 0.25); color: #e8e8e8; }
+
+  .cover-hero__artbackdrop {
+    background:
+      linear-gradient(180deg, rgba(180, 180, 180, 0.72) 0%, rgba(100, 100, 100, 0.55) 100%);
+  }
+  .cover-hero__bird {
+    filter: brightness(0) invert(1) grayscale(1) drop-shadow(0 4px 0 rgba(0, 0, 0, 0.85));
+  }
+
+  #markdown-toc { background: rgba(200, 200, 200, 0.06); border-color: rgba(200, 200, 200, 0.15); }
+
+  .theme-switcher__toggle {
+    background: rgba(30, 30, 30, 0.92);
+    border-color: rgba(200, 200, 200, 0.4);
+    color: #e0e0e0;
+  }
+  .theme-switcher__panel { background: #1c1c1c; border-color: rgba(200, 200, 200, 0.2); }
+  .theme-switcher__heading { color: rgba(200, 200, 200, 0.5); }
+  .theme-opt { color: rgba(220, 220, 220, 0.85); }
+  .theme-opt[aria-pressed="true"] {
+    background: rgba(200, 200, 200, 0.14);
+    border-color: rgba(200, 200, 200, 0.4);
+    color: #f0f0f0;
+  }
+  .theme-opt:hover { background: rgba(200, 200, 200, 0.08); }
+}

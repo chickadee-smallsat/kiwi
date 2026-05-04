@@ -2,6 +2,9 @@ title: "Kiwi: The Single-Board Satellite"
 description: "Getting started manual for the Kiwi Single-Board Satellite mainboard."
 theme: jekyll-theme-cayman
 
+kramdown:
+  math_engine: mathjax
+
 # Exclude source/draft files from the built site
 exclude:
   - README.md
