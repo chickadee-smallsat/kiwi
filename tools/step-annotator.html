@@ -309,6 +309,11 @@ header h1 { font-size: 1rem; font-weight: 700; color: #e94560; flex: 1; }
   outline: none; font-family: inherit;
 }
 .callout-note-row input:focus { border-color: #e94560; }
+.callout-note-color {
+  width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px;
+  border: none; border-radius: 3px; padding: 0; cursor: pointer;
+  background: none;
+}
 
 .empty-state { color: #444; font-size: 0.78rem; text-align: center; padding: 12px 0; line-height: 1.7; }
 .hint-text { font-size: 0.72rem; color: #555; margin-top: 7px; line-height: 1.5; }
@@ -1116,7 +1121,13 @@ function renderCalloutNotes() {
     input.placeholder = 'Note for callout ' + ann.number + '…';
     input.value = ann.label || '';
     input.oninput = () => { ann.label = input.value; };
-    row.append(badge, input);
+    const colorPick = document.createElement('input');
+    colorPick.type = 'color';
+    colorPick.className = 'callout-note-color';
+    colorPick.title = 'Label text color';
+    colorPick.value = ann.labelColor || '#e0e0e0';
+    colorPick.oninput = () => { ann.labelColor = colorPick.value; };
+    row.append(badge, input, colorPick);
     container.appendChild(row);
   });
 }
@@ -1400,9 +1411,9 @@ body {
   overflow-y: auto;
 }
 .step-title { font-size: 0.95rem; font-weight: 700; color: #e94560; margin-bottom: 4px; }
-.step-desc  { font-size: 0.82rem; color: #bbb; line-height: 1.55; margin-bottom: 6px; white-space: pre-wrap; }
+.step-desc  { font-size: 0.82rem; color: #e0e0e0; line-height: 1.55; margin-bottom: 6px; white-space: pre-wrap; }
 .callout-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-.callout-item { display: flex; align-items: flex-start; gap: 7px; font-size: 0.8rem; color: #ccc; line-height: 1.45; }
+.callout-item { display: flex; align-items: flex-start; gap: 7px; font-size: 0.8rem; color: #e0e0e0; line-height: 1.45; }
 .callout-badge {
   width: 18px; height: 18px; border-radius: 50%;
   color: white; font-size: 0.65rem; font-weight: 700;
@@ -1412,6 +1423,7 @@ body {
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #1a4a6e; border-radius: 3px; }
+.step-title code, .step-desc code, .callout-item code { font-family: ui-monospace,'Cascadia Code',Menlo,monospace; font-size:0.875em; background:rgba(255,255,255,0.1); padding:0.1em 0.35em; border-radius:3px; color:#7ec8e3; }
 </style>
 </head>
 <body>
@@ -1533,6 +1545,12 @@ function renderAnnotations(s, svg) {
   });
 }
 
+function parseInline(s) {
+  if (!s) return '';
+  var e = s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return e.replace(/\`([^\`]+)\`/g, '<code>$1</code>');
+}
+
 function renderStep(idx) {
   const s = STEPS[idx];
   document.getElementById('step-counter').textContent = (idx + 1) + ' / ' + STEPS.length;
@@ -1556,8 +1574,8 @@ function renderStep(idx) {
     svg.innerHTML = '';
   }
 
-  document.getElementById('slide-title').textContent = s.title || '';
-  document.getElementById('slide-desc').textContent  = s.desc  || '';
+  document.getElementById('slide-title').innerHTML = parseInline(s.title || '');
+  document.getElementById('slide-desc').innerHTML  = parseInline(s.desc  || '');
 
   const calloutList = document.getElementById('slide-callouts');
   calloutList.innerHTML = '';
@@ -1570,7 +1588,8 @@ function renderStep(idx) {
     badge.style.background = ann.color || '#e94560';
     badge.textContent = ann.number;
     const text = document.createElement('span');
-    text.textContent = ann.label;
+    text.innerHTML = parseInline(ann.label);
+    if (ann.labelColor) text.style.color = ann.labelColor;
     li.append(badge, text);
     calloutList.appendChild(li);
   });

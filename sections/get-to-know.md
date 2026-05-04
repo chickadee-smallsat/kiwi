@@ -64,6 +64,7 @@ Kiwi Plotter can be opened later from the Start ({% include icon-windows.html %}
 
 To install Kiwi Plotter on macOS, download `Kiwi Plotter-<Version>-arm64.dmg`, and open the DMG file.
 Follow the steps in {%include sld-ref.html id="sld-mac-kiwi-plotter" %} to complete the installation.
+Kiwi Plotter can be opened later from the Applications folder, or from Launchpad.
 
 <div class="pcb-viewer-wrap" id="sld-mac-kiwi-plotter" data-slideshow>
   <iframe src="{{ '/assets/media/macos-kiwi-plotter.html' | relative_url }}"
