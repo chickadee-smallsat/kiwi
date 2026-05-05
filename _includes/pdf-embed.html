@@ -1,15 +1,24 @@
 {% assign _pdf_src = include.src | relative_url %}
-{% assign _pdf_viewer = "https://mozilla.github.io/pdf.js/web/viewer.html?file=" | append: site.url | append: _pdf_src %}
 {% assign _pdf_height = include.height | default: "700px" %}
 {% assign _pdf_label = include.label | default: "PDF document" %}
-<div class="pdf-embed-wrap">
-  <iframe
-    src="{{ _pdf_viewer }}"
-    style="height:{{ _pdf_height }}"
-    title="{{ _pdf_label }}"
-    loading="lazy">
-  </iframe>
-  <p class="pdf-embed-fallback">
-    <a href="{{ _pdf_src }}">Download {{ _pdf_label }}</a>
-  </p>
+{% assign _pdf_viewer = "/assets/media/pdf-viewer.html?file=" | relative_url | append: (_pdf_src | uri_escape) %}
+<div class="collapsible-fig">
+  <div class="collapsible-fig__body">
+    <div class="pdf-embed-wrap">
+      <iframe
+        src="{{ _pdf_viewer }}"
+        style="height:{{ _pdf_height }}"
+        title="{{ _pdf_label }}"
+        loading="lazy"
+        scrolling="no"
+        onload="(function(f){window.addEventListener('message',function(e){if(e.data&&e.data.type==='pdf-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+      </iframe>
+    </div>
+  </div>
+  <button type="button" class="collapsible-fig__toggle" aria-expanded="false"
+    onclick="var w=this.closest('.collapsible-fig');var o=w.classList.toggle('is-open');this.setAttribute('aria-expanded',String(o));"
+    >{{ _pdf_label }}</button>
 </div>
+<p class="pdf-embed-fallback">
+  <a href="{{ _pdf_src }}" download>Download {{ _pdf_label }}</a>
+</p>

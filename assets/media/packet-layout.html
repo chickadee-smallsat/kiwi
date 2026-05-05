@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kiwi Packet Layout</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+    background: #0e3247;
+    color: #e8f7fd;
+    padding: 16px;
+  }
+
+  /* ── Diagram ── */
+  .diagram {
+    display: flex;
+    gap: 4px;
+    width: 100%;
+    user-select: none;
+  }
+
+  .seg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 10px 6px;
+    cursor: pointer;
+    transition: filter 0.15s, transform 0.15s, box-shadow 0.15s;
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .seg:focus-visible {
+    outline: 2px solid #7ec8e3;
+    outline-offset: 2px;
+  }
+
+  .seg:hover,
+  .seg.is-active {
+    filter: brightness(1.25) saturate(1.2);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    z-index: 2;
+  }
+
+  .seg__label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.2;
+    pointer-events: none;
+  }
+
+  .seg__bytes {
+    font-size: 0.62rem;
+    opacity: 0.75;
+    margin-top: 4px;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  /* Proportional widths: type=2, data=12, ts=8, crc=2 → total=24 */
+  .seg--type      { flex: 2;  background: #1b4f72; border: 2px solid #2e86c1; color: #aed6f1; }
+  .seg--data      { flex: 12; background: #1a3a2a; border: 2px solid #27ae60; color: #a9dfbf; }
+  .seg--timestamp { flex: 8;  background: #3b2d14; border: 2px solid #e67e22; color: #fad7a0; }
+  .seg--crc       { flex: 2;  background: #3b1030; border: 2px solid #8e44ad; color: #d7bde2; }
+
+  /* ── Detail panel ── */
+  .detail {
+    margin-top: 16px;
+    min-height: 100px;
+    border-radius: 8px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: opacity 0.2s;
+  }
+
+  .detail[hidden] { display: none; }
+
+  .detail__title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .detail__meta {
+    font-size: 0.76rem;
+    opacity: 0.65;
+    margin-bottom: 10px;
+    letter-spacing: 0.03em;
+  }
+
+  .detail__body {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    opacity: 0.88;
+  }
+
+  .detail__body code {
+    background: rgba(255,255,255,0.12);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 0.9em;
+  }
+
+  .detail__body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 0.8rem;
+  }
+
+  .detail__body th,
+  .detail__body td {
+    text-align: left;
+    padding: 4px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .detail__body th {
+    opacity: 0.6;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* Byte-position ruler */
+  .ruler {
+    display: flex;
+    gap: 4px;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .ruler__seg {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    opacity: 0.45;
+    padding: 0 2px;
+  }
+
+  .ruler__seg--type      { flex: 2; }
+  .ruler__seg--data      { flex: 12; }
+  .ruler__seg--timestamp { flex: 8; }
+  .ruler__seg--crc       { flex: 2; }
+
+  .hint {
+    font-size: 0.7rem;
+    text-align: center;
+    opacity: 0.4;
+    margin-top: 10px;
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<!-- Byte ruler -->
+<div class="ruler" aria-hidden="true">
+  <div class="ruler__seg ruler__seg--type">     <span>0</span><span>1</span></div>
+  <div class="ruler__seg ruler__seg--data">     <span>2</span><span>13</span></div>
+  <div class="ruler__seg ruler__seg--timestamp"><span>14</span><span>21</span></div>
+  <div class="ruler__seg ruler__seg--crc">      <span>22</span><span>23</span></div>
+</div>
+
+<!-- Diagram segments -->
+<div class="diagram" role="group" aria-label="Packet field diagram">
+
+  <div class="seg seg--type" id="seg-type" tabindex="0"
+       role="button" aria-pressed="false" aria-controls="detail-panel"
+       aria-label="TYPE field, bytes 0–1">
+    <span class="seg__label">Type</span>
+    <span class="seg__bytes">2 B</span>
+  </div>
+
+  <div class="seg seg--data" id="seg-data" tabindex="0"
+       role="button" aria-pressed="false" aria-controls="detail-panel"
+       aria-label="DATA PAYLOAD field, bytes 2–13">
+    <span class="seg__label">Data Payload</span>
+    <span class="seg__bytes">12 B</span>
+  </div>
+
+  <div class="seg seg--timestamp" id="seg-timestamp" tabindex="0"
+       role="button" aria-pressed="false" aria-controls="detail-panel"
+       aria-label="TIMESTAMP field, bytes 14–21">
+    <span class="seg__label">Timestamp</span>
+    <span class="seg__bytes">8 B</span>
+  </div>
+
+  <div class="seg seg--crc" id="seg-crc" tabindex="0"
+       role="button" aria-pressed="false" aria-controls="detail-panel"
+       aria-label="CRC field, bytes 22–23">
+    <span class="seg__label">CRC</span>
+    <span class="seg__bytes">2 B</span>
+  </div>
+
+</div>
+
+<p class="hint">Click a field to learn more</p>
+
+<!-- Detail panel -->
+<div id="detail-panel" class="detail" hidden></div>
+
+<script>
+(function () {
+  var FIELDS = {
+    'seg-type': {
+      title: 'Type',
+      meta: 'Bytes 0–1 · u16 · little-endian',
+      html: [
+        '<p>A 16-bit unsigned integer that identifies the sensor and how the data payload is encoded.</p>',
+        '<table>',
+        '<tr><th>Type</th><th>Code</th><th>Sensor</th></tr>',
+        '<tr><td>Accelerometer</td><td><code>0xACC1</code></td><td>3-axis accelerometer (g)</td></tr>',
+        '<tr><td>Gyroscope</td><td><code>0x6E50</code></td><td>3-axis gyroscope (°/s)</td></tr>',
+        '<tr><td>Magnetometer</td><td><code>0x9A61</code></td><td>3-axis magnetometer (mG)</td></tr>',
+        '<tr><td>Temperature</td><td><code>0x7E70</code></td><td>Labeled temperature sensor (°C)</td></tr>',
+        '<tr><td>Barometer</td><td><code>0xB480</code></td><td>Temperature, pressure, altitude</td></tr>',
+        '<tr><td>Humidity / AQI</td><td><code>0xF0AC</code></td><td>Temp, relative humidity, AQI</td></tr>',
+        '<tr><td>Light</td><td><code>0x1A2B</code></td><td>Labeled ambient light sensor (lux)</td></tr>',
+        '<tr><td>Device ID</td><td><code>0x1D1D</code></td><td>ASCII device identifier string</td></tr>',
+        '</table>'
+      ].join('')
+    },
+    'seg-data': {
+      title: 'Data Payload',
+      meta: 'Bytes 2–13 · 12 bytes · layout depends on Type',
+      html: [
+        '<p>The 12-byte measurement payload. Its internal layout is determined by the Type field:</p>',
+        '<table>',
+        '<tr><th>Type</th><th>Layout (bytes 2–13)</th></tr>',
+        '<tr><td>Accel / Gyro / Mag</td><td>X <code>f32</code>, Y <code>f32</code>, Z <code>f32</code> (4 B each)</td></tr>',
+        '<tr><td>Baro</td><td>Temperature <code>f32</code>, Pressure <code>f32</code>, Altitude <code>f32</code></td></tr>',
+        '<tr><td>Humidity / AQI</td><td>Temperature <code>f32</code>, Humidity <code>f32</code>, AQI <code>f32</code></td></tr>',
+        '<tr><td>Temperature / Light</td><td>Label (8 B ASCII, null-padded), Value <code>f32</code></td></tr>',
+        '<tr><td>Device ID</td><td>ID string (12 B ASCII, null-padded, e.g. <code>kiwi#0001</code>)</td></tr>',
+        '</table>',
+        '<p style="margin-top:8px">All <code>f32</code> values are IEEE 754 single-precision, little-endian.</p>'
+      ].join('')
+    },
+    'seg-timestamp': {
+      title: 'Timestamp',
+      meta: 'Bytes 14–21 · u64 · little-endian · microseconds',
+      html: [
+        '<p>A 64-bit unsigned integer recording when the measurement was taken, in <strong>microseconds</strong> since the device started.</p>',
+        '<p style="margin-top:8px">This is a relative timestamp — it is not anchored to wall-clock time and resets each time the device powers on.</p>'
+      ].join('')
+    },
+    'seg-crc': {
+      title: 'CRC',
+      meta: 'Bytes 22–23 · u16 · little-endian · CRC-16/XMODEM',
+      html: [
+        '<p>A 16-bit integrity checksum computed over bytes 0–21 using the <strong>CRC-16/XMODEM</strong> algorithm.</p>',
+        '<p style="margin-top:8px">Receivers should verify this value before processing the packet. A mismatch means the packet is corrupt and should be discarded.</p>'
+      ].join('')
+    }
+  };
+
+  var activeId = null;
+  var panel = document.getElementById('detail-panel');
+
+  function activate(id) {
+    if (activeId) {
+      var prev = document.getElementById(activeId);
+      if (prev) { prev.classList.remove('is-active'); prev.setAttribute('aria-pressed', 'false'); }
+    }
+    if (id === activeId) {
+      activeId = null;
+      panel.hidden = true;
+      reportHeight();
+      return;
+    }
+    activeId = id;
+    var el = document.getElementById(id);
+    el.classList.add('is-active');
+    el.setAttribute('aria-pressed', 'true');
+
+    var f = FIELDS[id];
+    panel.hidden = false;
+    panel.innerHTML =
+      '<div class="detail__title">' + f.title + '</div>' +
+      '<div class="detail__meta">' + f.meta + '</div>' +
+      '<div class="detail__body">' + f.html + '</div>';
+
+    reportHeight();
+  }
+
+  Object.keys(FIELDS).forEach(function (id) {
+    var el = document.getElementById(id);
+    el.addEventListener('click', function () { activate(id); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(id); }
+    });
+  });
+
+  function reportHeight() {
+    var h = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'pcb-resize', height: h }, '*');
+  }
+
+  window.addEventListener('resize', reportHeight);
+  reportHeight();
+
+  // Theme support via postMessage (same pattern as kiwi-pcb-viewer.html)
+  var THEME_CSS = {
+    'deuteranopia':
+      // Green → amber (deuteranopes can't distinguish green from red/orange).
+      // Orange timestamp → cyan so it stays distinct from amber data.
+      'body{background:#0d2c52;color:#fff8e1}' +
+      '.seg--type{background:#0d1e3c;border-color:#6ea8fe;color:#c8e0ff}' +
+      '.seg--data{background:#2d1f00;border-color:#f5a428;color:#ffe0a0}' +
+      '.seg--timestamp{background:#012030;border-color:#4cc9f0;color:#a0eeff}' +
+      '.seg--crc{background:#1c0d35;border-color:#a78bfa;color:#ddd6fe}' +
+      '.detail{background:rgba(255,248,225,0.05);border-color:rgba(255,248,225,0.12)}' +
+      '.detail__body code{background:rgba(245,164,40,0.15)}',
+    'high-contrast':
+      'body{background:#000;color:#fff}' +
+      '.seg--type{background:#000;border-color:#fff;color:#fff;border-width:2px}' +
+      '.seg--data{background:#000;border-color:#ff0;color:#ff0;border-width:2px}' +
+      '.seg--timestamp{background:#000;border-color:#0ff;color:#0ff;border-width:2px}' +
+      '.seg--crc{background:#000;border-color:#f0f;color:#f0f;border-width:2px}' +
+      '.seg:hover,.seg.is-active{filter:brightness(1.5);box-shadow:0 6px 18px rgba(255,255,255,0.25)}' +
+      '.detail{background:#0a0a0a;border-color:#fff}' +
+      '.detail__body code{background:#1c1c00;color:#ff0;border:1px solid rgba(255,255,0,0.45)}' +
+      '.detail__body th{color:#ff0}' +
+      '.ruler__seg{opacity:0.75}',
+    'monochrome':
+      'body{background:#111;color:#e0e0e0}' +
+      '.seg--type{background:#1a1a1a;border-color:#555;color:#ccc}' +
+      '.seg--data{background:#222;border-color:#777;color:#d8d8d8}' +
+      '.seg--timestamp{background:#1c1c1c;border-color:#666;color:#d0d0d0}' +
+      '.seg--crc{background:#181818;border-color:#444;color:#bbb}' +
+      '.seg:hover,.seg.is-active{filter:brightness(1.4)}' +
+      '.detail{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.15)}' +
+      '.detail__body code{background:rgba(255,255,255,0.1)}'
+  };
+
+  window.addEventListener('message', function (e) {
+    if (!e.data || e.data.type !== 'setTheme') return;
+    var t = e.data.theme || 'default';
+    var el = document.getElementById('_packet_theme_override');
+    if (!el) { el = document.createElement('style'); el.id = '_packet_theme_override'; document.head.appendChild(el); }
+    el.textContent = THEME_CSS[t] || '';
+  });
+})();
+</script>
+</body>
+</html>

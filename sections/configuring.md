@@ -2,7 +2,7 @@
 
 # Configuring your Kiwi
 
-Kiwi exposes a simple configuration interface over [universal serial asynchronous receiver-transmitter (UART)](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter), better known as a ['serial port'](https://en.wikipedia.org/wiki/Serial_communication).
+Kiwi exposes a simple configuration interface over universal serial asynchronous receiver-transmitter (UART)<span class="cite-ref" data-ref="ref-uart"></span>, better known as a 'serial port'<span class="cite-ref" data-ref="ref-serial"></span>.
 This serial port is accessible to the computer connected to Kiwi over the USB port.
 The configuration interfaces uses text commands to configure the Kiwi.
 The built-in firmware supports changing the Wi-Fi settings, and updating the unique identifier of the Kiwi (`Kiwi#XXXX` by default).
@@ -173,9 +173,9 @@ Executing `kiwi ap kiwi-private SecurePassword` will configure Kiwi to set up a 
 
 #### `wifi cl`
 {: .no_toc }
-The `wifi cl` command configures the Kiwi to connect to an open, or [WPA/WPA2](https://en.wikipedia.org/wiki/Wi-Fi_Protected_Access) protected network.
+The `wifi cl` command configures the Kiwi to connect to an open, or WPA/WPA2<span class="cite-ref" data-ref="ref-wpa"></span> protected network.
 Most home/private networks use this form of authentication, where a passsword is entered to join the network.
-The [eduroam](https://en.wikipedia.org/wiki/Eduroam) network uses more complex authentication methods, and Kiwi can not join such a network.
+The eduroam<span class="cite-ref" data-ref="ref-eduroam"></span> network uses more complex authentication methods, and Kiwi can not join such a network.
 `wifi cl` command accepts the SSID (required) and password (optional) parameters.
 To connect Kiwi to `MyHomeWiFi` secured by `MySecurePassword`, execute the following command:
 ```

@@ -234,6 +234,74 @@ Select <ui-btn>Bus reported device description</ui-btn>.
 
 The `.md` extension works with `include_relative` and Kramdown processes the `markdown="1"` block normally.
 
+## Citations
+
+References are stored in [`assets/references.json`](assets/references.json) and rendered entirely by JavaScript. Every entry requires `id`, `type`, `title`, and `url`. The order of entries in the JSON file determines the citation numbers `[1]`, `[2]`, … shown in the text.
+
+### JSON schema
+
+#### `type: "url"` — web page / encyclopedia entry
+
+```json
+{
+  "id": "ref-udp",
+  "type": "url",
+  "title": "User Datagram Protocol",
+  "url": "https://en.wikipedia.org/wiki/User_Datagram_Protocol",
+  "source": "Wikipedia"
+}
+```
+
+Rendered as: **[N]** [User Datagram Protocol](#). Wikipedia.
+
+| Field | Required | Description |
+|---|---|---|
+| `id` | ✓ | Unique anchor id used in `data-ref` attributes (e.g. `ref-udp`) |
+| `type` | ✓ | `"url"` |
+| `title` | ✓ | Link text |
+| `url` | ✓ | Destination URL |
+| `source` | | Publisher / site name, rendered in plain text |
+
+#### `type: "article"` — journal or conference paper
+
+```json
+{
+  "id": "ref-sharma2021",
+  "type": "article",
+  "title": "LoRa-based CubeSat telemetry in LEO",
+  "url": "https://doi.org/10.1109/AERO.2021.9438529",
+  "authors": ["Sharma, A.", "Müller, B.", "Chen, C."],
+  "year": 2021,
+  "source": "IEEE Aerospace Conference",
+  "doi": "10.1109/AERO.2021.9438529"
+}
+```
+
+Rendered as: **[N]** Sharma, A., Müller, B., Chen, C. (2021). [LoRa-based CubeSat telemetry in LEO](#). *IEEE Aerospace Conference*. [doi:10.1109/AERO.2021.9438529](#)
+
+| Field | Required | Description |
+|---|---|---|
+| `id` | ✓ | Unique anchor id (e.g. `ref-sharma2021`) |
+| `type` | ✓ | `"article"` |
+| `title` | ✓ | Paper title, rendered as a hyperlink |
+| `url` | ✓ | Landing page or DOI URL |
+| `authors` | | Array of author name strings in `"Last, F."` format |
+| `year` | | Publication year (integer) |
+| `source` | | Journal or proceedings name, rendered in *italics* |
+| `doi` | | DOI string (without `https://doi.org/`); rendered as a `doi:…` badge link |
+
+### Inline citation markup
+
+To cite a reference in any section file, place an empty `<span>` with the `cite-ref` class and a `data-ref` attribute matching the entry's `id`:
+
+```html
+CRC<span class="cite-ref" data-ref="ref-crc"></span> is used to detect transmission errors.
+```
+
+JavaScript fills in the numbered link at page load. No number is hardcoded in the markup — reordering entries in the JSON automatically renumbers all citations everywhere.
+
+---
+
 ## Versioned Docs Publishing
 
 Documentation versioning is handled by Git tags and CI, not by manually creating version folders in source.

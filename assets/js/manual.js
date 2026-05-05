@@ -179,6 +179,85 @@ document.querySelectorAll('a.tblref').forEach(function(a) {
     a.textContent = 'Table ' + tblMap[id];
   }
 });
+/* ── Citation auto-numbering ───────────────────────────────────── */
+(function() {
+  var ol = document.getElementById('references-list');
+  if (!ol) return;
+
+  fetch('/assets/references.json')
+    .then(function(r) { return r.json(); })
+    .then(function(refs) {
+      // Render list items.
+      refs.forEach(function(ref) {
+        var li = document.createElement('li');
+        li.id = ref.id;
+
+        // Authors + year (journal articles).
+        if (ref.type === 'article' && ref.authors && ref.authors.length) {
+          var authStr = ref.authors.join(', ');
+          authStr += ref.year ? ' (' + ref.year + '). ' : '. ';
+          li.appendChild(document.createTextNode(authStr));
+        }
+
+        // Linked title.
+        var a = document.createElement('a');
+        a.href = ref.url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = ref.title;
+        li.appendChild(a);
+
+        // Source: italicised for articles, plain for web pages.
+        if (ref.source) {
+          li.appendChild(document.createTextNode('. '));
+          if (ref.type === 'article') {
+            var em = document.createElement('em');
+            em.textContent = ref.source;
+            li.appendChild(em);
+          } else {
+            li.appendChild(document.createTextNode(ref.source));
+          }
+          li.appendChild(document.createTextNode('.'));
+        }
+
+        // DOI badge.
+        if (ref.doi) {
+          var doiA = document.createElement('a');
+          doiA.href = 'https://doi.org/' + ref.doi;
+          doiA.target = '_blank';
+          doiA.rel = 'noopener';
+          doiA.textContent = 'doi:' + ref.doi;
+          li.appendChild(document.createTextNode(' '));
+          li.appendChild(doiA);
+        }
+
+        ol.appendChild(li);
+      });
+
+      // Assign sequential numbers in list order.
+      var refMap = {};
+      var refCount = 0;
+      ol.querySelectorAll('li[id]').forEach(function(li) {
+        refCount++;
+        refMap[li.id] = refCount;
+        li.setAttribute('data-cite-num', '[' + refCount + ']');
+      });
+
+      // Fill every inline cite-ref marker with its number.
+      document.querySelectorAll('.cite-ref[data-ref]').forEach(function(span) {
+        var id = span.getAttribute('data-ref');
+        var num = refMap[id];
+        if (num === undefined) return;
+        // Clear any previously injected anchor (e.g. on hot-reload).
+        span.innerHTML = '';
+        var a = document.createElement('a');
+        a.href = '#' + id;
+        a.textContent = '[' + num + ']';
+        span.appendChild(a);
+      });
+    });
+})();
+
 /* ── Slideshow auto-numbering & slide navigation ─────────────────── */
 var sldMap = {};
 var sldCount = 0;
