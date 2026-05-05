@@ -1,0 +1,123 @@
+name: Publish Versioned Docs
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set version metadata
+        id: vars
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            DOC_VERSION="${GITHUB_REF_NAME}"
+          else
+            DOC_VERSION="latest"
+          fi
+          echo "repo_name=${REPO_NAME}" >> "$GITHUB_OUTPUT"
+          echo "doc_version=${DOC_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Build Jekyll site for target version
+        shell: bash
+        run: |
+          set -euo pipefail
+          bundle exec jekyll build --baseurl "/${{ steps.vars.outputs.repo_name }}/${{ steps.vars.outputs.doc_version }}"
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+        continue-on-error: true
+
+      - name: Prepare gh-pages worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! -d gh-pages/.git ]]; then
+            mkdir -p gh-pages
+            cp -R _site/. gh-pages/
+            pushd gh-pages > /dev/null
+            git init
+            git checkout --orphan gh-pages
+            popd > /dev/null
+          fi
+
+      - name: Publish version and update manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.vars.outputs.doc_version }}"
+          mkdir -p "gh-pages/${VERSION}"
+          rm -rf "gh-pages/${VERSION}"/*
+          cp -R _site/. "gh-pages/${VERSION}/"
+
+          if [[ -f gh-pages/versions.json ]]; then
+            cp gh-pages/versions.json /tmp/versions.json
+          elif [[ -f versions.json ]]; then
+            cp versions.json /tmp/versions.json
+          else
+            printf '["latest"]\n' > /tmp/versions.json
+          fi
+
+          jq --arg v "$VERSION" '
+            if index($v) then . else . + [$v] end
+            | map(select(. != "latest"))
+            | sort
+            | reverse
+            | ["latest"] + .
+          ' /tmp/versions.json > gh-pages/versions.json
+
+          cat > gh-pages/index.html <<'HTML'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0; url=./latest/">
+            <title>Kiwi Docs</title>
+          </head>
+          <body>
+            <p>Redirecting to the latest documentation...</p>
+            <p><a href="./latest/">Continue to latest</a></p>
+          </body>
+          </html>
+          HTML
+
+      - name: Commit and push gh-pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          pushd gh-pages > /dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --cached --quiet; then
+            echo "No changes to publish"
+            popd > /dev/null
+            exit 0
+          fi
+          git commit -m "docs: publish ${{ steps.vars.outputs.doc_version }}"
+          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+          popd > /dev/null

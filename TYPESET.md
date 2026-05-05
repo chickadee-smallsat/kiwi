@@ -233,3 +233,25 @@ Select <ui-btn>Bus reported device description</ui-btn>.
 3. Adding `{% include_relative sections/my-section.md %}` at the appropriate position in `index.md`.
 
 The `.md` extension works with `include_relative` and Kramdown processes the `markdown="1"` block normally.
+
+## Versioned Docs Publishing
+
+Documentation versioning is handled by Git tags and CI, not by manually creating version folders in source.
+
+The workflow in `.github/workflows/publish-versioned-docs.yml` publishes to the `gh-pages` branch as:
+
+- `latest` from pushes to `main`
+- `<tag>` (for example `v1.2.0`) from tag pushes
+
+Published URLs are:
+
+- `https://<org>.github.io/<repo>/latest/`
+- `https://<org>.github.io/<repo>/<tag>/`
+
+The footer version dropdown reads `versions.json` from the site root and lets readers switch between published versions.
+
+## Making A Release
+
+1. Create and push a tag: `git tag vX.Y.Z && git push origin vX.Y.Z`
+2. GitHub Actions builds the docs with a versioned `baseurl` and publishes them under `/<repo>/vX.Y.Z/`
+3. The workflow updates `versions.json` on `gh-pages`, so the new release appears in the footer dropdown

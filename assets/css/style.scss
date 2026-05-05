@@ -934,10 +934,6 @@ a.sldref {
   color: rgba(199, 235, 248, 0.9);
 }
 
-.site-footer-copyright {
-  color: rgba(199, 235, 248, 0.75);
-}
-
 .site-footer-contact {
   margin-left: auto;
 }
@@ -954,6 +950,46 @@ a.sldref {
   font-size: 0.72rem;
   color: rgba(199, 235, 248, 0.45);
   line-height: 1.5;
+}
+
+.version-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.75rem;
+}
+
+.version-selector__label {
+  color: rgba(199, 235, 248, 0.75);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.version-selector__select {
+  min-width: 9rem;
+  border: 1px solid rgba(199, 235, 248, 0.24);
+  background: rgba(14, 50, 71, 0.82);
+  color: #e8f7fd;
+  border-radius: 0.4rem;
+  padding: 0.22rem 0.45rem;
+  font-size: 0.82rem;
+}
+
+.version-selector__select:focus-visible {
+  outline: 2px solid rgba(126, 200, 227, 0.7);
+  outline-offset: 2px;
+}
+
+@media (max-width: 740px) {
+  .version-selector {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .version-selector__select {
+    flex: 1 1 auto;
+  }
 }
 
 /* ── Math (MathJax 3) ───────────────────────────────────────────── */

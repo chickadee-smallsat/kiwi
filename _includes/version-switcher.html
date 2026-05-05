@@ -1,0 +1,52 @@
+<div class="version-selector" aria-label="Documentation version selector">
+  <label class="version-selector__label" for="version-select">Version</label>
+  <select id="version-select" class="version-selector__select">
+    <option value="" disabled selected>Loading versions...</option>
+  </select>
+</div>
+
+<script>
+(function () {
+  var baseurl = '{{ site.baseurl | default: "" }}';
+  var parts = baseurl.split('/').filter(Boolean);
+  var current = parts.length ? parts[parts.length - 1] : 'latest';
+  var docsRoot = parts.length > 1 ? '/' + parts.slice(0, -1).join('/') : (parts.length === 1 ? '/' + parts[0] : '');
+  var versionsUrl = (docsRoot || '') + '/versions.json';
+
+  function targetUrl(version) {
+    var root = docsRoot || '';
+    return root + '/' + version + '/';
+  }
+
+  fetch(versionsUrl)
+    .then(function (res) {
+      return res.ok ? res.json() : [];
+    })
+    .catch(function () {
+      return [];
+    })
+    .then(function (versions) {
+      var select = document.getElementById('version-select');
+      if (!select || !Array.isArray(versions) || !versions.length) {
+        return;
+      }
+
+      select.innerHTML = '';
+      versions.forEach(function (v, i) {
+        var option = document.createElement('option');
+        option.value = v;
+        option.textContent = i === 0 ? v + ' (latest)' : v;
+        option.selected = (v === current);
+        select.appendChild(option);
+      });
+
+      if (!versions.includes(current)) {
+        select.selectedIndex = 0;
+      }
+
+      select.addEventListener('change', function () {
+        window.location.href = targetUrl(select.value) + window.location.hash;
+      });
+    });
+})();
+</script>

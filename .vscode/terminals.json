@@ -1,0 +1,13 @@
+{
+    "autorun": true,
+    "terminals": [
+        {
+            "autorun": true,
+            "name": "Jekyll Serve",
+            "commands": [
+                "bundle install",
+                "bundle exec jekyll serve"
+            ]
+        }
+    ]
+}
