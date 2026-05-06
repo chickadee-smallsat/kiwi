@@ -184,7 +184,7 @@ document.querySelectorAll('a.tblref').forEach(function(a) {
   var ol = document.getElementById('references-list');
   if (!ol) return;
 
-  fetch('/assets/references.json')
+  fetch((window.SITE_BASEURL || '') + '/assets/references.json')
     .then(function(r) { return r.json(); })
     .then(function(refs) {
       // Render list items.
