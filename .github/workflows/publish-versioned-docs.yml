@@ -99,19 +99,19 @@ jobs:
           touch gh-pages/.nojekyll
 
           cat > gh-pages/index.html <<'HTML'
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=./latest/">
-  <title>Kiwi Docs</title>
-</head>
-<body>
-  <p>Redirecting to the latest documentation...</p>
-  <p><a href="./latest/">Continue to latest</a></p>
-</body>
-</html>
-HTML
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0; url=./latest/">
+            <title>Kiwi Docs</title>
+          </head>
+          <body>
+            <p>Redirecting to the latest documentation...</p>
+            <p><a href="./latest/">Continue to latest</a></p>
+          </body>
+          </html>
+          HTML
 
       - name: Commit and push gh-pages
         shell: bash
