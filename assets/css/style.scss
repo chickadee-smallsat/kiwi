@@ -882,6 +882,12 @@ a.sldref {
   border: none;
 }
 
+@media (max-width: 640px) {
+  [data-slideshow] iframe {
+    aspect-ratio: 3 / 4 !important;
+  }
+}
+
 /* ── PDF Embed ──────────────────────────────────────────────────── */
 .pdf-embed-wrap {
   width: 100%;

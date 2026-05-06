@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Kiwi PCB Interactive Viewer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: "Space Grotesk", system-ui, -apple-system, sans-serif; background: #1a1a2e; color: #e0e0e0; }
@@ -109,6 +107,7 @@
   /* Parts table */
   .parts-section { padding: 0 16px 24px; }
   .parts-section details { border: 1px solid #0f3460; border-radius: 6px; }
+  .parts-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
   .parts-section summary {
     padding: 10px 14px;
     font-size: 0.82rem;
@@ -128,7 +127,7 @@
   .parts-section summary::before { content: '▼'; font-size: 0.65rem; color: #e94560; transition: transform 0.2s; }
   .parts-section details:not([open]) summary::before { transform: rotate(-90deg); }
   .parts-section summary span.count { font-weight: 400; color: #aaa; font-size: 0.78rem; text-transform: none; letter-spacing: 0; }
-  .parts-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: #0f1b2d; border-radius: 0 0 5px 5px; overflow: hidden; }
+  .parts-table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 0.8rem; background: #0f1b2d; border-radius: 0 0 5px 5px; overflow: hidden; }
   .parts-table th {
     text-align: left;
     padding: 7px 12px;
@@ -188,10 +187,12 @@
 <div class="parts-section">
   <details open id="parts-details">
     <summary>Parts list <span class="count" id="parts-count"></span></summary>
+    <div class="parts-table-scroll">
     <table class="parts-table">
       <thead><tr><th>Designation</th><th>Part Number</th><th>Description</th><th>Board</th></tr></thead>
       <tbody id="parts-tbody"></tbody>
     </table>
+    </div>
   </details>
 </div>
 <div id="pcb-popup">
