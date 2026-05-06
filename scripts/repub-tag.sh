@@ -83,9 +83,13 @@ if remote_branch_exists gh-pages; then
     echo "    Found commit $COMMIT  ($TOTAL commit(s) on gh-pages)"
 
     if [[ "$TOTAL" -eq 1 ]]; then
-      # Only one commit: wipe the branch so gh-pages starts fresh on re-publish
-      echo "    Only commit — deleting gh-pages branch entirely"
-      git push origin --delete gh-pages
+      # Only one commit: replace it with an empty orphan so the gh-pages branch
+      # (and its GitHub Pages configuration) is preserved but contains nothing.
+      echo "    Only commit — resetting gh-pages to an empty orphan commit"
+      git checkout --orphan gh-pages-empty
+      git rm -rf . > /dev/null 2>&1 || true
+      git commit --allow-empty -m "chore: reset gh-pages"
+      git push origin --force HEAD:gh-pages
     else
       HEAD_SHA="$(git rev-parse HEAD)"
 

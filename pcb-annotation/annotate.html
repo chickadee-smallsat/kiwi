@@ -1161,7 +1161,7 @@ function exportViewer(imageMode) {
   .parts-section summary::before { content: '▼'; font-size: 0.65rem; color: #e94560; transition: transform 0.2s; }
   .parts-section details:not([open]) summary::before { transform: rotate(-90deg); }
   .parts-section summary span.count { font-weight: 400; color: #aaa; font-size: 0.78rem; text-transform: none; letter-spacing: 0; }
-  .parts-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: #0f1b2d; border-radius: 0 0 5px 5px; overflow: hidden; }
+  .parts-table { width: max-content; min-width: 480px; border-collapse: collapse; font-size: 0.8rem; background: #0f1b2d; border-radius: 0 0 5px 5px; overflow: hidden; }
   .parts-table th {
     text-align: left;
     padding: 7px 12px;
