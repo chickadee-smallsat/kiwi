@@ -25,7 +25,7 @@ Thonny allows you to store code on your Kiwi and run it when the Kiwi is powered
 
 > **Kiwi Plotter will not work with MicroPython**
 > Installing MicroPython to Kiwi will remove the pre-loaded firmware Kiwi came with.
-> This will break the data transmission functionality Kiwi previously offered, and your Kiwi will not transmit any data over Wi-Fi to Kiwi Plotter.
+> This will break the data transmission functionality Kiwi previously offered, and your Kiwi will not transmit any data over Wi-Fi to Kiwi Plotter by default.
 {: .callout-caution }
 
 ## Data Format used by Kiwi
@@ -113,9 +113,10 @@ Rust is a memory-safe language that avoids many pitfalls of traditional system p
 Rust also allows for powerful patterns, such as the asynchronous programming model (using keywords `async` and `await`, and an asynchronous executor).
 The asynchronous programming model is especially useful on the Kiwi, which is a resource-constrained embedded system and cannot run a full operating system that would take care of scheduling various tasks (reading multiple sensors, collecting the data, transmitting them over Wi-Fi, while waiting for USB commands for configuration updates, and more). 
 Kiwi leverages the [embassy](https://embassy.dev/) framework to achieve this, which as excellent support of the Raspberry Pi RP2350B microcontroller.
+The pre-loaded firmware is written in Rust, and leverages embassy to implement a cooperative multi-tasking environment.
 
 However, Rust development is more advanced and would be more difficult to introduce in a simple manual.
 Development of a [VSCode](https://code.visualstudio.com/) extension is in progress, that would simplify the process of starting development on your Kiwi using the Rust programming language.
-This document will be updated once such resources are available.
+This document will be updated as these resources are made available.
 
 </section>

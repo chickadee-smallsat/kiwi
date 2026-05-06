@@ -138,7 +138,7 @@ Typing in `ident get` in the console and pressing <kbd>Enter</kbd> or <kbd>Retur
 The `ident set` command takes a single parameter, the new identity to be set.
 For example, if you want to set the identity string to `MyKiwi`, execute the following command:
 ```
-ident set MyKiwi
+> ident set MyKiwi
 ``` 
 Note, this does not update the identity string immediately.
 Execute the `store` command for the update to take effect.
@@ -154,7 +154,7 @@ For example, the Kiwi with device ID `Kiwi#0002`, set up in access point (Kiwi c
 Device ID: Kiwi#0002
 WiFi Credentials:
   Mode: Access Point
-  SSID: kiwi_ap
+  SSID: kiwi-ap
   Open network
 Data rate: 23.195875 kbps, Packet rate: 123.711334 pkt/s
 ```
@@ -179,7 +179,7 @@ The eduroam<span class="cite-ref" data-ref="ref-eduroam"></span> network uses mo
 `wifi cl` command accepts the SSID (required) and password (optional) parameters.
 To connect Kiwi to `MyHomeWiFi` secured by `MySecurePassword`, execute the following command:
 ```
-wifi cl MyHomeWiFi MySecurePassword
+> wifi cl MyHomeWiFi MySecurePassword
 ```
 Omit the password if you are connecting to an open network.
 
