@@ -168,10 +168,16 @@ document.querySelectorAll('.manual-sheet table').forEach(function(tbl) {
   if (tbl.id) {
     tblMap[tbl.id] = tblCount;
   }
+  // Wrap table (and its caption) in a scrollable container.
+  var wrap = document.createElement('div');
+  wrap.className = 'table-scroll-wrap';
+  tbl.parentNode.insertBefore(wrap, tbl);
   var prev = tbl.previousElementSibling;
-  if (prev && prev.classList.contains('table-caption')) {
+  if (prev && prev !== wrap && prev.classList.contains('table-caption')) {
     prev.textContent = 'Table ' + tblCount + '. ' + prev.textContent.replace(/^Table\s+\d+[.:]\s*/i, '');
+    wrap.appendChild(prev);
   }
+  wrap.appendChild(tbl);
 });
 document.querySelectorAll('a.tblref').forEach(function(a) {
   var id = (a.getAttribute('href') || '').replace(/^#/, '');

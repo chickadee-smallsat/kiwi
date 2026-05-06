@@ -1141,6 +1141,7 @@ function exportViewer(imageMode) {
   /* Parts table */
   .parts-section { padding: 0 16px 24px; }
   .parts-section details { border: 1px solid #0f3460; border-radius: 6px; }
+  .parts-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
   .parts-section summary {
     padding: 10px 14px;
     font-size: 0.82rem;
@@ -1220,10 +1221,12 @@ function exportViewer(imageMode) {
 <div class="parts-section">
   <details open id="parts-details">
     <summary>Parts list <span class="count" id="parts-count"></span></summary>
+    <div class="parts-table-scroll">
     <table class="parts-table">
       <thead><tr><th>Designation</th><th>Part Number</th><th>Description</th><th>Board</th></tr></thead>
       <tbody id="parts-tbody"></tbody>
     </table>
+    </div>
   </details>
 </div>
 <div id="pcb-popup">
