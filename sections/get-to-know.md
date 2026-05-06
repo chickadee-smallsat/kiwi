@@ -31,7 +31,7 @@ There is also an on-board micro-SD card slot for additional data storage.
 ### The Firmware
 
 Firmware<span class="cite-ref" data-ref="ref-firmware"></span> is the software that runs on the microcontroller on-board the Kiwi, controlling its hardware functions and defining its operations.
-Kiwi comes preloaded with a firmware that provides the basic functionality of reading out various sensor measurements, and broadcasting them over Wi-Fi.
+Kiwi comes preloaded with a firmware that collects data from various sensors and broadcasts them over Wi-Fi.
 
 The firmware is upgradable (requires a computer and the [Raspberry Pi Debug Tool](https://www.raspberrypi.com/documentation/computers/debug-tool/)).
 Custom firmware can be developed and flashed onto the Kiwi, allowing for custom behavior and functionality.

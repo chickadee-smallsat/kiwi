@@ -8,10 +8,10 @@ Kiwi is primarily designed for tabletop experiments, to be used as a tool in STE
 
 This document introduces Kiwi, and the plug-and-play functions it provides out-of-the-box.
 
-Please look at the contact information section towards the end if you're interested in any further information or have questions!
+Contact information can be found at the end of the manual if you're interested in any further information or have questions.
 
 > **WARNINGS & Safety Measures**
-> Electrical devices connected to Kiwi should not be near any liquids and/or high temperature environments (above 85°C, 185°F) as it may cause internal or external damage to the Kiwi, your device connected to the Kiwi, and/or yourself.
+> Electrical devices connected to Kiwi should not be near any liquids and/or high temperature environments (above 85°C, 185°F) as it may cause internal or external damage to the Kiwi, your device connected to the Kiwi, and/or injury to yourself.
 > Kiwi is designed primarily to be powered over USB (5V), consuming around 250 mW of power.
 > 
 > Kiwi is an exposed PCB, with electronic components sensitive to static discharge.

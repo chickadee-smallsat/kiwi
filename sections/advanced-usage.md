@@ -31,7 +31,7 @@ Thonny allows you to store code on your Kiwi and run it when the Kiwi is powered
 ## Data Format used by Kiwi
 
 Kiwi broadcasts measurement packets over UDP on port `8099`.
-Currently, this is not configurable in the on-board Kiwi firmware, or the Kiwi Plotter, so any data broadcast to the plotter will have to use this address.
+Currently, this is not configurable in the on-board Kiwi firmware, or the Kiwi Plotter, so any data broadcast to the plotter will have to be broadcast on this port.
 
 Kiwi broadcasts data packets that are fixed-size 24-byte binary structures.
 All multi-byte values are [**little-endian**](https://en.wikipedia.org/wiki/Endianness), or least-significant-byte first.
@@ -57,7 +57,7 @@ This is in contrast to the typical network byte order (big-endian), since most c
 
 ### Measurement Types
 
-The type field identifies what sensor produced the data and how the 12-byte payload is laid out (<a class="tblref" href="#tbl-data-ids"/>).
+The type field identifies which sensor produced the data and how the 12-byte payload is laid out (<a class="tblref" href="#tbl-data-ids"/>).
 
 <p class="table-caption">Table of type-field values identifying which sensor produced a data packet.</p>
 
@@ -98,7 +98,7 @@ Packets with a CRC mismatch should be discarded.
 ### Custom Data Packets
 
 The reference implementation of the Kiwi software transmits data in 24-byte packets.
-If your Kiwi is flying as a part of the Kiwi-50 experiment, the following are **recommended** to ensure successful data acquisition:
+If your Kiwi is flying as part of the Kiwi-50 experiment, the following are **recommended** to ensure successful data acquisition:
 - **Broadcast UDP packets on port `8099`.**
 - **Adhere to the 24-byte packet size.**
 - **Maintain the CRC-16 bytes at the end of the packet.**
@@ -112,7 +112,7 @@ The [Rust Programming Language](https://rust-lang.org/) is the primary intended 
 Rust is a memory-safe language that avoids many pitfalls of traditional system programming languages, such as C and C++, without any performance overhead.
 Rust also allows for powerful patterns, such as the asynchronous programming model (using keywords `async` and `await`, and an asynchronous executor).
 The asynchronous programming model is especially useful on the Kiwi, which is a resource-constrained embedded system and cannot run a full operating system that would take care of scheduling various tasks (reading multiple sensors, collecting the data, transmitting them over Wi-Fi, while waiting for USB commands for configuration updates, and more). 
-Kiwi leverages the [embassy](https://embassy.dev/) framework to achieve this, which as excellent support of the Raspberry Pi RP2350B microcontroller.
+Kiwi leverages the [embassy](https://embassy.dev/) framework to achieve this, which supports the Raspberry Pi RP2350B microcontroller very well.
 The pre-loaded firmware is written in Rust, and leverages embassy to implement a cooperative multi-tasking environment.
 
 However, Rust development is more advanced and would be more difficult to introduce in a simple manual.

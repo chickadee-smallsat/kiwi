@@ -26,7 +26,7 @@
 {: .callout-note }
 
 > **Troubleshooting**
-> - Give it up to a minute for the Wi-Fi network to show up.
+> - Wait up to a minute for the Wi-Fi network to show up.
 > - If the default `kiwi-ap` network does not show up, disconnect and reconnect the device.
 > - If the problem persists,
 >   - Short the `PWLED_EN` jumper to verify both the red (5V power) and green (3.3V power) LEDs are lighting up.

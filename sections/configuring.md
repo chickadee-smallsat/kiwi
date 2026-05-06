@@ -4,7 +4,7 @@
 
 Kiwi exposes a simple configuration interface over universal serial asynchronous receiver-transmitter (UART)<span class="cite-ref" data-ref="ref-uart"></span>, better known as a 'serial port'<span class="cite-ref" data-ref="ref-serial"></span>.
 This serial port is accessible to the computer connected to Kiwi over the USB port.
-The configuration interfaces uses text commands to configure the Kiwi.
+The configuration interface uses text commands to configure the Kiwi.
 The built-in firmware supports changing the Wi-Fi settings, and updating the unique identifier of the Kiwi (`Kiwi#XXXX` by default).
 
 ## Connecting to Kiwi Serial Port
@@ -188,7 +188,7 @@ Omit the password if you are connecting to an open network.
 > Due to the positional parameter inputs to `wifi ap` and `wifi cl` commands, any space in the SSID will cause the part before the space to be interpreted as the SSID and the part after the space as the password.
 > Special characters are **not** supported.
 >
-> Wi-Fi passwords are up to 32 characters long.
+> Wi-Fi passwords are at most 32 characters long.
 {: .callout-note .collapsible .collapsible-open }
 
 #### `store`
