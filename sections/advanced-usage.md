@@ -28,24 +28,23 @@ Thonny allows you to store code on your Kiwi and run it when the Kiwi is powered
 > This will break the data transmission functionality Kiwi previously offered, and your Kiwi will not transmit any data over Wi-Fi to Kiwi Plotter.
 {: .callout-caution }
 
-## Data Format used by Kiwi Plotter
+## Data Format used by Kiwi
 
-Kiwi Plotter listens for packets over UDP on port `8099`.
-Currently, this is not configurable in the Kiwi Plotter, so any data broadcast to the plotter will have to use this address.
+Kiwi broadcasts measurement packets over UDP on port `8099`.
+Currently, this is not configurable in the on-board Kiwi firmware, or the Kiwi Plotter, so any data broadcast to the plotter will have to use this address.
 
-The data format Kiwi Plotter expects is documented below.
+Kiwi broadcasts data packets that are fixed-size 24-byte binary structures.
+All multi-byte values are [**little-endian**](https://en.wikipedia.org/wiki/Endianness), or least-significant-byte first.
+This is in contrast to the typical network byte order (big-endian), since most consumer hardware, including the Kiwi, is little-endian.
 
-Each data packet is a `SingleMeasurement` — a fixed-size 24-byte binary structure transmitted over UDP.
-All multi-byte values are **little-endian**.
-
-### Packet Layout
+### Default Packet Layout
 
 <div class="pcb-viewer-wrap">
   <iframe src="{{ '/assets/media/packet-layout.html' | relative_url }}"
           title="Kiwi Packet Layout"
           loading="lazy"
           scrolling="no"
-          onload="this.style.height=(this.contentWindow.document.body.scrollHeight+32)+'px'; (function(f){window.addEventListener('message',function(e){if(e.data&&e.data.type==='pcb-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+          onload="this.style.height=(this.contentWindow.document.body.scrollHeight+32)+'px'; (function(f){window.addEventListener('message',function(e){if(e.data&&e.data.type==='packet-layout-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
   </iframe>
 </div>
 
@@ -58,7 +57,9 @@ All multi-byte values are **little-endian**.
 
 ### Measurement Types
 
-The type field identifies what sensor produced the data and how the 12-byte payload is laid out.
+The type field identifies what sensor produced the data and how the 12-byte payload is laid out (<a class="tblref" href="#tbl-data-ids"/>).
+
+<p class="table-caption">Table of type-field values identifying which sensor produced a data packet.</p>
 
 | Type | Code | Bytes 2–13 | Units |
 |------|------|------------|-------|
@@ -70,6 +71,7 @@ The type field identifies what sensor produced the data and how the 12-byte payl
 | Humidity / AQI | `0xF0AC` | Temperature (`f32`), Humidity (`f32`), AQI (`f32`) | °C / % / — |
 | Light | `0x1A2B` | Label (8 B ASCII, null-padded), Value (`f32`) | lux |
 | Device ID | `0x1D1D` | ID string (12 B ASCII, null-padded) | — |
+{: #tbl-data-ids }
 
 The **Temperature** and **Light** types include an 8-character ASCII label (null-padded to 8 bytes, bytes 2–9) that identifies the specific sensor, followed by the value as an `f32` at bytes 10–13.
 The **Device ID** type carries a 12-character null-padded ASCII string identifying the device (e.g. `kiwi#0001`), with no numeric value.
@@ -78,7 +80,7 @@ The **Device ID** type carries a 12-character null-padded ASCII string identifyi
 > - `u8`: Unsigned 8-bits of data (a byte). Also known as `unsigned char` or `uint8_t` in the C programming language. The Python equivalent is a `byte`.
 > - `u16`: Unsigned 16-bits of data (2 bytes). Also known as `unsigned short` or `uint16_t` in C. Python does not have a direct equivalent of this type. Use the [`struct`](https://docs.micropython.org/en/latest/library/struct.html) module to unpack a `u16` to an `int`, and vice-versa.
 > - `u64`: Unsigned 64-bits of data (8 bytes). Also known as `unsigned long long` or `uint64_t` in C. Python does not have a direct equivalent of this type.
-> - `f32`: A 32-bit, IEEE-758 floating point number. Also known as `float` in C. `float` in Python is usually 64-bits long.
+> - `f32`: A 32-bit, IEEE-758 floating point number. Also known as `float` in C. `float` in Python is usually 64-bits long, but MicroPython usually uses 32-bit floating point numbers by default.
 {: .callout-tip }
 
 ### Integrity Check
@@ -87,7 +89,33 @@ The last 2 bytes of every packet carry a **CRC-16/XMODEM** checksum computed ove
 Packets with a CRC mismatch should be discarded.
 
 > **CRC-16/XMODEM**
-> A cyclic redundancy check (CRC) is an error-detecting code commonly used in digital networks and storage devices to detect accidental changes to digital data. Blocks of data entering these systems get a short check value attached, based on the remainder of a polynomial division of their contents. On retrieval, the calculation is repeated and, in the event the check values do not match, corrective action can be taken against data corruption.<span class="cite-ref" data-ref="ref-crc"></span>
+> A cyclic redundancy check (CRC) is an error-detecting code commonly used in digital networks and storage devices to detect accidental changes to digital data. 
+> Blocks of data entering these systems get a short check value attached, based on the remainder of a polynomial division of their contents. 
+> On retrieval, the calculation is repeated and, in the event the check values do not match, corrective action can be taken against data corruption.<span class="cite-ref" data-ref="ref-crc"></span>
+> The specific polynomial used in the CRC-16/XMODEM algorithm, also known as the CRC-16 [CCITT](https://en.wikipedia.org/wiki/ITU-T) algorithm, is $$x^{16} + x^{12} + x^{5} + 1$$, or `0x1021`, and the accumulator is initialized to `0x0000`.
 {: .callout-note }
+
+### Custom Data Packets
+
+The reference implementation of the Kiwi software transmits data in 24-byte packets.
+If your Kiwi is flying as a part of the Kiwi-50 experiment, the following are **recommended** to ensure successful data acquisition:
+- **Broadcast UDP packets on port `8099`.**
+- **Adhere to the 24-byte packet size.**
+- **Maintain the CRC-16 bytes at the end of the packet.**
+- **Transmit the ID packet with your unique ID**. No data will be routed until this ID is received (Kiwi-50 experiments).
+- **Use a custom ID (`u16`)**. There are over 60,000 to choose from.
+- Implement a way to track the order of packets. UDP does not guarantee transmission or ordering of packets.
+
+## Rust on your Kiwi
+
+The [Rust Programming Language](https://rust-lang.org/) is the primary intended programming language for a Kiwi.
+Rust is a memory-safe language that avoids many pitfalls of traditional system programming languages, such as C and C++, without any performance overhead.
+Rust also allows for powerful patterns, such as the asynchronous programming model (using keywords `async` and `await`, and an asynchronous executor).
+The asynchronous programming model is especially useful on the Kiwi, which is a resource-constrained embedded system and cannot run a full operating system that would take care of scheduling various tasks (reading multiple sensors, collecting the data, transmitting them over Wi-Fi, while waiting for USB commands for configuration updates, and more). 
+Kiwi leverages the [embassy](https://embassy.dev/) framework to achieve this, which as excellent support of the Raspberry Pi RP2350B microcontroller.
+
+However, Rust development is more advanced and would be more difficult to introduce in a simple manual.
+Development of a [VSCode](https://code.visualstudio.com/) extension is in progress, that would simplify the process of starting development on your Kiwi using the Rust programming language.
+This document will be updated once such resources are available.
 
 </section>

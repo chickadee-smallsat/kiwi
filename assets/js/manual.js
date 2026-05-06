@@ -326,6 +326,15 @@ window.addEventListener('message', function(e) {
       } catch (_) {}
     });
   }
+  if (e.data.type === 'packet-layout-resize') {
+    document.querySelectorAll('.pcb-viewer-wrap iframe').forEach(function(iframe) {
+      try {
+        if (iframe.contentWindow === e.source) {
+          iframe.style.height = e.data.height + 'px';
+        }
+      } catch (_) {}
+    });
+  }
 });
 // Broadcast theme changes to all embedded iframes
 function broadcastThemeToIframes(theme) {

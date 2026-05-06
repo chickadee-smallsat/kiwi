@@ -23,7 +23,7 @@ layout: default
 
 <section class="manual-sheet" id="references" markdown="1">
 
-## References
+# References
 
 <ol class="references-list" markdown="0" id="references-list"></ol>
 

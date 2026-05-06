@@ -143,6 +143,19 @@ An IIFE that powers the fixed `<nav class="anchor-nav">` bar. Scans for all `h1â
 See <a href="#fig-screenshot" class="figref"></a> for the screenshot.
 ```
 
+The usage pattern is the same for a table.
+```markdown
+<p class="table-caption">My table.</p>
+
+|--|--|
+| A | B |
+| C | D |
+{: #tbl-ref }
+
+See <a href="#tbl-ref" class="tblref"/> for my table.
+
+```
+
 ### 3 â€” Collapsible Figures
 
 Wraps any `<figure>` whose `<img>` carries `.collapsible`, or whose parent `div.os-toggle-wrap` carries `.collapsible`, in a `div.collapsible-fig` with a toggle `<button>`. The button caption is taken from the `<figcaption>` text.

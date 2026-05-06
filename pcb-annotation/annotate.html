@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>Kiwi PCB Annotator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
     background: #1a1a2e;
     color: #e0e0e0;
     min-height: 100vh;
@@ -614,7 +616,7 @@ function renderAnnotationsSVG(side) {
     text.setAttribute('y', ly);
     text.setAttribute('fill', '#e94560');
     text.setAttribute('font-size', Math.max(9, 11 * scale));
-    text.setAttribute('font-family', 'system-ui, sans-serif');
+    text.setAttribute('font-family', '"Space Grotesk", system-ui, sans-serif');
     text.setAttribute('font-weight', '700');
     text.classList.add('annotation-label');
     text.dataset.id = a.id;
@@ -1037,7 +1039,7 @@ function exportViewer(imageMode) {
 <title>Kiwi PCB Interactive Viewer</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: system-ui, -apple-system, sans-serif; background: #1a1a2e; color: #e0e0e0; }
+  body { font-family: "Space Grotesk", system-ui, -apple-system, sans-serif; background: #1a1a2e; color: #e0e0e0; }
   .boards-row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; justify-content: center; }
   .board-panel { display: flex; flex-direction: column; gap: 6px; flex: 1 1 2in; min-width: 2in; }
   .board-label { font-size: 0.75rem; font-weight: 700; color: #d8d8d8; text-transform: uppercase; letter-spacing: 0.08em; }

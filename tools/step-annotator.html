@@ -4,11 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Step Slideshow Annotator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
   background: #1a1a2e;
   color: #e0e0e0;
   height: 100vh;
@@ -802,7 +804,7 @@ function buildAnnSVG(ann, step, isSelected) {
       'text-anchor': 'middle', 'dominant-baseline': 'central',
       fill: 'white',
       'font-size': r * 1.1, 'font-weight': '700',
-      'font-family': 'system-ui,-apple-system,sans-serif',
+      'font-family': '"Space Grotesk",system-ui,-apple-system,sans-serif',
       'pointer-events': 'none' });
     txt.textContent = ann.number ?? '?';
     g.append(hit, circ, txt);
@@ -851,7 +853,7 @@ function buildAnnSVG(ann, step, isSelected) {
     const txt = svgEl('text', { x: x, y: y,
       fill: stroke,
       'font-size': fs, 'font-weight': '700',
-      'font-family': 'system-ui,-apple-system,sans-serif' });
+      'font-family': '"Space Grotesk",system-ui,-apple-system,sans-serif' });
     txt.textContent = textContent;
     txt.dataset.annId = ann.id;
     g.append(bg, txt);
@@ -1314,7 +1316,7 @@ function buildSlideshowHTML(vpW, vpH, stepsData) {
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
 body {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
   background: #111827;
   color: #e0e0e0;
   display: flex;
@@ -1503,7 +1505,7 @@ function renderAnnotations(s, svg) {
         Object.assign(svgEl('text', { x, y,
           'text-anchor': 'middle', 'dominant-baseline': 'central',
           fill: 'white', 'font-size': r * 1.1, 'font-weight': '700',
-          'font-family': 'system-ui,-apple-system,sans-serif' }),
+          'font-family': '"Space Grotesk",system-ui,-apple-system,sans-serif' }),
           { textContent: ann.number ?? '?' })
       );
       svg.appendChild(g);
@@ -1537,7 +1539,7 @@ function renderAnnotations(s, svg) {
       const g = svgEl('g', {});
       g.append(
         svgEl('rect', { x: x - pad, y: y - estH * 0.78, width: estW, height: estH, rx: pad * 0.5, fill: '#16213e', 'fill-opacity': 0.9 }),
-        Object.assign(svgEl('text', { x, y, fill: color, 'font-size': fs, 'font-weight': '700', 'font-family': 'system-ui,-apple-system,sans-serif' }),
+        Object.assign(svgEl('text', { x, y, fill: color, 'font-size': fs, 'font-weight': '700', 'font-family': '"Space Grotesk",system-ui,-apple-system,sans-serif' }),
           { textContent })
       );
       svg.appendChild(g);
