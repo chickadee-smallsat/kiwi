@@ -471,3 +471,58 @@ document.querySelectorAll('.manual-sheet .callout-note.collapsible, .manual-shee
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
   });
 });
+/* ── Image Lightbox ─────────────────────────────────────────────── */
+(function() {
+  var overlay = document.createElement('div');
+  overlay.className = 'img-lightbox';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', 'Image viewer');
+
+  var closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'img-lightbox__close';
+  closeBtn.setAttribute('aria-label', 'Close image viewer');
+  closeBtn.innerHTML = '&#x2715;';
+
+  var lightboxImg = document.createElement('img');
+  lightboxImg.className = 'img-lightbox__img';
+  lightboxImg.alt = '';
+
+  overlay.appendChild(lightboxImg);
+  overlay.appendChild(closeBtn);
+  document.body.appendChild(overlay);
+
+  var previousFocus = null;
+
+  function openLightbox(src, alt) {
+    previousFocus = document.activeElement;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeLightbox() {
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (previousFocus) { previousFocus.focus(); previousFocus = null; }
+  }
+
+  closeBtn.addEventListener('click', closeLightbox);
+
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) { closeLightbox(); }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && overlay.classList.contains('is-open')) { closeLightbox(); }
+  });
+
+  document.querySelectorAll('.manual-sheet figure img').forEach(function(img) {
+    img.addEventListener('click', function() {
+      openLightbox(img.src, img.alt);
+    });
+  });
+})();
