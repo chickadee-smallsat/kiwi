@@ -76,6 +76,11 @@ The type field identifies which sensor produced the data and how the 12-byte pay
 The **Temperature** and **Light** types include an 8-character ASCII label (null-padded to 8 bytes, bytes 2–9) that identifies the specific sensor, followed by the value as an `f32` at bytes 10–13.
 The **Device ID** type carries a 12-character null-padded ASCII string identifying the device (e.g. `kiwi#0001`), with no numeric value.
 
+> **AQI Data**
+> Due to the closed-source nature of the [AQI calculation algorithm (BSEC)](https://github.com/boschsensortec/BSEC-Arduino-library) provided by Bosch Sensortech, it has not been integrated into the pre-loaded Kiwi firmware.
+> AQI data is reported as raw resistance measurement from the gas sensor, heated up to 300°C.
+{: .callout-note }
+
 > **Data Types**
 > - `u8`: Unsigned 8-bits of data (a byte). Also known as `unsigned char` or `uint8_t` in the C programming language. The Python equivalent is a `byte`.
 > - `u16`: Unsigned 16-bits of data (2 bytes). Also known as `unsigned short` or `uint16_t` in C. Python does not have a direct equivalent of this type. Use the [`struct`](https://docs.micropython.org/en/latest/library/struct.html) module to unpack a `u16` to an `int`, and vice-versa.

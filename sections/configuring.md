@@ -32,13 +32,13 @@ For most users, the first (Windows users) and second (Mac users) should be suffi
 <!-- {: .collapsible} -->
 #### Installation
 - Download the version of CoolTerm compatible with your Windows PC from <a href="#tbl-coolterm" class="tblref"></a>.
-- Navigate to the location where the file was downloaded on 
+- Navigate to the location of the downloaded `.zip` file.
 - Extract the files from the downloaded `.zip` archive.
   - Right click on the `.zip` archive to open the context menu and select the "Extract All..." option.
     {% include os-toggle.html id="fig-coolterm-extract" src1="assets/media/windows/coolterm_extract_win11.png" alt1="Extract CoolTerm (Windows 11)" src2="assets/media/windows/coolterm_extract_win10.png" alt2="Extract CoolTerm (Windows 10)" label1="Windows 11" label2="Windows10" style="width: 100%" collapsible=true %}
   - Click the "Extract" button in the extraction dialog.
     ![Extract the `.zip` file](assets/media/windows/coolterm_extract_dialog.png){: .collapsible style="width: 60%" }
-  - Navigate into the extracted `CoolTermWin64Bit` directory, and launch the `CoolTerm` executable.
+  - Navigate into the extracted `CoolTermWin64Bit` directory, and launch the `CoolTerm` application executable (`.exe`).
     ![Launch CoolTerm](assets/media/windows/coolterm_program.png){: .collapsible style="width: 80%" }
 
 #### Usage

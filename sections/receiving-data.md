@@ -28,7 +28,7 @@ Instantaneous values of the various sensor measurements can be viewed by hoverin
 An individual, more detailed 3-D visualization of the device orientation is also available in a separate tab in the plotter, accessible through the "3D" button on the device list.
 ![3D visualization of device orientation]({{ '/assets/media/kiwi-plotter/kiwi-plotter-3d-view.png' | relative_url }}){: style="width: 60%" }
 The data from the Kiwi can also be recorded and exported as a CSV file for offline analysis.
-To start recording, click the "Start" button in the top-left of the device plot tab.
+To start recording, click the "Start" button in the top-left corner of the device plot tab.
 After recording has started, use the "Stop" button to stop recording, and the "Export" button to download the recorded data as an Excel spreadsheet.
 Data from various sensors are recorded in separate sheets within the spreadsheet, with timestamps for each measurement.
 </section>
