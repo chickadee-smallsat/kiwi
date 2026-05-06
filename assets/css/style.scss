@@ -692,8 +692,8 @@ ui-btn {
 
 @media (max-width: 700px) {
   .manual-sheet {
-    width: min(100% - 1rem, 1080px);
-    margin-top: -2.5rem;
+    width: min(1080px, calc(100% - 2rem));
+    margin-top: 1.5rem;
     padding: 1.25rem;
     border-radius: 1.5rem;
   }

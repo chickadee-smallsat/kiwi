@@ -102,7 +102,7 @@ If your Kiwi is flying as a part of the Kiwi-50 experiment, the following are **
 - **Broadcast UDP packets on port `8099`.**
 - **Adhere to the 24-byte packet size.**
 - **Maintain the CRC-16 bytes at the end of the packet.**
-- **Transmit the ID packet with your unique ID**. No data will be routed until this ID is received (Kiwi-50 experiments).
+- **Transmit the ID packet with your unique ID**. No data will be routed until this ID is received (Kiwi-50 experiments). It is recommended to broadcast the ID packet at a regular interval, at most 4 times every minute (15 seconds interval), to ensure the device is identified quickly without lowering data throughput with too many ID packets.
 - **Use a custom ID (`u16`)**. There are over 60,000 to choose from.
 - Implement a way to track the order of packets. UDP does not guarantee transmission or ordering of packets.
 
