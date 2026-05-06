@@ -46,25 +46,29 @@ jobs:
           set -euo pipefail
           bundle exec jekyll build --baseurl "/${{ steps.vars.outputs.repo_name }}/${{ steps.vars.outputs.doc_version }}"
 
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
-        continue-on-error: true
+      - name: Checkout or init gh-pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin gh-pages; then
+            git clone --branch gh-pages --single-branch --depth 1 \
+              "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" \
+              gh-pages
+          else
+            mkdir gh-pages
+            git -C gh-pages init
+            git -C gh-pages checkout --orphan gh-pages
+          fi
 
       - name: Prepare gh-pages worktree
         shell: bash
         run: |
           set -euo pipefail
-          if [[ ! -d gh-pages/.git ]]; then
-            mkdir -p gh-pages
-            cp -R _site/. gh-pages/
-            pushd gh-pages > /dev/null
-            git init
-            git checkout --orphan gh-pages
-            popd > /dev/null
-          fi
+          git -C gh-pages config user.name "github-actions[bot]"
+          git -C gh-pages config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C gh-pages remote get-url origin &>/dev/null || \
+            git -C gh-pages remote add origin \
+              "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
 
       - name: Publish version and update manifest
         shell: bash
@@ -111,8 +115,6 @@ jobs:
         run: |
           set -euo pipefail
           pushd gh-pages > /dev/null
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .
           if git diff --cached --quiet; then
             echo "No changes to publish"
@@ -120,5 +122,5 @@ jobs:
             exit 0
           fi
           git commit -m "docs: publish ${{ steps.vars.outputs.doc_version }}"
-          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+          git push origin HEAD:gh-pages
           popd > /dev/null
