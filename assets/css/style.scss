@@ -133,7 +133,7 @@ body {
   top: 0.5%;
   bottom: 3.5%;
   left: 50%;
-  width: min(calc(var(--cutout-size) * 5.5), calc(100% - 0.5rem));
+  width: min(calc(var(--cutout-size) * 4.8), calc(100% - 2rem));
   transform: translateX(-50%);
   background:
     linear-gradient(180deg, rgba(184, 226, 244, 0.86) 0%, rgba(110, 168, 201, 0.74) 100%),
@@ -163,7 +163,7 @@ body {
 .cover-hero__bird {
   position: absolute;
   left: 50%;
-  bottom: -12%;
+  bottom: 3.5%;
   z-index: 10;
   width: min(calc(var(--cutout-size) * 4.8), calc(100% - 2rem));
   max-height: calc(65svh);
