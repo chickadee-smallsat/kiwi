@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kiwi PCB Interactive Viewer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Space Grotesk", system-ui, -apple-system, sans-serif; background: #1a1a2e; color: #e0e0e0; }
+  .boards-row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; justify-content: center; }
+  .board-panel { display: flex; flex-direction: column; gap: 6px; flex: 1 1 2in; min-width: 2in; }
+  .board-label { font-size: 0.75rem; font-weight: 700; color: #d8d8d8; text-transform: uppercase; letter-spacing: 0.08em; }
+  .board-img-wrap { position: relative; display: block; }
+  .board-img-wrap img { display: block; width: 100%; height: auto; border: 2px solid #0f3460; border-radius: 4px; }
+  .anno-region {
+    position: absolute;
+    cursor: pointer;
+    border: 1.5px solid #e94560;
+    background: rgba(233,69,96,0.08);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .anno-region:hover {
+    background: rgba(233,69,96,0.25);
+    border-color: #f97;
+    z-index: 5;
+  }
+  .anno-region:hover .anno-label { opacity: 1; }
+  .anno-region.is-highlighted {
+    background: rgba(255, 238, 0, 0.45);
+    border-color: #fff36a;
+    border-width: 3px;
+    border-style: solid;
+    z-index: 6;
+    animation: pcb-highlight-bloom 1.7s cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
+  }
+  .anno-region.is-highlighted .anno-label { opacity: 1; }
+  @keyframes pcb-highlight-bloom {
+    0% {
+      transform: scale(1);
+      box-shadow:
+        0 0 0 2px rgba(255, 238, 0, 0.95),
+        0 0 10px rgba(255, 238, 0, 0.85),
+        0 0 24px rgba(255, 214, 0, 0.55);
+      filter: brightness(1.25) saturate(1.2);
+    }
+    38% {
+      transform: scale(1.02);
+      box-shadow:
+        0 0 0 4px rgba(255, 238, 0, 0.75),
+        0 0 20px rgba(255, 234, 0, 0.75),
+        0 0 42px rgba(255, 188, 0, 0.55);
+      filter: brightness(1.5) saturate(1.35);
+    }
+    72% {
+      transform: scale(1.01);
+      box-shadow:
+        0 0 0 3px rgba(255, 238, 0, 0.55),
+        0 0 16px rgba(255, 238, 0, 0.45),
+        0 0 30px rgba(255, 188, 0, 0.25);
+      filter: brightness(1.25) saturate(1.15);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow:
+        0 0 0 2px rgba(255, 238, 0, 0),
+        0 0 8px rgba(255, 238, 0, 0),
+        0 0 18px rgba(255, 188, 0, 0);
+      filter: brightness(1) saturate(1);
+    }
+  }
+  .anno-label {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: #e94560;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.15s;
+  }
+  /* Persistent popup */
+  #pcb-popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    background: #16213e;
+    border: 1px solid #e94560;
+    border-radius: 6px;
+    padding: 10px 14px;
+    max-width: 300px;
+    pointer-events: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  #pcb-popup .pp-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #pcb-popup .pp-close { background: none; border: none; color: #c0c0c0; font-size: 1rem; cursor: pointer; padding: 0; line-height: 1; flex-shrink: 0; }
+  #pcb-popup .pp-close:hover { color: #e94560; }
+  #pcb-popup .pp-desig { font-size: 1rem; font-weight: 700; color: #e94560; }
+  #pcb-popup .pp-partnum { font-size: 0.8rem; color: #e4e4e4; margin-top: 3px; }
+  #pcb-popup .pp-partnum a { color: #7ec8e3; }
+  #pcb-popup .pp-desc { font-size: 0.78rem; color: #d8d8d8; margin-top: 5px; line-height: 1.5; word-break: break-word; }
+  #pcb-popup .pp-desc a { color: #7ec8e3; }
+  #pcb-popup .pp-board { font-size: 0.7rem; color: #aaa; margin-top: 6px; }
+  /* Parts table */
+  .parts-section { padding: 0 16px 24px; }
+  .parts-section details { border: 1px solid #0f3460; border-radius: 6px; }
+  .parts-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  .parts-section summary {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #d8d8d8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    background: #16213e;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .parts-section summary::-webkit-details-marker { display: none; }
+  .parts-section summary::before { content: '▼'; font-size: 0.65rem; color: #e94560; transition: transform 0.2s; }
+  .parts-section details:not([open]) summary::before { transform: rotate(-90deg); }
+  .parts-section summary span.count { font-weight: 400; color: #aaa; font-size: 0.78rem; text-transform: none; letter-spacing: 0; }
+  .parts-table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 0.8rem; background: #0f1b2d; border-radius: 0 0 5px 5px; overflow: hidden; }
+  .parts-table th {
+    text-align: left;
+    padding: 7px 12px;
+    color: #c8c8c8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid #1a4a6e;
+    background: #111d35;
+  }
+  .parts-table td { padding: 7px 12px; border-bottom: 1px solid #162035; vertical-align: top; }
+  .parts-table tr:last-child td { border-bottom: none; }
+  .parts-table tr:hover td { background: #141e33; }
+  .parts-table .td-desig { font-weight: 700; color: #e94560; white-space: nowrap; }
+  .parts-table .td-board { color: #999; font-size: 0.72rem; white-space: nowrap; }
+  .parts-table .td-partnum { color: #e4e4e4; }
+  .parts-table .td-partnum a { color: #7ec8e3; }
+  .parts-table .td-desc { color: #d0d0d0; line-height: 1.5; }
+  .parts-table .td-desc a { color: #7ec8e3; }
+  .pp-desc code, .td-desc code, .td-partnum code {
+    font-family: ui-monospace, 'Cascadia Code', Menlo, monospace;
+    font-size: 0.875em; background: rgba(255,255,255,0.1);
+    padding: 0.1em 0.35em; border-radius: 3px; color: #7ec8e3;
+  }
+  /* Boards section */
+  .boards-section { padding: 16px 16px 0; }
+  .boards-section details { border: 1px solid #0f3460; border-radius: 6px; margin-bottom: 12px; }
+  .boards-section summary {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #d8d8d8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    background: #16213e;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .boards-section summary::-webkit-details-marker { display: none; }
+  .boards-section summary::before { content: '▼'; font-size: 0.65rem; color: #e94560; transition: transform 0.2s; }
+  .boards-section details:not([open]) summary::before { transform: rotate(-90deg); }
+  .boards-section .boards-row { padding: 12px; border-radius: 0 0 5px 5px; overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="boards-section">
+  <details open id="boards-details">
+    <summary>PCB Boards</summary>
+    <div class="boards-row" id="boards-row"></div>
+  </details>
+</div>
+<div class="parts-section">
+  <details open id="parts-details">
+    <summary>Parts list <span class="count" id="parts-count"></span></summary>
+    <div class="parts-table-scroll">
+    <table class="parts-table">
+      <thead><tr><th>Designation</th><th>Part Number</th><th>Description</th><th>Board</th></tr></thead>
+      <tbody id="parts-tbody"></tbody>
+    </table>
+    </div>
+  </details>
+</div>
+<div id="pcb-popup">
+  <div class="pp-header">
+    <div class="pp-desig" id="pp-desig"></div>
+    <button class="pp-close" onclick="closePopup()">&#x2715;</button>
+  </div>
+  <div class="pp-partnum" id="pp-partnum"></div>
+  <div class="pp-desc" id="pp-desc"></div>
+  <div class="pp-board" id="pp-board"></div>
+</div>
+<script>
+var ANNOTATIONS = [{"id":1,"side":"front","x":759.5238095238095,"y":457.14285714285717,"w":269.04761904761915,"h":283.3333333333333,"designation":"U5","partNumber":"[Raspberry Pi RP2350B](https://www.raspberrypi.com/products/rp2350/)","description":"Raspberry Pi RP2350 Microcontroller, the brains of the operation"},{"id":2,"side":"front","x":1183.3333333333335,"y":866.6666666666667,"w":433.33333333333326,"h":380.95238095238096,"designation":"J4","partNumber":"","description":"micro-SD Card slot for on-board data storage"},{"id":3,"side":"front","x":1397.6190476190477,"y":416.6666666666667,"w":126.19047619047615,"h":140.47619047619042,"designation":"J2","partNumber":"JST SM03B-SRSS-TB","description":"Debug connector. Connect to the debug port of the [Raspberry Pi Debug Probe](https://www.raspberrypi.com/documentation/microcontrollers/debug-probe.html) for low-level debugging of the RP2350B microcontroller."},{"id":4,"side":"front","x":1116.6666666666667,"y":614.2857142857143,"w":59.523809523809405,"h":71.42857142857144,"designation":"PWLED_EN","partNumber":"","description":"Short this jumper to activate the power status indicator LEDs"},{"id":5,"side":"front","x":1076.1904761904761,"y":442.8571428571429,"w":30.952380952380963,"h":54.76190476190476,"designation":"D1","partNumber":"Red LED","description":"Red LED, indicating 5V supply is present. It is disabled by default, enable by shorting `PWLED_EN`."},{"id":6,"side":"front","x":1190.4761904761906,"y":442.8571428571429,"w":23.809523809523625,"h":59.52380952380952,"designation":"D2","partNumber":"Green LED","description":"Green LED, indicating 3.3V is being generated from 5V input. It is disabled by default, enable by shorting `PWLED_EN`."},{"id":7,"side":"front","x":1000,"y":1092.857142857143,"w":80.95238095238096,"h":80.95238095238096,"designation":"U6","partNumber":"[Bosch Sensortec BME680](https://www.bosch-sensortec.com/en/products/environmental-sensors/gas-sensors/bme680/)","description":"A combined humidity, air quality index (AQI), temperature and pressure sensor."},{"id":8,"side":"front","x":495.23809523809524,"y":1116.6666666666667,"w":92.85714285714283,"h":69.04761904761904,"designation":"U10","partNumber":"[Bosch Sensortec BMI323](https://www.bosch-sensortec.com/en/products/motion-sensors/imus/bmi323)","description":"Combined accelerometer and gyroscope."},{"id":9,"side":"front","x":488.09523809523813,"y":835.7142857142858,"w":88.09523809523813,"h":138.09523809523807,"designation":"U3","partNumber":"[TE Conn. MS560702BA03](https://www.te.com/en/product-MS560702BA03-50.html)","description":"High-precision (24-bit), high-altitude (10 mbar) pressure and temperature sensor."},{"id":10,"side":"front","x":230.95238095238096,"y":1111.904761904762,"w":45.23809523809524,"h":54.761904761904816,"designation":"U7","partNumber":"[Texas Instruments OPT3001](https://www.ti.com/product/OPT3001)","description":"Incident light sensor, reports the amount of light (in lux) incident on the sensor."},{"id":11,"side":"front","x":83.33333333333334,"y":995.2380952380953,"w":107.14285714285714,"h":66.66666666666663,"designation":"SW1","partNumber":"","description":"Holding down this button while connecting the USB cable to the board puts it in flash storage mode. Copying a UF2 firmware file to this storage from the connected computer loads the firmware onto the board."},{"id":12,"side":"front","x":4.761904761904762,"y":719.047619047619,"w":173.80952380952382,"h":195.2380952380953,"designation":"J1","partNumber":"USB micro-B socket","description":"USB micro-B socket to connect the Kiwi to a PC/Mac for configuration and firmware updates."},{"id":13,"side":"front","x":76.19047619047619,"y":142.85714285714286,"w":297.6190476190476,"h":307.1428571428571,"designation":"J3","partNumber":"[Molex Picoblade 0532610671](https://www.molex.com/en-us/products/part-detail/0532610671)","description":"6-pin socket providing 3.3V power, a UART channel, and a GPIO to a connected peripheral."},{"id":14,"side":"front","x":621.4285714285714,"y":73.80952380952381,"w":488.0952380952382,"h":114.28571428571429,"designation":"TOP1","partNumber":"[Amphenol Bergstack 10132797-065100LF](https://www.amphenol-cs.com/product/10132797065100lf.html)","description":"This receptacle allows another board to connect to this Kiwi board. This connector distributes 5V power up and down the stack of boards."},{"id":15,"side":"front","x":616.6666666666667,"y":1452.3809523809525,"w":483.33333333333326,"h":109.5238095238094,"designation":"TOP2","partNumber":"[Amphenol Bergstack 10132797-065100LF](https://www.amphenol-cs.com/product/10132797065100lf.html)","description":"This connector passes GPIO pins from U5 to a board above this Kiwi board. Do not connect traces to this connector on a custom expansion board."},{"id":16,"side":"back","x":54.761904761904766,"y":647.6190476190476,"w":466.6666666666667,"h":407.1428571428572,"designation":"U1","partNumber":"[Raspberry Pi RM2](https://www.raspberrypi.com/products/radio-module-2/)","description":"The Raspberry Pi Radio Module 2. Provides WiFi and Bluetooth Low Energy communication capabilities to Kiwi."},{"id":17,"side":"back","x":983.3333333333334,"y":1179.7619047619048,"w":80.95238095238085,"h":83.33333333333326,"designation":"MMC1","partNumber":"[Memsic MMC5983MA](https://www.memsic.com/magnetometer-5)","description":"High precision (18-bit) magnetometer, measuring magnetic field around the device."},{"id":18,"side":"back","x":1476.1904761904761,"y":1145.2380952380952,"w":57.14285714285734,"h":66.66666666666674,"designation":"U8","partNumber":"[Texas Instruments OPT3001](https://www.ti.com/product/OPT3001)","description":"Incident light sensor, reports the amount of light (in lux) incident on the sensor."},{"id":19,"side":"back","x":435.7142857142857,"y":498.80952380952385,"w":57.14285714285717,"h":83.33333333333326,"designation":"DBGLED_EN","partNumber":"","description":"Short this jumper to enable D3 and D4 LED circuits.","labelX":211.71428571428572,"labelY":550.8095238095239},{"id":20,"side":"back","x":597.6190476190476,"y":505.95238095238096,"w":61.904761904761926,"h":30.952380952380963,"designation":"D3","partNumber":"Amber LED","description":"An amber LED controlled by GPIO 27 (software index, not physical pin number) on the RP2350B. It is disabled by default, enable by shorting `DBGLED_EN`."},{"id":22,"side":"back","x":600,"y":548.8095238095239,"w":54.761904761904816,"h":30.952380952380963,"designation":"D4","partNumber":"Amber LED","description":"An amber LED controlled by GPIO 28 (software index, not physical pin number) on the RP2350B. It is disabled by default, enable by shorting `DBGLED_EN`.","labelX":600,"labelY":616.8095238095239},{"id":23,"side":"back","x":650.152099609375,"y":107.97824096679688,"w":480,"h":100,"designation":"BOT1","partNumber":"[Amphenol BergStack 10132798-062100LF](https://www.amphenol-cs.com/product/10132798062100lf.html)","description":"This plug allows this Kiwi board to connect to a board below it. This connector distributes 5V power up and down the stack of boards."},{"id":24,"side":"back","x":642.152099609375,"y":1471.9782409667969,"w":464,"h":116,"designation":"BOT2","partNumber":"[Amphenol BergStack 10132798-062100LF](https://www.amphenol-cs.com/product/10132798062100lf.html)","description":"This plug connector passes GPIO pins from U5 to a board below this Kiwi board."}];
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var frontFallback = "kiwi_front.png";
+  var backFallback  = "kiwi_back.png";
+  window.IMAGES = {
+    front: { url: null || params.get('front') || frontFallback || null, w: 1688, h: 1648 },
+    back:  { url: null  || params.get('back')  || backFallback  || null, w: 1750,  h: 1680 }
+  };
+})();
+
+function esc(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function buildBoard(side) {
+  var info = IMAGES[side];
+  if (!info || !info.url) return null;
+  var panel = document.createElement('div');
+  panel.className = 'board-panel';
+  var lbl = document.createElement('div');
+  lbl.className = 'board-label';
+  lbl.textContent = side.charAt(0).toUpperCase() + side.slice(1);
+  var wrap = document.createElement('div');
+  wrap.className = 'board-img-wrap';
+  wrap.id = 'wrap-' + side;
+  var img = document.createElement('img');
+  img.src = info.url;
+  img.alt = 'Kiwi PCB ' + side;
+  img.id = 'img-' + side;
+  img.onload = function() { positionRegions(side); };
+  wrap.appendChild(img);
+  panel.appendChild(lbl);
+  panel.appendChild(wrap);
+
+  // Regions
+  ANNOTATIONS.filter(function(a) { return a.side === side; }).forEach(function(a) {
+    var div = document.createElement('div');
+    div.className = 'anno-region';
+    div.dataset.id = a.id;
+    var lbl2 = document.createElement('div');
+    lbl2.className = 'anno-label';
+    lbl2.textContent = a.designation || '?';
+    div.appendChild(lbl2);
+    div.addEventListener('click', function(e) { e.stopPropagation(); showPopup(e, a); });
+    wrap.appendChild(div);
+  });
+
+  return panel;
+}
+
+function positionRegions(side) {
+  var img = document.getElementById('img-' + side);
+  var wrap = document.getElementById('wrap-' + side);
+  if (!img || !wrap) return;
+  var scaleX = img.clientWidth / IMAGES[side].w;
+  var scaleY = img.clientHeight / IMAGES[side].h;
+  ANNOTATIONS.filter(function(a) { return a.side === side; }).forEach(function(a) {
+    var div = wrap.querySelector('[data-id="' + a.id + '"]');
+    if (!div) return;
+    div.style.left   = (a.x * scaleX) + 'px';
+    div.style.top    = (a.y * scaleY) + 'px';
+    div.style.width  = (a.w * scaleX) + 'px';
+    div.style.height = (a.h * scaleY) + 'px';
+    // Apply custom label position if saved
+    var lbl2 = div.querySelector('.anno-label');
+    if (lbl2 && a.labelX !== undefined && a.labelY !== undefined) {
+      lbl2.style.left = ((a.labelX - a.x) * scaleX) + 'px';
+      lbl2.style.top  = ((a.labelY - a.y) * scaleY) + 'px';
+    }
+  });
+}
+
+var popup = document.getElementById('pcb-popup');
+function inlineCode(html) {
+  return html.replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+function linkify(text) {
+  if (!text) return '';
+  var parts = text.split(/(<a\s+href="https?:\/\/[^"]*"[^>]*>[\s\S]*?<\/a>)/gi);
+  return parts.map(function(part, i) {
+    if (i % 2 === 1) {
+      var m = part.match(/<a\s+href="(https?:\/\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
+      if (m) return '<a href="' + esc(m[1]) + '" target="_blank" rel="noopener">' + esc(m[2]) + '</a>';
+      return esc(part);
+    }
+    return part.split(/(\[[^\]]+\]\(https?:\/\/[^)]+\)|https?:\/\/[^\s<>"]+)/).map(function(p, j) {
+      if (j % 2 === 0) return inlineCode(esc(p));
+      var md = p.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
+      if (md) return '<a href="' + esc(md[2]) + '" target="_blank" rel="noopener">' + esc(md[1]) + '</a>';
+      return '<a href="' + esc(p) + '" target="_blank" rel="noopener">' + esc(p) + '</a>';
+    }).join('');
+  }).join('');
+}
+function showPopup(e, a) {
+  document.getElementById('pp-desig').textContent = a.designation || '(unnamed)';
+  document.getElementById('pp-partnum').innerHTML = linkify(a.partNumber || '');
+  document.getElementById('pp-desc').innerHTML = linkify(a.description || '');
+  document.getElementById('pp-board').textContent = 'PCB: ' + (a.side === 'front' ? 'Front' : 'Back');
+  popup.style.display = 'block';
+  positionPopup(e);
+}
+function positionPopup(e) {
+  var x = e.clientX + 14, y = e.clientY + 14;
+  if (x + 310 > window.innerWidth) x = Math.max(4, e.clientX - 310);
+  if (y + 180 > window.innerHeight) y = Math.max(4, e.clientY - 180);
+  popup.style.left = x + 'px';
+  popup.style.top = y + 'px';
+}
+function closePopup() { popup.style.display = 'none'; }
+document.addEventListener('click', function(e) {
+  if (popup.style.display === 'block' && !popup.contains(e.target)) closePopup();
+});
+
+// Build
+var row = document.getElementById('boards-row');
+['front','back'].forEach(function(side) {
+  var panel = buildBoard(side);
+  if (panel) row.appendChild(panel);
+});
+
+// Reposition on resize
+window.addEventListener('resize', function() {
+  ['front','back'].forEach(positionRegions);
+});
+
+// Notify parent frame of height changes when sections are toggled
+function notifyParentHeight() {
+  window.parent.postMessage({ type: 'pcb-resize', height: document.body.scrollHeight }, '*');
+}
+['boards-details', 'parts-details'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('toggle', notifyParentHeight);
+});
+
+// Theme support via postMessage
+var THEME_CSS_PCB = {
+  'deuteranopia':
+    'body{background:#0d1e3c;color:#fff8e1}' +
+    '.board-img-wrap img{border-color:#1e3a6e}' +
+    '.anno-region{border-color:#f5a428;background:rgba(245,164,40,0.08)}' +
+    '.anno-region:hover{background:rgba(245,164,40,0.25);border-color:#f7c06e}' +
+    '.anno-label{background:#f5a428}' +
+    '#pcb-popup{background:#0d2c52;border-color:#f5a428}' +
+    '#pcb-popup .pp-desig{color:#f5a428}' +
+    '#pcb-popup .pp-close:hover{color:#f5a428}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#f5a428}' +
+    '.parts-table .td-desig{color:#f5a428}',
+  'high-contrast':
+    'body{background:#000;color:#fff}' +
+    '.board-img-wrap img{border-color:#fff}' +
+    '.anno-region{border-color:#ff0;background:rgba(255,255,0,0.07)}' +
+    '.anno-region:hover{background:rgba(255,255,0,0.2);border-color:#ffe}' +
+    '.anno-label{background:#7a7000;color:#ff0}' +
+    '#pcb-popup{background:#000;border-color:#ff0}' +
+    '#pcb-popup .pp-desig{color:#ff0}' +
+    '#pcb-popup .pp-close:hover{color:#ff0}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#ff0}' +
+    '.parts-section summary,.boards-section summary{background:#111;color:#fff}' +
+    '.parts-table{background:#000}.parts-table th{background:#111;color:#fff;border-color:#555}' +
+    '.parts-table td{border-color:#333}.parts-table tr:hover td{background:#1a1a1a}' +
+    '.parts-table .td-desig{color:#ff0}' +
+    '.parts-section details,.boards-section details{border-color:#555}',
+  'monochrome':
+    'body{background:#111;color:#e0e0e0}' +
+    '.board-img-wrap img{border-color:#444;filter:grayscale(1)}' +
+    '.anno-region{border-color:#aaa;background:rgba(170,170,170,0.07)}' +
+    '.anno-region:hover{background:rgba(170,170,170,0.2);border-color:#ccc}' +
+    '.anno-label{background:#555;color:#e0e0e0}' +
+    '#pcb-popup{background:#1a1a1a;border-color:#666}' +
+    '#pcb-popup .pp-desig{color:#ccc}' +
+    '#pcb-popup .pp-close:hover{color:#fff}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#aaa}' +
+    '.parts-section summary,.boards-section summary{background:#1e1e1e;color:#d0d0d0}' +
+    '.parts-table{background:#111}.parts-table th{background:#1a1a1a;color:#bbb;border-color:#333}' +
+    '.parts-table td{border-color:#222}.parts-table tr:hover td{background:#181818}' +
+    '.parts-table .td-desig{color:#c0c0c0}' +
+    '.parts-section details,.boards-section details{border-color:#333}'
+};
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'setTheme') return;
+  var t = e.data.theme || 'default';
+  var el = document.getElementById('_kiwi_theme_override');
+  if (!el) { el = document.createElement('style'); el.id = '_kiwi_theme_override'; document.head.appendChild(el); }
+  el.textContent = THEME_CSS_PCB[t] || '';
+});
+
+// Parts table
+(function buildPartsTable() {
+  var tbody = document.getElementById('parts-tbody');
+  var countEl = document.getElementById('parts-count');
+  if (!tbody) return;
+  var sorted = ANNOTATIONS.slice().sort(function(a, b) {
+    if (a.side !== b.side) return a.side === 'front' ? -1 : 1;
+    return (a.designation || '').localeCompare(b.designation || '', undefined, { numeric: true, sensitivity: 'base' });
+  });
+  if (countEl) countEl.textContent = '(' + sorted.length + ')';
+  sorted.forEach(function(a) {
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="td-desig">' + esc(a.designation || '(unnamed)') + '</td>' +
+      '<td class="td-partnum">' + linkify(a.partNumber || '') + '</td>' +
+      '<td class="td-desc">' + linkify(a.description || '') + '</td>' +
+      '<td class="td-board">' + (a.side === 'front' ? 'Front' : 'Back') + '</td>';
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', function(e) {
+      closePopup();
+      var region = document.querySelector('[data-id="' + a.id + '"]');
+      if (!region) return;
+      document.querySelectorAll('.anno-region.is-highlighted').forEach(function(el) {
+        el.classList.remove('is-highlighted');
+      });
+      region.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function() {
+        region.classList.add('is-highlighted');
+        region.addEventListener('animationend', function() {
+          region.classList.remove('is-highlighted');
+        }, { once: true });
+      }, 320);
+    });
+    tbody.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>

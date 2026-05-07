@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kiwi: The Single-Board Satellite Manual | Kiwi: The Single-Board Satellite</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Kiwi: The Single-Board Satellite Manual" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:site_name" content="Kiwi: The Single-Board Satellite" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kiwi: The Single-Board Satellite Manual" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"Getting started manual for the Kiwi Single-Board Satellite.","headline":"Kiwi: The Single-Board Satellite Manual","name":"Kiwi: The Single-Board Satellite","url":"/kiwi/v0.0.1/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/kiwi/v0.0.1/assets/css/style.css">
+    <link rel="icon" href="/kiwi/v0.0.1/favicon.ico" type="image/x-icon">
+<script>try{var _kct=localStorage.getItem('kiwi-color-theme');if(_kct&&_kct!=='default')document.documentElement.dataset.theme=_kct;}catch(e){}</script>
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script>window.SITE_BASEURL = "/kiwi/v0.0.1";</script>
+<script src="/kiwi/v0.0.1/assets/js/manual.js" defer></script>
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Kiwi: The Single-Board Satellite Manual</h1>
+      <h2 class="project-tagline">Getting started manual for the Kiwi Single-Board Satellite.</h2>
+      
+        <a href="https://github.com/chickadee-smallsat/kiwi" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <section class="cover-hero" aria-labelledby="cover-title">
+  <div class="cover-hero__panel">
+    <div class="cover-hero__topline">
+      <h1 id="cover-title" class="cover-hero__word">KIWI</h1>
+      <p class="cover-hero__title-block">The<br />Single-board<br />Satellite</p>
+    </div>
+    <div class="cover-hero__artframe" aria-hidden="true">
+      <div class="cover-hero__artbackdrop"></div>
+      <img class="cover-hero__bird" src="/kiwi/v0.0.1/assets/backdrop/logo-with-wire.png" alt="" />
+    </div>
+    <p class="cover-hero__manual">MANUAL</p>
+  </div>
+  <!-- <a class="cover-hero__scroll" href="#manual-start">Enter manual</a> -->
+</section>
+
+<section class="manual-sheet" id="manual-start">
+
+  <h1 id="description">Description</h1>
+
+  <p>Kiwi is a small and compact satellite that combines multiple sensors, radios and data storage solutions on a single printed circuit board (PCB).
+It is designed to be accessible, programmable, and easily customizable through custom expansion boards.
+Kiwi is primarily designed for tabletop experiments, to be used as a tool in STEM education.</p>
+
+  <p>This document introduces Kiwi, and the plug-and-play functions it provides out-of-the-box.</p>
+
+  <p>Contact information can be found at the end of the manual if you’re interested in any further information or have questions.</p>
+
+  <blockquote class="callout-warning">
+    <p><strong>WARNINGS &amp; Safety Measures</strong>
+Electrical devices connected to Kiwi should not be near any liquids and/or high temperature environments (above 85°C, 185°F) as it may cause internal or external damage to the Kiwi, your device connected to the Kiwi, and/or injury to yourself.
+Kiwi is designed primarily to be powered over USB (5V), consuming around 250 mW of power.</p>
+
+    <p>Kiwi is an exposed PCB, with electronic components sensitive to static discharge.
+Use caution while handling.</p>
+  </blockquote>
+
+</section>
+
+<section class="manual-sheet">
+
+  <h1 class="no_toc" id="table-of-contents">TABLE OF CONTENTS</h1>
+
+<ul id="markdown-toc">
+  <li><a href="#description" id="markdown-toc-description">Description</a></li>
+  <li><a href="#materials--equipment-required" id="markdown-toc-materials--equipment-required">Materials / Equipment Required</a>    <ul>
+      <li><a href="#hardware" id="markdown-toc-hardware">Hardware</a></li>
+      <li><a href="#software" id="markdown-toc-software">Software</a></li>
+    </ul>
+  </li>
+  <li><a href="#get-to-know-your-kiwi" id="markdown-toc-get-to-know-your-kiwi">Get to know your Kiwi</a>    <ul>
+      <li><a href="#the-hardware" id="markdown-toc-the-hardware">The Hardware</a></li>
+      <li><a href="#the-firmware" id="markdown-toc-the-firmware">The Firmware</a></li>
+      <li><a href="#kiwi-plotter" id="markdown-toc-kiwi-plotter">Kiwi Plotter</a>        <ul>
+          <li><a href="#windows-installation" id="markdown-toc-windows-installation">Windows Installation</a></li>
+          <li><a href="#macos-installation" id="markdown-toc-macos-installation">macOS Installation</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#powering-up-your-kiwi" id="markdown-toc-powering-up-your-kiwi">Powering up your Kiwi</a></li>
+  <li><a href="#receiving-data-from-your-kiwi" id="markdown-toc-receiving-data-from-your-kiwi">Receiving Data from your Kiwi</a></li>
+  <li><a href="#configuring-your-kiwi" id="markdown-toc-configuring-your-kiwi">Configuring your Kiwi</a>    <ul>
+      <li><a href="#connecting-to-kiwi-serial-port" id="markdown-toc-connecting-to-kiwi-serial-port">Connecting to Kiwi Serial Port</a>        <ul>
+          <li><a href="#coolterm" id="markdown-toc-coolterm">CoolTerm</a></li>
+          <li><a href="#windows-pc" id="markdown-toc-windows-pc">Windows PC</a>            <ul>
+              <li><a href="#installation" id="markdown-toc-installation">Installation</a></li>
+              <li><a href="#usage" id="markdown-toc-usage">Usage</a></li>
+            </ul>
+          </li>
+          <li><a href="#macbook--imac" id="markdown-toc-macbook--imac">MacBook / iMac</a>            <ul>
+              <li><a href="#installation-1" id="markdown-toc-installation-1">Installation</a></li>
+              <li><a href="#usage-1" id="markdown-toc-usage-1">Usage</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#configuration-commands" id="markdown-toc-configuration-commands">Configuration Commands</a></li>
+    </ul>
+  </li>
+  <li><a href="#advanced-usage" id="markdown-toc-advanced-usage">Advanced Usage</a></li>
+  <li><a href="#programming-your-kiwi" id="markdown-toc-programming-your-kiwi">Programming your Kiwi</a>    <ul>
+      <li><a href="#flashing-the-micropython-firmware" id="markdown-toc-flashing-the-micropython-firmware">Flashing the MicroPython Firmware</a></li>
+      <li><a href="#micropython-on-your-kiwi" id="markdown-toc-micropython-on-your-kiwi">MicroPython on your Kiwi</a></li>
+      <li><a href="#data-format-used-by-kiwi" id="markdown-toc-data-format-used-by-kiwi">Data Format used by Kiwi</a>        <ul>
+          <li><a href="#default-packet-layout" id="markdown-toc-default-packet-layout">Default Packet Layout</a></li>
+          <li><a href="#measurement-types" id="markdown-toc-measurement-types">Measurement Types</a></li>
+          <li><a href="#integrity-check" id="markdown-toc-integrity-check">Integrity Check</a></li>
+          <li><a href="#custom-data-packets" id="markdown-toc-custom-data-packets">Custom Data Packets</a></li>
+        </ul>
+      </li>
+      <li><a href="#rust-on-your-kiwi" id="markdown-toc-rust-on-your-kiwi">Rust on your Kiwi</a></li>
+    </ul>
+  </li>
+  <li><a href="#kiwi-50" id="markdown-toc-kiwi-50">Kiwi-50</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+  <li><a href="#feedback" id="markdown-toc-feedback">Feedback</a></li>
+</ul>
+
+</section>
+
+<section class="manual-sheet">
+
+  <h1 id="materials--equipment-required">Materials / Equipment Required</h1>
+
+  <h2 id="hardware">Hardware</h2>
+
+  <ul>
+    <li>The Kiwi single-board satellite (provided)</li>
+    <li>A USB-micro B cable (not provided) to power the Kiwi</li>
+    <li>A Wi-Fi enabled personal computer (desktop, laptop, MacBook or iMac, etc., not provided) to view data coming from the Kiwi</li>
+    <li><em>Raspberry Pi Debug Probe (Optional)</em></li>
+  </ul>
+
+  <h2 id="software">Software</h2>
+
+  <ul>
+    <li>CoolTerm</li>
+    <li>Kiwi Plotter</li>
+    <li><em>Thonny IDE for MicroPython (Optional)</em></li>
+  </ul>
+
+</section>
+
+<section class="manual-sheet">
+
+  <h1 id="get-to-know-your-kiwi">Get to know your Kiwi</h1>
+
+  <p>Kiwi is a single-board satellite.
+Meaning, it is a printed-circuit board (PCB) with various components attached to it, performing different functions.
+The following sections will introduce you to various parts of a Kiwi - some that are visible, and some that are not.</p>
+
+  <h3 id="the-hardware">The Hardware</h3>
+
+  <p>The interactive diagram below shows the front and back of the Kiwi PCB.
+Click the rectangle around a component to see its designation, part number, and description.</p>
+
+  <div class="pcb-viewer-wrap">
+  <iframe src="/kiwi/v0.0.1/assets/media/kiwi-pcb-viewer.html?front=/kiwi/v0.0.1/pcb-annotation/kiwi_front.png&amp;back=/kiwi/v0.0.1/pcb-annotation/kiwi_back.png" title="Kiwi PCB Interactive Viewer" loading="lazy" scrolling="no" id="pcb-viewer-frame" onload="this.style.height=(this.contentWindow.document.body.scrollHeight+32)+'px'; (function(f){window.addEventListener('message',function(e){if(e.data&amp;&amp;e.data.type==='pcb-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+  </iframe>
+</div>
+
+  <p>The central component of the Kiwi is the Raspberry Pi RP2350B microcontroller, which serves as the “brain” of Kiwi, managing its operations in processing sensor data and handling communications.
+Kiwi contains a 2 MiB (1 MiB = 1024 KiB = 1024 × 1024 bytes) flash memory chip, which is used to store the software program executed by the microcontroller.
+Additional peripherals can be stacked on top of Kiwi through the 60-pin expansion sockets (<code class="language-plaintext highlighter-rouge">TOP1</code> and <code class="language-plaintext highlighter-rouge">TOP2</code>) and plugs (<code class="language-plaintext highlighter-rouge">BOT1</code> and <code class="language-plaintext highlighter-rouge">BOT2</code>).
+Kiwi also contains a variety of sensors, including an accelerometer, gyroscope, magnetometer, barometer, temperature sensor, air quality index (AQI) and humidity sensor, and light sensors on each side of the board.
+Kiwi has a built-in Wi-Fi (2.4 GHz) radio for wireless communication, and a USB port for power and configuration updates.
+There is also an on-board micro-SD card slot for additional data storage.</p>
+
+  <h3 id="the-firmware">The Firmware</h3>
+
+  <p>Firmware<span class="cite-ref" data-ref="ref-firmware"></span> is the software that runs on the microcontroller on-board the Kiwi, controlling its hardware functions and defining its operations.
+Kiwi comes preloaded with a firmware that collects data from various sensors and broadcasts them over Wi-Fi.</p>
+
+  <p>The firmware is upgradable (requires a computer and the <a href="https://www.raspberrypi.com/documentation/computers/debug-tool/">Raspberry Pi Debug Tool</a>).
+Custom firmware can be developed and flashed onto the Kiwi, allowing for custom behavior and functionality.
+A <a href="https://micropython.org/">MicroPython</a> interpreter is also available for the Kiwi, allowing users to write and execute Python code directly on the device.</p>
+
+  <h3 id="kiwi-plotter">Kiwi Plotter</h3>
+
+  <p><a href="https://github.com/chickadee-smallsat/kiwi-clients/releases/latest">Kiwi Plotter</a> is a free, cross-platform software that allows you to visualize, and collect data from various sensors on your Kiwi over Wi-Fi.
+Kiwi Plotter is available for Windows, macOS (ARM-based) and Linux (as an AppImage).</p>
+
+  <h4 id="windows-installation">Windows Installation</h4>
+  <p>Download <code class="language-plaintext highlighter-rouge">Kiwi Plotter Setup &lt;Version&gt; x64.zip</code>.
+Navigate to the location of the ZIP archive, and double-click on the file to open it.
+The archive contains a single file <code class="language-plaintext highlighter-rouge">Kiwi Plotter Setup &lt;Version&gt;-x64.exe</code>.
+Double-click on this file to open it.
+You will be presented with the Windows SmartScreen filter dialog, since the Kiwi Plotter installer is not signed by a digital signature.
+Click on “More Info”, then <ui-btn>Run Anyway</ui-btn> to proceed with the installation.
+<img src="assets/media/windows/windows_smart_screen.png" alt="Windows SmartScreen Filter" style="width: 50%" class="collapsible" />
+<img src="assets/media/windows/windows_smart_screen_run_anyway.png" alt="Windows SmartScreen Filter: Run Anyway" style="width: 50%" class="collapsible" />
+Upon installation, the Kiwi Plotter will start automatically.
+Kiwi Plotter can be opened later from the Start (<svg aria-label="Windows" role="img" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-0.15em"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.551H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.949"></path></svg>
+) menu.</p>
+
+  <blockquote class="callout-note">
+    <p><strong>Safety</strong>
+As long as it is downloaded from <a href="https://github.com/chickadee-smallsat/kiwi-clients/releases/latest">here</a>, it should be completely safe to install and execute.
+The source code for the plotter is available <a href="https://github.com/chickadee-smallsat/kiwi-clients">here</a>.
+Validate the SHA-256 checksum of the downloaded ZIP archive against the checksum posted with the release.</p>
+  </blockquote>
+
+  <h4 id="macos-installation">macOS Installation</h4>
+
+  <p>To install Kiwi Plotter on macOS, download <code class="language-plaintext highlighter-rouge">Kiwi Plotter-&lt;Version&gt;-arm64.dmg</code>, and open the DMG file.
+Follow the steps in <a class="sldref" href="#sld-mac-kiwi-plotter"></a>
+ to complete the installation.
+Kiwi Plotter can be opened later from the Applications folder, or from Launchpad.</p>
+
+  <div class="pcb-viewer-wrap" id="sld-mac-kiwi-plotter" data-slideshow="">
+  <iframe src="/kiwi/v0.0.1/assets/media/macos-kiwi-plotter.html" title="Kiwi Plotter macOS Installation" loading="lazy" scrolling="no" style="width:100%; border:none; display:block;">
+  </iframe>
+</div>
+
+</section>
+
+<section class="manual-sheet">
+
+  <h1 id="powering-up-your-kiwi">Powering up your Kiwi</h1>
+
+  <ul>
+    <li>Locate the USB port on your computer.</li>
+  </ul>
+
+  <p><img src="assets/media/computer-usb-port.png" alt="USB port on a computer" id="fig-usb-port-pc" style="filter: invert(1); width: 40%" class="collapsible" /></p>
+
+  <p><img src="assets/media/usb-a-micro-b-cable.png" alt="USB Type-A to Micro-B cable" id="fig-usb-cable" style="filter: invert(1); width: 40%" class="collapsible" /></p>
+
+  <ul>
+    <li>
+      <p>Plug in the USB-A side of the cable into the computer’s USB Port (<a href="#fig-usb-plugged-pc" class="figref"></a>).
+Connect the micro-B side into the Kiwi (as shown in <a href="#fig-usb-plugged-kiwi" class="figref"></a>).</p>
+
+      <p><img src="assets/media/pc-usb-plugged.jpeg" alt="USB cable plugged into computer" id="fig-usb-plugged-pc" style="width: 60%" class="collapsible" /></p>
+
+      <p><img src="assets/media/kiwi-usb-plugged.jpeg" alt="Micro-B cable plugged into Kiwi board" id="fig-usb-plugged-kiwi" style="width: 60%" class="collapsible" /></p>
+
+      <p>At this point, the Kiwi is turned on, and by default, creates an open Wi-Fi access point called <code class="language-plaintext highlighter-rouge">kiwi-ap</code>.
+Kiwi broadcasts various sensor measurements over Wi-Fi at UDP<span class="cite-ref" data-ref="ref-udp"></span> port <code class="language-plaintext highlighter-rouge">8099</code>.
+The <code class="language-plaintext highlighter-rouge">kiwi-ap</code> network should show up in the list of available Wi-Fi networks on your computer.
+Connect to the <code class="language-plaintext highlighter-rouge">kiwi-ap</code> network to start receiving data from the Kiwi.</p>
+    </li>
+  </ul>
+
+  <blockquote class="callout-note">
+    <p><strong>Note</strong>
+If you are using a MacBook or iMac, or a Windows PC without an accessible USB type-A port, you may need a USB-C to USB-A adapter to connect the USB cable to your computer.
+Optionally, you can also use a <a href="https://www.adafruit.com/product/3878">USB-C to micro-B cable</a> to connect the Kiwi directly to your Mac or PC without an adapter.</p>
+  </blockquote>
+
+  <blockquote class="callout-tip">
+    <p><strong>Troubleshooting</strong></p>
+    <ul>
+      <li>Wait up to a minute for the Wi-Fi network to show up.</li>
+      <li>If the default <code class="language-plaintext highlighter-rouge">kiwi-ap</code> network does not show up, disconnect and reconnect the device.</li>
+      <li>If the problem persists,
+        <ul>
+          <li>Short the <code class="language-plaintext highlighter-rouge">PWLED_EN</code> jumper to verify both the red (5V power) and green (3.3V power) LEDs are lighting up.</li>
+          <li>Write to us at <a href="mailto:kiwi@uml.edu">kiwi@uml.edu</a>.</li>
+        </ul>
+      </li>
+    </ul>
+  </blockquote>
+
+</section>
+
+<section class="manual-sheet">
+
+  <h1 id="receiving-data-from-your-kiwi">Receiving Data from your Kiwi</h1>
+
+  <p>By default, Kiwi transmits data through the self-hosted <code class="language-plaintext highlighter-rouge">kiwi-ap</code> Wi-Fi access point.
+To receive measurements from your Kiwi, you will need to use a Wi-Fi-enabled computer. 
+After the data visualization tool, Kiwi Plotter, has been set up on your computer, connect your computer to the <code class="language-plaintext highlighter-rouge">kiwi-ap</code> Wi-Fi access point.
+<img src="/kiwi/v0.0.1/assets/media/kiwi-plotter/kiwi-plotter-connect-wifi.png" alt="Wi-Fi access point list showing `kiwi-ap`" style="width: 60%" />
+Once your computer is connected to the <code class="language-plaintext highlighter-rouge">kiwi-ap</code> network access point, the device should show up in the Kiwi Plotter software.</p>
+  <blockquote class="callout-tip">
+    <p><strong>Wi-Fi Network</strong>
+If you have changed the name of the Wi-Fi access point that your Kiwi is broadcasting, look for that name in the list of available devices in the plotter instead of <code class="language-plaintext highlighter-rouge">kiwi-ap</code>.
+If you have configured your Kiwi to connect to a different Wi-Fi network, make sure your computer is connected to the same network to receive data from the Kiwi.</p>
+  </blockquote>
+  <p><img src="/kiwi/v0.0.1/assets/media/kiwi-plotter/kiwi-plotter-connected.png" alt="Kiwi Plotter device list showing a connected Kiwi device" style="width: 60%" />
+Clicking on the device in the list will open up a new tab in the plotter, showing real-time sensor measurements from the Kiwi.
+<img src="/kiwi/v0.0.1/assets/media/kiwi-plotter/kiwi-plotter-device.png" alt="Kiwi Plotter tab showing real-time sensor measurements" id="fig-kiwi-plotter-device" style="width: 60%" />
+The various sensor measurements are shown in individual panels in the plotter (<a href="#fig-kiwi-plotter-device" class="figref"></a>).
+Measurements from the accelerometer, gyroscope and magnetometer show three axes of data, corresponding to the x, y and z axes of the device.
+These plots also show the magnitude of these measurements, calculated as \(\sqrt{x^2 + y^2 + z^2}\).
+The pressure, temperature, and inferred altitude measurements are shown in their individual panels.
+These panels can be adjusted in size, and rearranged within the plotter tab to customize the layout.
+The Y-axis limits can also be adjusted for each panel by clicking the gear icon in the top-right corner of the panel, and entering new limits in the “Y-Axis Limits” section.
+<img src="/kiwi/v0.0.1/assets/media/kiwi-plotter/kiwi-plotter-reorganize.png" alt="Kiwi Plotter panel reorganization and 3-D visualization" style="width: 60%" />
+The viewer also shows a real-time 3D visualization of the orientation of the device, based on the accelerometer and magnetometer measurements.
+This visualization is approximate, and does not (yet) account for the drift in the gyroscope measurements, so it may not be perfectly accurate.
+Instantaneous values of the various sensor measurements can be viewed by hovering over the plots, or by clicking on the “Data Inspector” button in the top-right corner of the plotter tab.
+<img src="/kiwi/v0.0.1/assets/media/kiwi-plotter/kiwi-plotter-instantaneous-value.png" alt="Instantaneous values shown on hover" style="width: 60%" />
+An individual, more detailed 3-D visualization of the device orientation is also available in a separate tab in the plotter, accessible through the “3D” button on the device list.
+<img src="/kiwi/v0.0.1/assets/media/kiwi-plotter/kiwi-plotter-3d-view.png" alt="3D visualization of device orientation" style="width: 60%" />
+The data from the Kiwi can also be recorded and exported as a CSV file for offline analysis.
+To start recording, click the “Start” button in the top-left corner of the device plot tab.
+After recording has started, use the “Stop” button to stop recording, and the “Export” button to download the recorded data as an Excel spreadsheet.
+Data from various sensors are recorded in separate sheets within the spreadsheet, with timestamps for each measurement.</p>
+</section>
+
+<section class="manual-sheet">
+
+  <h1 id="configuring-your-kiwi">Configuring your Kiwi</h1>
+
+  <p>Kiwi exposes a simple configuration interface over universal serial asynchronous receiver-transmitter (UART)<span class="cite-ref" data-ref="ref-uart"></span>, better known as a ‘serial port’<span class="cite-ref" data-ref="ref-serial"></span>.
+This serial port is accessible to the computer connected to Kiwi over the USB port.
+The configuration interface uses text commands to configure the Kiwi.
+The built-in firmware supports changing the Wi-Fi settings, and updating the unique identifier of the Kiwi (<code class="language-plaintext highlighter-rouge">Kiwi#XXXX</code> by default).</p>
+
+  <h2 id="connecting-to-kiwi-serial-port">Connecting to Kiwi Serial Port</h2>
+
+  <h3 id="coolterm">CoolTerm</h3>
+  <p><a href="https://freeware.the-meiers.org/">CoolTerm</a> is a free software that provides an interface to communicate with a device over the serial port.
+Depending on your operating system, use the links in the following table to get the correct version of CoolTerm.
+For most users, the first (Windows users) and second (Mac users) should be sufficient.</p>
+
+  <p class="table-caption">CoolTerm download options by platform and CPU architecture.</p>
+
+  <table id="tbl-coolterm">
+    <thead>
+      <tr>
+        <th>Computer</th>
+        <th>Operating System</th>
+        <th>Architecture</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Windows PC / Laptop</td>
+        <td>Windows 64-bit</td>
+        <td><code class="language-plaintext highlighter-rouge">x86_64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermWin64Bit.zip">Link</a></td>
+      </tr>
+      <tr>
+        <td>MacBook / iMac</td>
+        <td>macOS (Universal)</td>
+        <td><code class="language-plaintext highlighter-rouge">x86_64</code> / <code class="language-plaintext highlighter-rouge">arm64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermMac.dmg">Link</a></td>
+      </tr>
+      <tr>
+        <td>Windows PC / Laptop (before 2010)</td>
+        <td>Windows 32-bit</td>
+        <td><code class="language-plaintext highlighter-rouge">x86</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermWin32Bit.zip">Link</a></td>
+      </tr>
+      <tr>
+        <td>Windows PC / Laptop with Snapdragon Chip</td>
+        <td>Windows ARM64</td>
+        <td><code class="language-plaintext highlighter-rouge">arm64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermWinARM64Bit.zip">Link</a></td>
+      </tr>
+      <tr>
+        <td>Linux PC / Laptop</td>
+        <td>Linux</td>
+        <td><code class="language-plaintext highlighter-rouge">x86</code> / <code class="language-plaintext highlighter-rouge">x86_64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermLinux32Bit.zip">32-bit</a> <a href="https://freeware.the-meiers.org/CoolTermLinux64Bit.zip">64-bit</a></td>
+      </tr>
+      <tr>
+        <td>Raspberry Pi</td>
+        <td>Linux</td>
+        <td><code class="language-plaintext highlighter-rouge">armv7</code> / <code class="language-plaintext highlighter-rouge">arm64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermRaspberryPi.zip">32-bit</a> <a href="https://freeware.the-meiers.org/CoolTermRaspberryPi64Bit.zip">64-bit</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="collapsible collapsible-open" id="windows-pc">Windows PC</h3>
+  <!-- {: .collapsible} -->
+  <h4 id="installation">Installation</h4>
+  <ul>
+    <li>Download the version of CoolTerm compatible with your Windows PC from <a href="#tbl-coolterm" class="tblref"></a>.</li>
+    <li>Navigate to the location of the downloaded <code class="language-plaintext highlighter-rouge">.zip</code> file.</li>
+    <li>Extract the files from the downloaded <code class="language-plaintext highlighter-rouge">.zip</code> archive.
+      <ul>
+        <li>Right click on the <code class="language-plaintext highlighter-rouge">.zip</code> archive to open the context menu and select the “Extract All…” option.
+          <div class="os-toggle-wrap collapsible" style="width: 100%"><div class="os-toggle" role="group" aria-label="Select version"><button type="button" class="os-toggle__btn is-active" data-target="#fig-coolterm-extract" data-src="/kiwi/v0.0.1/assets/media/windows/coolterm_extract_win11.png" data-alt="Extract CoolTerm (Windows 11)">Windows 11</button><button type="button" class="os-toggle__btn" data-target="#fig-coolterm-extract" data-src="/kiwi/v0.0.1/assets/media/windows/coolterm_extract_win10.png" data-alt="Extract CoolTerm (Windows 10)">Windows10</button></div><img id="fig-coolterm-extract" src="/kiwi/v0.0.1/assets/media/windows/coolterm_extract_win11.png" alt="Extract CoolTerm (Windows 11)" /></div>
+        </li>
+        <li>Click the “Extract” button in the extraction dialog.
+<img src="assets/media/windows/coolterm_extract_dialog.png" alt="Extract the `.zip` file" class="collapsible" style="width: 60%" /></li>
+        <li>Navigate into the extracted <code class="language-plaintext highlighter-rouge">CoolTermWin64Bit</code> directory, and launch the <code class="language-plaintext highlighter-rouge">CoolTerm</code> application executable (<code class="language-plaintext highlighter-rouge">.exe</code>).
+<img src="assets/media/windows/coolterm_program.png" alt="Launch CoolTerm" class="collapsible" style="width: 80%" /></li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 id="usage">Usage</h4>
+  <ul>
+    <li>Upon launching CoolTerm, you will be prompted to set the preferences for CoolTerm. Use default preferences.
+<img src="assets/media/windows/coolterm_preferences.png" alt="Use Default Preferences" /></li>
+    <li>After CoolTerm opens, click on “▼” on the left of the bottom bar.</li>
+    <li>Select a serial port under “Port”. Your computer may have multiple serial connections available depending on which peripherals are connected to it.
+<img src="assets/media/windows/coolterm_port_selection.png" alt="Select a serial device" /></li>
+    <li>Click “Connect” to connect to the Kiwi serial port.
+<img src="assets/media/windows/coolterm_connect.png" alt="Connect to a serial device" class="collapsible" />
+<img src="assets/media/windows/coolterm_after_connect.png" alt="Serial device is connected" class="collapsible" /></li>
+    <li>Hit the <kbd>Enter</kbd> key. You should see a prompt that looks like <code class="language-plaintext highlighter-rouge">&gt; </code>, which indicates you are connected to the Kiwi serial console, and your Kiwi is ready to receive commands.
+<img src="assets/media/windows/coolterm_connect_caret.png" alt="Kiwi is connected!" /></li>
+    <li>If the <code class="language-plaintext highlighter-rouge">&gt; </code> does not show up and you have multiple serial devices under “Ports”, switch to a different port, connect to it, and hit <kbd>Enter</kbd>.</li>
+    <li>Type <code class="language-plaintext highlighter-rouge">help</code> and hit <kbd>Enter</kbd> to see the list of available commands.
+<img src="assets/media/windows/coolterm_connected_help_menu.png" alt="Available serial commands on Kiwi" /></li>
+  </ul>
+
+  <blockquote class="callout-tip collapsible">
+    <p><strong>Identify the Kiwi COM Port</strong>
+The COM port presented by Kiwi can be identified in the <code class="language-plaintext highlighter-rouge">Device Manager</code> program in case multiple COM ports are present.
+To open Device Manager, first click on the ‘Start’ (<svg aria-label="Windows" role="img" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-0.15em"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.551H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.949"></path></svg>
+) button on your desktop, or the <kbd>Windows <svg aria-label="Windows" role="img" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-0.15em"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.551H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.949"></path></svg>
+</kbd> key on your keyboard.
+Then, type in ‘device manager’, and ‘Device Manager (Control Panel)’ should show up in the search results.
+<img src="assets/media/windows/device_manager_prompt.png" alt="Search result for device manager" style="width: 60%" class="collapsible" />
+Open Device Manager, and navigate to <ui-menu>Ports (COM &amp; LPT)</ui-menu> in the device tree.
+<img src="assets/media/windows/device_manager_ports_com_lpt.png" alt="Ports (COM &amp; LPT) in Device Manager tree" class="collapsible" />
+Then, right click on a COM port under the <ui-menu>Ports (COM &amp; LPT)</ui-menu> devices and select <strong>Properties</strong>.
+<img src="assets/media/windows/device_manager_properties.png" alt="Properties of a COM device" class="collapsible" />
+In the device properties dialog box, navigate to <ui-tab>Details</ui-tab>, and select <ui-btn>Bus reported device description</ui-btn> under the <ui-menu>Property</ui-menu> dropdown. A Kiwi will report itself as <code class="language-plaintext highlighter-rouge">Kiwi Mainboard Rev. B</code>.
+<img src="assets/media/windows/device_manager_identity.png" alt="Detecting a Kiwi" />
+Note the COM port number once the Kiwi is found. Hit ‘OK’ to close the Properties dialog box, and close Device Manager.</p>
+  </blockquote>
+
+  <h3 class="collapsible" id="macbook--imac">MacBook / iMac</h3>
+  <h4 id="installation-1">Installation</h4>
+  <ul>
+    <li>Download the macOS version of CoolTerm from <a href="#tbl-coolterm" class="tblref"></a>.</li>
+    <li>Open the downloaded <code class="language-plaintext highlighter-rouge">CoolTermMac.dmg</code> file, and drag the CoolTerm application to your Applications folder.
+<img src="assets/media/coolterm-mac-install.png" alt="Dragging CoolTerm to Applications folder" style="width: 60%" /></li>
+  </ul>
+
+  <h4 id="usage-1">Usage</h4>
+  <ul>
+    <li>Open CoolTerm from the Applications folder.
+On first launch, you will be prompted to set up the preferences for CoolTerm.
+Use the default settings (press “Use Defaults” button).
+<img src="assets/media/coolterm-mac-startup.png" alt="Opening CoolTerm on Mac" style="width: 40%" /></li>
+    <li>After CoolTerm opens, click on “▼” on the left of the bottom bar.</li>
+    <li>Select the serial port that corresponds to your Kiwi (e.g., <code class="language-plaintext highlighter-rouge">usbmodem2025_0011</code>) under “Port”.</li>
+    <li>In the “▼” menu, click “Connect” to connect to the Kiwi serial port.</li>
+    <li>Hit the <kbd>Return</kbd> key. You should see a prompt that looks like <code class="language-plaintext highlighter-rouge">&gt; </code>, which indicates you are connected to the Kiwi serial console, and your Kiwi is ready to receive commands.</li>
+    <li>Type <code class="language-plaintext highlighter-rouge">help</code> and hit <kbd>Return</kbd> to see the list of available commands.</li>
+  </ul>
+
+  <figure style="width: 80%; margin: 1.5rem auto">
+  <video controls="" style="width: 100%; margin: 0; border-radius: 1rem">
+    <source src="/kiwi/v0.0.1/assets/media/coolterm-mac-connect.mp4" type="video/mp4" />
+  </video>
+  <figcaption>Connecting to the Kiwi serial port on macOS using CoolTerm.</figcaption>
+</figure>
+
+  <h2 id="configuration-commands">Configuration Commands</h2>
+  <p>Kiwi serial commands are strings, identified by one or more command keywords.
+These command keywords are selected to be small, memorable mnemonics of the operation they perform.
+Most commands are made of one or two keywords, separated by a single space.</p>
+
+  <p>Some commands also accept input parameters, some of which may be optional.
+Required input parameters are indicated by <code class="language-plaintext highlighter-rouge">&lt;&gt;</code> symbols, and optional parameters are indicated by <code class="language-plaintext highlighter-rouge">[]</code>.
+The inputs are positional, meaning the position after the command keywords determines which parameter is set by a passed value.
+Commands are executed when the <kbd>Enter</kbd> or <kbd>Return</kbd> key is pressed.</p>
+
+  <p class="table-caption">Available configuration commands</p>
+
+  <table id="tbl-commands">
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+        <th>Inputs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="/#help"><code class="language-plaintext highlighter-rouge">help</code></a></td>
+        <td>Shows a help message describing what commands are available</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#ident-get"><code class="language-plaintext highlighter-rouge">ident get</code></a></td>
+        <td>Get the currently set identity for the Kiwi</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#ident-set"><code class="language-plaintext highlighter-rouge">ident set &lt;ID&gt;</code></a></td>
+        <td>Set a new identity</td>
+        <td><code class="language-plaintext highlighter-rouge">ID</code>: New identity string (12 characters max.)</td>
+      </tr>
+      <tr>
+        <td><a href="/#wifi-status"><code class="language-plaintext highlighter-rouge">wifi status</code></a></td>
+        <td>Current status of the Wi-Fi connection, and broadcast data rate if a connection has been established</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#wifi-ap"><code class="language-plaintext highlighter-rouge">wifi ap &lt;ssid&gt; [pw]</code></a></td>
+        <td>Kiwi creates a Wi-Fi access point</td>
+        <td><code class="language-plaintext highlighter-rouge">ssid</code>: Wi-Fi access point name (32 characters max.)<br /><code class="language-plaintext highlighter-rouge">pw</code>: Optional password for the access point (32 characters max.)</td>
+      </tr>
+      <tr>
+        <td><a href="/#wifi-cl"><code class="language-plaintext highlighter-rouge">wifi cl &lt;ssid&gt; [pw]</code></a></td>
+        <td>Kiwi joins a Wi-Fi network</td>
+        <td><code class="language-plaintext highlighter-rouge">ssid</code>: Name of the Wi-Fi network (32 characters max.)<br /><code class="language-plaintext highlighter-rouge">pw</code>: Optional password for the Wi-Fi network (32 characters max.)</td>
+      </tr>
+      <tr>
+        <td><a href="/#store"><code class="language-plaintext highlighter-rouge">store</code></a></td>
+        <td>Update the identity, or Wi-Fi configuration of Kiwi. This operation causes the device to reset.</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#reset"><code class="language-plaintext highlighter-rouge">reset</code></a></td>
+        <td>Trigger a software reset of the device</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#clear"><code class="language-plaintext highlighter-rouge">clear</code></a></td>
+        <td>Use ANSI escape sequences to clear the terminal screen. This may not work on CoolTerm on Windows.</td>
+        <td>–</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="no_toc" id="help"><code class="language-plaintext highlighter-rouge">help</code></h3>
+  <p>The <code class="language-plaintext highlighter-rouge">help</code> command prints the available commands in the console.</p>
+
+  <h3 class="no_toc" id="identity-commands">Identity Commands</h3>
+  <p>Each Kiwi board stores a unique identity string (12 characters) on board.</p>
+
+  <h4 class="no_toc" id="ident-get"><code class="language-plaintext highlighter-rouge">ident get</code></h4>
+  <p>Typing in <code class="language-plaintext highlighter-rouge">ident get</code> in the console and pressing <kbd>Enter</kbd> or <kbd>Return</kbd> prints the currently set identity string on the console.</p>
+
+  <h4 class="no_toc" id="ident-set"><code class="language-plaintext highlighter-rouge">ident set</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">ident set</code> command takes a single parameter, the new identity to be set.
+For example, if you want to set the identity string to <code class="language-plaintext highlighter-rouge">MyKiwi</code>, execute the following command:</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; ident set MyKiwi
+</code></pre></div>  </div>
+  <p>Note, this does not update the identity string immediately.
+Execute the <code class="language-plaintext highlighter-rouge">store</code> command for the update to take effect.
+Identity strings must be alphanumeric, and can not contain a space.</p>
+
+  <h4 class="no_toc" id="wifi-status"><code class="language-plaintext highlighter-rouge">wifi status</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">wifi status</code> command does not take any parameters.
+This command outputs the current status of the Wi-Fi connection.
+For example, the Kiwi with device ID <code class="language-plaintext highlighter-rouge">Kiwi#0002</code>, set up in access point (Kiwi creates the Wi-Fi network) called <code class="language-plaintext highlighter-rouge">kiwi_ap</code> (this is what the Wi-Fi network shows up as in your PC/laptop/phone) without a password, returns the following output on <code class="language-plaintext highlighter-rouge">wifi status</code> command:</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; wifi status
+Device ID: Kiwi#0002
+WiFi Credentials:
+  Mode: Access Point
+  SSID: kiwi-ap
+  Open network
+Data rate: 23.195875 kbps, Packet rate: 123.711334 pkt/s
+</code></pre></div>  </div>
+  <p>If the Kiwi is unable to create the access point, or join a Wi-Fi network, it will report <code class="language-plaintext highlighter-rouge">WiFi not ready</code> instead of showing a data rate.</p>
+
+  <h4 class="no_toc" id="wifi-ap"><code class="language-plaintext highlighter-rouge">wifi ap</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">wifi ap</code> command configures the Kiwi to host a Wi-Fi hotspot for you to connect to.
+Kiwi broadcasts its measurements over this Wi-Fi hotspot.
+This command takes two parameters:</p>
+  <ul>
+    <li><code class="language-plaintext highlighter-rouge">ssid</code>: The service-set identifier (SSID) is the name of the Wi-Fi hotspot Kiwi creates.</li>
+    <li><code class="language-plaintext highlighter-rouge">pw</code>: An optional password for the Wi-Fi hotspot. If <code class="language-plaintext highlighter-rouge">pw</code> is not provided as an input, Kiwi will host an open network that can be joined without entering a password.</li>
+  </ul>
+
+  <p>For example, executing <code class="language-plaintext highlighter-rouge">kiwi ap kiwi-network</code> will configure the Kiwi to set up an open network hotspot that will show up as <code class="language-plaintext highlighter-rouge">kiwi-network</code> on your device.
+Executing <code class="language-plaintext highlighter-rouge">kiwi ap kiwi-private SecurePassword</code> will configure Kiwi to set up a network hotspot <code class="language-plaintext highlighter-rouge">kiwi-private</code> that will require <code class="language-plaintext highlighter-rouge">SecurePassword</code> for a device to join that network.</p>
+
+  <h4 class="no_toc" id="wifi-cl"><code class="language-plaintext highlighter-rouge">wifi cl</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">wifi cl</code> command configures the Kiwi to connect to an open, or WPA/WPA2<span class="cite-ref" data-ref="ref-wpa"></span> protected network.
+Most home/private networks use this form of authentication, where a passsword is entered to join the network.
+The eduroam<span class="cite-ref" data-ref="ref-eduroam"></span> network uses more complex authentication methods, and Kiwi can not join such a network.
+<code class="language-plaintext highlighter-rouge">wifi cl</code> command accepts the SSID (required) and password (optional) parameters.
+To connect Kiwi to <code class="language-plaintext highlighter-rouge">MyHomeWiFi</code> secured by <code class="language-plaintext highlighter-rouge">MySecurePassword</code>, execute the following command:</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; wifi cl MyHomeWiFi MySecurePassword
+</code></pre></div>  </div>
+  <p>Omit the password if you are connecting to an open network.</p>
+
+  <blockquote class="callout-note collapsible collapsible-open">
+    <p><strong>Wi-Fi SSID and Password Formatting</strong>
+Wi-Fi SSID is an alphanumeric string of up to 32 characters, supporting characters <em>a–z</em>, <em>A–Z</em>, <em>0–9</em>, dashes (-) and underscores (_).
+Due to the positional parameter inputs to <code class="language-plaintext highlighter-rouge">wifi ap</code> and <code class="language-plaintext highlighter-rouge">wifi cl</code> commands, any space in the SSID will cause the part before the space to be interpreted as the SSID and the part after the space as the password.
+Special characters are <strong>not</strong> supported.</p>
+
+    <p>Wi-Fi passwords are at most 32 characters long.</p>
+  </blockquote>
+
+  <h4 class="no_toc" id="store"><code class="language-plaintext highlighter-rouge">store</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">store</code> command stores any changes to Kiwi configuration (identity or Wi-Fi configuration), and resets the device for the settings to take effect.</p>
+
+  <h4 class="no_toc" id="reset"><code class="language-plaintext highlighter-rouge">reset</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">reset</code> command triggers a software reset of the Kiwi.
+The <code class="language-plaintext highlighter-rouge">store</code> command uses this trigger to reload the new configuration.</p>
+
+  <h4 class="no_toc" id="clear"><code class="language-plaintext highlighter-rouge">clear</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">clear</code> command sends a set of characters to the terminal to clear any previous commands and their outputs.
+This command may not work as intended in CoolTerm on Windows.</p>
+
+</section>
+
+<section class="manual-sheet">
+
+  <h1 id="advanced-usage">Advanced Usage</h1>
+
+  <p>This section covers advanced topics for users who want to get more out of their Kiwi.</p>
+
+  <p>Datasheet for Kiwi is provided below.</p>
+
+  <div class="collapsible-fig">
+  <div class="collapsible-fig__body">
+    <div class="pdf-embed-wrap">
+      <iframe src="/kiwi/v0.0.1/assets/media/pdf-viewer.html?file=/kiwi/v0.0.1/datasheet/kiwi-mainboard-ds.pdf" style="height:700px" title="Kiwi Datasheet" loading="lazy" scrolling="no" onload="(function(f){window.addEventListener('message',function(e){if(e.data&amp;&amp;e.data.type==='pdf-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+      </iframe>
+    </div>
+  </div>
+  <button type="button" class="collapsible-fig__toggle" aria-expanded="false" onclick="var w=this.closest('.collapsible-fig');var o=w.classList.toggle('is-open');this.setAttribute('aria-expanded',String(o));">Kiwi Datasheet</button>
+</div>
+  <p class="pdf-embed-fallback">
+  <a href="/kiwi/v0.0.1/datasheet/kiwi-mainboard-ds.pdf" download="">Download Kiwi Datasheet</a>
+</p>
+
+  <h1 id="programming-your-kiwi">Programming your Kiwi</h1>
+
+  <p>Kiwi supports <a href="https://micropython.org/">MicroPython</a> out-of-the-box.
+MicroPython has been compiled for the Kiwi, and is available from <a href="https://github.com/chickadee-smallsat/kiwi-mainboard-micropython/releases/latest">here</a>.</p>
+
+  <h2 id="flashing-the-micropython-firmware">Flashing the MicroPython Firmware</h2>
+  <ul>
+    <li>Download the <code class="language-plaintext highlighter-rouge">micropython_&lt;MicroPythonVersion&gt;_kiwi_mb_revB0.uf2</code> file to your PC.</li>
+    <li>Keep the USB micro-B cable plugged into the Kiwi, but not into the PC.</li>
+    <li>With the <code class="language-plaintext highlighter-rouge">BOOTSEL</code> button held down (possibly with a small tool like a screwdriver), insert the cable into the PC.</li>
+    <li>Kiwi should show up as a removable storage device. Copy the downloaded <code class="language-plaintext highlighter-rouge">.uf2</code> firmware to it.</li>
+    <li>At this point, the removable storage should automatically be removed and the Kiwi should reboot.</li>
+  </ul>
+
+  <h2 id="micropython-on-your-kiwi">MicroPython on your Kiwi</h2>
+  <p>Use the <a href="https://thonny.org/">Thonny IDE</a> to write MicroPython code and execute it on your Kiwi.
+Thonny allows you to store code on your Kiwi and run it when the Kiwi is powered on.</p>
+
+  <blockquote class="callout-caution">
+    <p><strong>Kiwi Plotter will not work with MicroPython</strong>
+Installing MicroPython to Kiwi will remove the pre-loaded firmware Kiwi came with.
+This will break the data transmission functionality Kiwi previously offered, and your Kiwi will not transmit any data over Wi-Fi to Kiwi Plotter by default.</p>
+  </blockquote>
+
+  <h2 id="data-format-used-by-kiwi">Data Format used by Kiwi</h2>
+
+  <p>Kiwi broadcasts measurement packets over UDP on port <code class="language-plaintext highlighter-rouge">8099</code>.
+Currently, this is not configurable in the on-board Kiwi firmware, or the Kiwi Plotter, so any data broadcast to the plotter will have to be broadcast on this port.</p>
+
+  <p>Kiwi broadcasts data packets that are fixed-size 24-byte binary structures.
+All multi-byte values are <a href="https://en.wikipedia.org/wiki/Endianness"><strong>little-endian</strong></a>, or least-significant-byte first.
+This is in contrast to the typical network byte order (big-endian), since most consumer hardware, including the Kiwi, is little-endian.</p>
+
+  <h3 id="default-packet-layout">Default Packet Layout</h3>
+
+  <div class="pcb-viewer-wrap">
+  <iframe src="/kiwi/v0.0.1/assets/media/packet-layout.html" title="Kiwi Packet Layout" loading="lazy" scrolling="no" onload="this.style.height=(this.contentWindow.document.body.scrollHeight+32)+'px'; (function(f){window.addEventListener('message',function(e){if(e.data&amp;&amp;e.data.type==='packet-layout-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+  </iframe>
+</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Bytes</th>
+        <th>Size</th>
+        <th>Field</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0–1</td>
+        <td>2 B</td>
+        <td>Type</td>
+        <td>Measurement type code (<code class="language-plaintext highlighter-rouge">u16</code>)</td>
+      </tr>
+      <tr>
+        <td>2–13</td>
+        <td>12 B</td>
+        <td>Data</td>
+        <td>Measurement payload (layout varies by type)</td>
+      </tr>
+      <tr>
+        <td>14–21</td>
+        <td>8 B</td>
+        <td>Timestamp</td>
+        <td>Microseconds since device start (<code class="language-plaintext highlighter-rouge">u64</code>)</td>
+      </tr>
+      <tr>
+        <td>22–23</td>
+        <td>2 B</td>
+        <td>CRC</td>
+        <td>CRC-16/XMODEM over bytes 0–21 (<code class="language-plaintext highlighter-rouge">u16</code>)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="measurement-types">Measurement Types</h3>
+
+  <p>The type field identifies which sensor produced the data and how the 12-byte payload is laid out (<a class="tblref" href="#tbl-data-ids"></a>).</p>
+
+  <p class="table-caption">Table of type-field values identifying which sensor produced a data packet.</p>
+
+  <table id="tbl-data-ids">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Code</th>
+        <th>Bytes 2–13</th>
+        <th>Units</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Accelerometer</td>
+        <td><code class="language-plaintext highlighter-rouge">0xACC1</code></td>
+        <td>X (<code class="language-plaintext highlighter-rouge">f32</code>), Y (<code class="language-plaintext highlighter-rouge">f32</code>), Z (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>g</td>
+      </tr>
+      <tr>
+        <td>Gyroscope</td>
+        <td><code class="language-plaintext highlighter-rouge">0x6E50</code></td>
+        <td>X (<code class="language-plaintext highlighter-rouge">f32</code>), Y (<code class="language-plaintext highlighter-rouge">f32</code>), Z (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>°/s</td>
+      </tr>
+      <tr>
+        <td>Magnetometer</td>
+        <td><code class="language-plaintext highlighter-rouge">0x9A61</code></td>
+        <td>X (<code class="language-plaintext highlighter-rouge">f32</code>), Y (<code class="language-plaintext highlighter-rouge">f32</code>), Z (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>mG</td>
+      </tr>
+      <tr>
+        <td>Temperature</td>
+        <td><code class="language-plaintext highlighter-rouge">0x7E70</code></td>
+        <td>Label (8 B ASCII, null-padded), Value (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>°C</td>
+      </tr>
+      <tr>
+        <td>Barometer</td>
+        <td><code class="language-plaintext highlighter-rouge">0xB480</code></td>
+        <td>Temperature (<code class="language-plaintext highlighter-rouge">f32</code>), Pressure (<code class="language-plaintext highlighter-rouge">f32</code>), Altitude (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>°C / hPa / m</td>
+      </tr>
+      <tr>
+        <td>Humidity / AQI</td>
+        <td><code class="language-plaintext highlighter-rouge">0xF0AC</code></td>
+        <td>Temperature (<code class="language-plaintext highlighter-rouge">f32</code>), Humidity (<code class="language-plaintext highlighter-rouge">f32</code>), AQI (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>°C / % / —</td>
+      </tr>
+      <tr>
+        <td>Light</td>
+        <td><code class="language-plaintext highlighter-rouge">0x1A2B</code></td>
+        <td>Label (8 B ASCII, null-padded), Value (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>lux</td>
+      </tr>
+      <tr>
+        <td>Device ID</td>
+        <td><code class="language-plaintext highlighter-rouge">0x1D1D</code></td>
+        <td>ID string (12 B ASCII, null-padded)</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>The <strong>Temperature</strong> and <strong>Light</strong> types include an 8-character ASCII label (null-padded to 8 bytes, bytes 2–9) that identifies the specific sensor, followed by the value as an <code class="language-plaintext highlighter-rouge">f32</code> at bytes 10–13.
+The <strong>Device ID</strong> type carries a 12-character null-padded ASCII string identifying the device (e.g. <code class="language-plaintext highlighter-rouge">kiwi#0001</code>), with no numeric value.</p>
+
+  <blockquote class="callout-note">
+    <p><strong>AQI Data</strong>
+Due to the closed-source nature of the <a href="https://github.com/boschsensortec/BSEC-Arduino-library">AQI calculation algorithm (BSEC)</a> provided by Bosch Sensortech, it has not been integrated into the pre-loaded Kiwi firmware.
+AQI data is reported as raw resistance measurement from the gas sensor, heated up to 300°C.</p>
+  </blockquote>
+
+  <blockquote class="callout-tip">
+    <p><strong>Data Types</strong></p>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">u8</code>: Unsigned 8-bits of data (a byte). Also known as <code class="language-plaintext highlighter-rouge">unsigned char</code> or <code class="language-plaintext highlighter-rouge">uint8_t</code> in the C programming language. The Python equivalent is a <code class="language-plaintext highlighter-rouge">byte</code>.</li>
+      <li><code class="language-plaintext highlighter-rouge">u16</code>: Unsigned 16-bits of data (2 bytes). Also known as <code class="language-plaintext highlighter-rouge">unsigned short</code> or <code class="language-plaintext highlighter-rouge">uint16_t</code> in C. Python does not have a direct equivalent of this type. Use the <a href="https://docs.micropython.org/en/latest/library/struct.html"><code class="language-plaintext highlighter-rouge">struct</code></a> module to unpack a <code class="language-plaintext highlighter-rouge">u16</code> to an <code class="language-plaintext highlighter-rouge">int</code>, and vice-versa.</li>
+      <li><code class="language-plaintext highlighter-rouge">u64</code>: Unsigned 64-bits of data (8 bytes). Also known as <code class="language-plaintext highlighter-rouge">unsigned long long</code> or <code class="language-plaintext highlighter-rouge">uint64_t</code> in C. Python does not have a direct equivalent of this type.</li>
+      <li><code class="language-plaintext highlighter-rouge">f32</code>: A 32-bit, IEEE-758 floating point number. Also known as <code class="language-plaintext highlighter-rouge">float</code> in C. <code class="language-plaintext highlighter-rouge">float</code> in Python is usually 64-bits long, but MicroPython usually uses 32-bit floating point numbers by default.</li>
+    </ul>
+  </blockquote>
+
+  <h3 id="integrity-check">Integrity Check</h3>
+
+  <p>The last 2 bytes of every packet carry a <strong>CRC-16/XMODEM</strong> checksum computed over the first 22 bytes.
+Packets with a CRC mismatch should be discarded.</p>
+
+  <blockquote class="callout-note">
+    <p><strong>CRC-16/XMODEM</strong>
+A cyclic redundancy check (CRC) is an error-detecting code commonly used in digital networks and storage devices to detect accidental changes to digital data. 
+Blocks of data entering these systems get a short check value attached, based on the remainder of a polynomial division of their contents. 
+On retrieval, the calculation is repeated and, in the event the check values do not match, corrective action can be taken against data corruption.<span class="cite-ref" data-ref="ref-crc"></span>
+The specific polynomial used in the CRC-16/XMODEM algorithm, also known as the CRC-16 <a href="https://en.wikipedia.org/wiki/ITU-T">CCITT</a> algorithm, is \(x^{16} + x^{12} + x^{5} + 1\), or <code class="language-plaintext highlighter-rouge">0x1021</code>, and the accumulator is initialized to <code class="language-plaintext highlighter-rouge">0x0000</code>.</p>
+  </blockquote>
+
+  <h3 id="custom-data-packets">Custom Data Packets</h3>
+
+  <p>The reference implementation of the Kiwi software transmits data in 24-byte packets.
+If your Kiwi is flying as part of the Kiwi-50 experiment, the following are <strong>recommended</strong> to ensure successful data acquisition:</p>
+  <ul>
+    <li><strong>Broadcast UDP packets on port <code class="language-plaintext highlighter-rouge">8099</code>.</strong></li>
+    <li><strong>Adhere to the 24-byte packet size.</strong></li>
+    <li><strong>Maintain the CRC-16 bytes at the end of the packet.</strong></li>
+    <li><strong>Transmit the ID packet with your unique ID</strong>. No data will be routed until this ID is received (Kiwi-50 experiments). It is recommended to broadcast the ID packet at a regular interval, at most 4 times every minute (15 seconds interval), to ensure the device is identified quickly without lowering data throughput with too many ID packets.</li>
+    <li><strong>Use a custom ID (<code class="language-plaintext highlighter-rouge">u16</code>)</strong>. There are over 60,000 to choose from.</li>
+    <li>Implement a way to track the order of packets. UDP does not guarantee transmission or ordering of packets.</li>
+  </ul>
+
+  <h2 id="rust-on-your-kiwi">Rust on your Kiwi</h2>
+
+  <p>The <a href="https://rust-lang.org/">Rust Programming Language</a> is the primary intended programming language for a Kiwi.
+Rust is a memory-safe language that avoids many pitfalls of traditional system programming languages, such as C and C++, without any performance overhead.
+Rust also allows for powerful patterns, such as the asynchronous programming model (using keywords <code class="language-plaintext highlighter-rouge">async</code> and <code class="language-plaintext highlighter-rouge">await</code>, and an asynchronous executor).
+The asynchronous programming model is especially useful on the Kiwi, which is a resource-constrained embedded system and cannot run a full operating system that would take care of scheduling various tasks (reading multiple sensors, collecting the data, transmitting them over Wi-Fi, while waiting for USB commands for configuration updates, and more). 
+Kiwi leverages the <a href="https://embassy.dev/">embassy</a> framework to achieve this, which supports the Raspberry Pi RP2350B microcontroller very well.
+The pre-loaded firmware is written in Rust, and leverages embassy to implement a cooperative multi-tasking environment.</p>
+
+  <p>However, Rust development is more advanced and would be more difficult to introduce in this manual.
+Source code for the firmware pre-loaded in your Kiwi is available <a href="https://github.com/chickadee-smallsat/kiwi-firmware">here</a>.
+Documentation for the firmware is available on <a href="https://chickadee-smallsat.github.io/kiwi-firmware">GitHub pages</a>.</p>
+
+</section>
+
+<section class="manual-sheet" id="manual-start">
+
+  <h1 id="kiwi-50">Kiwi-50</h1>
+
+  <p>Kiwi-50 is an upcoming high-altitude balloon flight opportunity for Kiwis.
+Two self-contained experiments, each carrying up to 50 Kiwis, will be launched from Fort Sumner, New Mexico, USA.
+These balloons will fly at the float altitude (100,000 ft or 30 km typical) for at least two hours before coming down.
+If you want to participate in the Kiwi-50 flight with your Kiwi and have an experiment in mind, please use the <a href="#feedback">Feedback</a> form to contact us.
+Additionally, you can reach out at <a href="mailto:kiwi@uml.edu">kiwi@uml.edu</a>.</p>
+
+</section>
+
+<section class="manual-sheet" id="references">
+
+  <h1 id="references">References</h1>
+
+  <ol class="references-list" id="references-list"></ol>
+
+</section>
+
+<section class="manual-sheet manual-sheet--fullscreen" id="feedback">
+
+  <h1 id="feedback">Feedback</h1>
+
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdS3CuQHle6Cvr3Ah4OPqLyHnISn6B4ZjbZpE-AfgNAfxWefQ/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+
+</section>
+
+<nav class="anchor-nav" aria-label="Section navigation">
+  <button type="button" class="anchor-nav__btn anchor-nav__btn--prev" id="anchor-prev" aria-label="Go to previous section">
+    <span class="anchor-nav__icon" aria-hidden="true">◀</span>
+    <span class="anchor-nav__label">Previous section</span>
+  </button>
+  <button type="button" class="anchor-nav__btn anchor-nav__btn--next" id="anchor-next" aria-label="Go to next section">
+    <span class="anchor-nav__label">Next section</span>
+    <span class="anchor-nav__icon" aria-hidden="true">▶</span>
+  </button>
+</nav>
+
+
+
+      <footer class="site-footer">
+        <div class="site-footer__inner">
+          <span class="site-footer-owner">
+            <a href="https://github.com/chickadee-smallsat/kiwi">kiwi</a>
+            is maintained by
+            <a href="mailto:sunip_mukherjee@uml.edu">Sunip K. Mukherjee</a>.
+          </span>
+          <span class="site-footer-contact">
+            Contact us: <a href="mailto:kiwi@uml.edu">kiwi@uml.edu</a>
+          </span>
+          <div class="version-selector" aria-label="Documentation version selector">
+  <label class="version-selector__label" for="version-select">Version</label>
+  <select id="version-select" class="version-selector__select">
+    <option value="" disabled selected>Loading versions...</option>
+  </select>
+</div>
+
+<script>
+(function () {
+  var baseurl = '/kiwi/v0.0.1';
+  var parts = baseurl.split('/').filter(Boolean);
+  var current = parts.length ? parts[parts.length - 1] : 'latest';
+  var docsRoot = parts.length > 1 ? '/' + parts.slice(0, -1).join('/') : (parts.length === 1 ? '/' + parts[0] : '');
+  var versionsUrl = (docsRoot || '') + '/versions.json';
+
+  function targetUrl(version) {
+    var root = docsRoot || '';
+    return root + '/' + version + '/';
+  }
+
+  fetch(versionsUrl)
+    .then(function (res) {
+      return res.ok ? res.json() : [];
+    })
+    .catch(function () {
+      return [];
+    })
+    .then(function (versions) {
+      var select = document.getElementById('version-select');
+      if (!select || !Array.isArray(versions) || !versions.length) {
+        return;
+      }
+
+      select.innerHTML = '';
+      versions.forEach(function (v, i) {
+        var option = document.createElement('option');
+        option.value = v;
+        option.textContent = i === 0 ? v + ' (latest)' : v;
+        option.selected = (v === current);
+        select.appendChild(option);
+      });
+
+      if (!versions.includes(current)) {
+        select.selectedIndex = 0;
+      }
+
+      select.addEventListener('change', function () {
+        window.location.href = targetUrl(select.value) + window.location.hash;
+      });
+    });
+})();
+</script>
+
+          <span class="site-footer-credits">Generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+          <p class="site-footer-disclaimer">&copy; 2026 LoCSST / UMass Lowell. LoCSST / UMass Lowell is not affiliated with any vendors or manufacturers for products linked in this document. Links are provided for reference only.</p>
+        </div>
+      </footer>
+    </main>
+    <aside class="theme-switcher" id="theme-switcher">
+  <button class="theme-switcher__toggle" id="theme-toggle"
+          aria-haspopup="true" aria-expanded="false" aria-controls="theme-panel"
+          aria-label="Color theme">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5
+               0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16
+               c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5
+               S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5
+               S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5
+               S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5
+               S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+    </svg>
+  </button>
+
+  <div class="theme-switcher__panel" id="theme-panel" hidden role="group" aria-label="Select color theme">
+    <p class="theme-switcher__heading">Color theme</p>
+
+    <button class="theme-opt" data-theme="default" aria-pressed="true">
+      <span class="theme-opt__dot" style="background:#0e3247;box-shadow:0 0 0 2px #7fd4f0"></span>
+      Default
+    </button>
+    <button class="theme-opt" data-theme="deuteranopia" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#0d2c52;box-shadow:0 0 0 2px #f5a428"></span>
+      Deuteranopia-friendly
+    </button>
+    <button class="theme-opt" data-theme="high-contrast" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#000;box-shadow:0 0 0 2px #ffff00"></span>
+      High Contrast
+    </button>
+    <button class="theme-opt" data-theme="monochrome" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#1e1e1e;box-shadow:0 0 0 2px #d0d0d0"></span>
+      Monochrome
+    </button>
+  </div>
+
+  <div aria-live="polite" aria-atomic="true" class="theme-switcher__announce" id="theme-announce"></div>
+</aside>
+
+<script>
+(function () {
+  var PREF_KEY = 'kiwi-color-theme';
+  var labels = {
+    'default': 'Default',
+    'deuteranopia': 'Deuteranopia-friendly',
+    'high-contrast': 'High Contrast',
+    'monochrome': 'Monochrome'
+  };
+
+  var root    = document.documentElement;
+  var toggle  = document.getElementById('theme-toggle');
+  var panel   = document.getElementById('theme-panel');
+  var opts    = document.querySelectorAll('.theme-opt');
+  var announce = document.getElementById('theme-announce');
+
+  function applyTheme(theme, shouldAnnounce) {
+    if (theme && theme !== 'default') {
+      root.dataset.theme = theme;
+    } else {
+      delete root.dataset.theme;
+      theme = 'default';
+    }
+    opts.forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.theme === theme));
+    });
+    if (shouldAnnounce && announce) {
+      announce.textContent = '';
+      // Force re-announcement with a slight delay
+      setTimeout(function () {
+        announce.textContent = 'Color theme changed to ' + (labels[theme] || theme);
+      }, 50);
+    }
+    try { localStorage.setItem(PREF_KEY, theme); } catch (e) {}
+    document.dispatchEvent(new CustomEvent('kiwi-theme', { detail: theme }));
+  }
+
+  // Sync button states with whatever theme was applied by the anti-FOUC script
+  var saved;
+  try { saved = localStorage.getItem(PREF_KEY) || 'default'; } catch (e) { saved = 'default'; }
+  applyTheme(saved, false);
+
+  // Toggle panel open/close
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var opening = panel.hidden;
+    panel.hidden = !opening;
+    toggle.setAttribute('aria-expanded', String(opening));
+    if (opening) {
+      // Focus first option when opening
+      var first = panel.querySelector('.theme-opt');
+      if (first) first.focus();
+    }
+  });
+
+  // Option selection
+  opts.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applyTheme(btn.dataset.theme, true);
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function (e) {
+    var sw = document.getElementById('theme-switcher');
+    if (sw && !sw.contains(e.target)) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !panel.hidden) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
+  });
+})();
+</script>
+
+  </body>
+</html>

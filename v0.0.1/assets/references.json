@@ -1,0 +1,51 @@
+[
+  {
+    "id": "ref-crc",
+    "type": "url",
+    "title": "Cyclic redundancy check",
+    "url": "https://en.wikipedia.org/wiki/Cyclic_redundancy_check",
+    "source": "Wikipedia"
+  },
+  {
+    "id": "ref-eduroam",
+    "type": "url",
+    "title": "Eduroam",
+    "url": "https://en.wikipedia.org/wiki/Eduroam",
+    "source": "Wikipedia"
+  },
+  {
+    "id": "ref-firmware",
+    "type": "url",
+    "title": "Firmware",
+    "url": "https://en.wikipedia.org/wiki/Firmware",
+    "source": "Wikipedia"
+  },
+  {
+    "id": "ref-serial",
+    "type": "url",
+    "title": "Serial communication",
+    "url": "https://en.wikipedia.org/wiki/Serial_communication",
+    "source": "Wikipedia"
+  },
+  {
+    "id": "ref-uart",
+    "type": "url",
+    "title": "Universal asynchronous receiver-transmitter",
+    "url": "https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter",
+    "source": "Wikipedia"
+  },
+  {
+    "id": "ref-udp",
+    "type": "url",
+    "title": "User Datagram Protocol",
+    "url": "https://en.wikipedia.org/wiki/User_Datagram_Protocol",
+    "source": "Wikipedia"
+  },
+  {
+    "id": "ref-wpa",
+    "type": "url",
+    "title": "Wi-Fi Protected Access",
+    "url": "https://en.wikipedia.org/wiki/Wi-Fi_Protected_Access",
+    "source": "Wikipedia"
+  }
+]

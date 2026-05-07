@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kiwi: The Single-Board Satellite | Getting started manual for the Kiwi Single-Board Satellite.</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Kiwi: The Single-Board Satellite" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:site_name" content="Kiwi: The Single-Board Satellite" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kiwi: The Single-Board Satellite" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Getting started manual for the Kiwi Single-Board Satellite.","headline":"Kiwi: The Single-Board Satellite","url":"/kiwi/v0.0.1/sections/configuring.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/kiwi/v0.0.1/assets/css/style.css">
+    <link rel="icon" href="/kiwi/v0.0.1/favicon.ico" type="image/x-icon">
+<script>try{var _kct=localStorage.getItem('kiwi-color-theme');if(_kct&&_kct!=='default')document.documentElement.dataset.theme=_kct;}catch(e){}</script>
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script>window.SITE_BASEURL = "/kiwi/v0.0.1";</script>
+<script src="/kiwi/v0.0.1/assets/js/manual.js" defer></script>
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Kiwi: The Single-Board Satellite</h1>
+      <h2 class="project-tagline">Getting started manual for the Kiwi Single-Board Satellite.</h2>
+      
+        <a href="https://github.com/chickadee-smallsat/kiwi" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <section class="manual-sheet">
+
+  <h1 id="configuring-your-kiwi">Configuring your Kiwi</h1>
+
+  <p>Kiwi exposes a simple configuration interface over universal serial asynchronous receiver-transmitter (UART)<span class="cite-ref" data-ref="ref-uart"></span>, better known as a ‘serial port’<span class="cite-ref" data-ref="ref-serial"></span>.
+This serial port is accessible to the computer connected to Kiwi over the USB port.
+The configuration interface uses text commands to configure the Kiwi.
+The built-in firmware supports changing the Wi-Fi settings, and updating the unique identifier of the Kiwi (<code class="language-plaintext highlighter-rouge">Kiwi#XXXX</code> by default).</p>
+
+  <h2 id="connecting-to-kiwi-serial-port">Connecting to Kiwi Serial Port</h2>
+
+  <h3 id="coolterm">CoolTerm</h3>
+  <p><a href="https://freeware.the-meiers.org/">CoolTerm</a> is a free software that provides an interface to communicate with a device over the serial port.
+Depending on your operating system, use the links in the following table to get the correct version of CoolTerm.
+For most users, the first (Windows users) and second (Mac users) should be sufficient.</p>
+
+  <p class="table-caption">CoolTerm download options by platform and CPU architecture.</p>
+
+  <table id="tbl-coolterm">
+    <thead>
+      <tr>
+        <th>Computer</th>
+        <th>Operating System</th>
+        <th>Architecture</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Windows PC / Laptop</td>
+        <td>Windows 64-bit</td>
+        <td><code class="language-plaintext highlighter-rouge">x86_64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermWin64Bit.zip">Link</a></td>
+      </tr>
+      <tr>
+        <td>MacBook / iMac</td>
+        <td>macOS (Universal)</td>
+        <td><code class="language-plaintext highlighter-rouge">x86_64</code> / <code class="language-plaintext highlighter-rouge">arm64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermMac.dmg">Link</a></td>
+      </tr>
+      <tr>
+        <td>Windows PC / Laptop (before 2010)</td>
+        <td>Windows 32-bit</td>
+        <td><code class="language-plaintext highlighter-rouge">x86</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermWin32Bit.zip">Link</a></td>
+      </tr>
+      <tr>
+        <td>Windows PC / Laptop with Snapdragon Chip</td>
+        <td>Windows ARM64</td>
+        <td><code class="language-plaintext highlighter-rouge">arm64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermWinARM64Bit.zip">Link</a></td>
+      </tr>
+      <tr>
+        <td>Linux PC / Laptop</td>
+        <td>Linux</td>
+        <td><code class="language-plaintext highlighter-rouge">x86</code> / <code class="language-plaintext highlighter-rouge">x86_64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermLinux32Bit.zip">32-bit</a> <a href="https://freeware.the-meiers.org/CoolTermLinux64Bit.zip">64-bit</a></td>
+      </tr>
+      <tr>
+        <td>Raspberry Pi</td>
+        <td>Linux</td>
+        <td><code class="language-plaintext highlighter-rouge">armv7</code> / <code class="language-plaintext highlighter-rouge">arm64</code></td>
+        <td><a href="https://freeware.the-meiers.org/CoolTermRaspberryPi.zip">32-bit</a> <a href="https://freeware.the-meiers.org/CoolTermRaspberryPi64Bit.zip">64-bit</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="collapsible collapsible-open" id="windows-pc">Windows PC</h3>
+  <!-- {: .collapsible} -->
+  <h4 id="installation">Installation</h4>
+  <ul>
+    <li>Download the version of CoolTerm compatible with your Windows PC from <a href="#tbl-coolterm" class="tblref"></a>.</li>
+    <li>Navigate to the location of the downloaded <code class="language-plaintext highlighter-rouge">.zip</code> file.</li>
+    <li>Extract the files from the downloaded <code class="language-plaintext highlighter-rouge">.zip</code> archive.
+      <ul>
+        <li>Right click on the <code class="language-plaintext highlighter-rouge">.zip</code> archive to open the context menu and select the “Extract All…” option.
+          <div class="os-toggle-wrap collapsible" style="width: 100%"><div class="os-toggle" role="group" aria-label="Select version"><button type="button" class="os-toggle__btn is-active" data-target="#fig-coolterm-extract" data-src="/kiwi/v0.0.1/assets/media/windows/coolterm_extract_win11.png" data-alt="Extract CoolTerm (Windows 11)">Windows 11</button><button type="button" class="os-toggle__btn" data-target="#fig-coolterm-extract" data-src="/kiwi/v0.0.1/assets/media/windows/coolterm_extract_win10.png" data-alt="Extract CoolTerm (Windows 10)">Windows10</button></div><img id="fig-coolterm-extract" src="/kiwi/v0.0.1/assets/media/windows/coolterm_extract_win11.png" alt="Extract CoolTerm (Windows 11)" /></div>
+        </li>
+        <li>Click the “Extract” button in the extraction dialog.
+<img src="assets/media/windows/coolterm_extract_dialog.png" alt="Extract the `.zip` file" class="collapsible" style="width: 60%" /></li>
+        <li>Navigate into the extracted <code class="language-plaintext highlighter-rouge">CoolTermWin64Bit</code> directory, and launch the <code class="language-plaintext highlighter-rouge">CoolTerm</code> application executable (<code class="language-plaintext highlighter-rouge">.exe</code>).
+<img src="assets/media/windows/coolterm_program.png" alt="Launch CoolTerm" class="collapsible" style="width: 80%" /></li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4 id="usage">Usage</h4>
+  <ul>
+    <li>Upon launching CoolTerm, you will be prompted to set the preferences for CoolTerm. Use default preferences.
+<img src="assets/media/windows/coolterm_preferences.png" alt="Use Default Preferences" /></li>
+    <li>After CoolTerm opens, click on “▼” on the left of the bottom bar.</li>
+    <li>Select a serial port under “Port”. Your computer may have multiple serial connections available depending on which peripherals are connected to it.
+<img src="assets/media/windows/coolterm_port_selection.png" alt="Select a serial device" /></li>
+    <li>Click “Connect” to connect to the Kiwi serial port.
+<img src="assets/media/windows/coolterm_connect.png" alt="Connect to a serial device" class="collapsible" />
+<img src="assets/media/windows/coolterm_after_connect.png" alt="Serial device is connected" class="collapsible" /></li>
+    <li>Hit the <kbd>Enter</kbd> key. You should see a prompt that looks like <code class="language-plaintext highlighter-rouge">&gt; </code>, which indicates you are connected to the Kiwi serial console, and your Kiwi is ready to receive commands.
+<img src="assets/media/windows/coolterm_connect_caret.png" alt="Kiwi is connected!" /></li>
+    <li>If the <code class="language-plaintext highlighter-rouge">&gt; </code> does not show up and you have multiple serial devices under “Ports”, switch to a different port, connect to it, and hit <kbd>Enter</kbd>.</li>
+    <li>Type <code class="language-plaintext highlighter-rouge">help</code> and hit <kbd>Enter</kbd> to see the list of available commands.
+<img src="assets/media/windows/coolterm_connected_help_menu.png" alt="Available serial commands on Kiwi" /></li>
+  </ul>
+
+  <blockquote class="callout-tip collapsible">
+    <p><strong>Identify the Kiwi COM Port</strong>
+The COM port presented by Kiwi can be identified in the <code class="language-plaintext highlighter-rouge">Device Manager</code> program in case multiple COM ports are present.
+To open Device Manager, first click on the ‘Start’ (<svg aria-label="Windows" role="img" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-0.15em"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.551H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.949"></path></svg>
+) button on your desktop, or the <kbd>Windows <svg aria-label="Windows" role="img" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-0.15em"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.551H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.949"></path></svg>
+</kbd> key on your keyboard.
+Then, type in ‘device manager’, and ‘Device Manager (Control Panel)’ should show up in the search results.
+<img src="assets/media/windows/device_manager_prompt.png" alt="Search result for device manager" style="width: 60%" class="collapsible" />
+Open Device Manager, and navigate to <ui-menu>Ports (COM &amp; LPT)</ui-menu> in the device tree.
+<img src="assets/media/windows/device_manager_ports_com_lpt.png" alt="Ports (COM &amp; LPT) in Device Manager tree" class="collapsible" />
+Then, right click on a COM port under the <ui-menu>Ports (COM &amp; LPT)</ui-menu> devices and select <strong>Properties</strong>.
+<img src="assets/media/windows/device_manager_properties.png" alt="Properties of a COM device" class="collapsible" />
+In the device properties dialog box, navigate to <ui-tab>Details</ui-tab>, and select <ui-btn>Bus reported device description</ui-btn> under the <ui-menu>Property</ui-menu> dropdown. A Kiwi will report itself as <code class="language-plaintext highlighter-rouge">Kiwi Mainboard Rev. B</code>.
+<img src="assets/media/windows/device_manager_identity.png" alt="Detecting a Kiwi" />
+Note the COM port number once the Kiwi is found. Hit ‘OK’ to close the Properties dialog box, and close Device Manager.</p>
+  </blockquote>
+
+  <h3 class="collapsible" id="macbook--imac">MacBook / iMac</h3>
+  <h4 id="installation-1">Installation</h4>
+  <ul>
+    <li>Download the macOS version of CoolTerm from <a href="#tbl-coolterm" class="tblref"></a>.</li>
+    <li>Open the downloaded <code class="language-plaintext highlighter-rouge">CoolTermMac.dmg</code> file, and drag the CoolTerm application to your Applications folder.
+<img src="assets/media/coolterm-mac-install.png" alt="Dragging CoolTerm to Applications folder" style="width: 60%" /></li>
+  </ul>
+
+  <h4 id="usage-1">Usage</h4>
+  <ul>
+    <li>Open CoolTerm from the Applications folder.
+On first launch, you will be prompted to set up the preferences for CoolTerm.
+Use the default settings (press “Use Defaults” button).
+<img src="assets/media/coolterm-mac-startup.png" alt="Opening CoolTerm on Mac" style="width: 40%" /></li>
+    <li>After CoolTerm opens, click on “▼” on the left of the bottom bar.</li>
+    <li>Select the serial port that corresponds to your Kiwi (e.g., <code class="language-plaintext highlighter-rouge">usbmodem2025_0011</code>) under “Port”.</li>
+    <li>In the “▼” menu, click “Connect” to connect to the Kiwi serial port.</li>
+    <li>Hit the <kbd>Return</kbd> key. You should see a prompt that looks like <code class="language-plaintext highlighter-rouge">&gt; </code>, which indicates you are connected to the Kiwi serial console, and your Kiwi is ready to receive commands.</li>
+    <li>Type <code class="language-plaintext highlighter-rouge">help</code> and hit <kbd>Return</kbd> to see the list of available commands.</li>
+  </ul>
+
+  <figure style="width: 80%; margin: 1.5rem auto">
+  <video controls="" style="width: 100%; margin: 0; border-radius: 1rem">
+    <source src="/kiwi/v0.0.1/assets/media/coolterm-mac-connect.mp4" type="video/mp4" />
+  </video>
+  <figcaption>Connecting to the Kiwi serial port on macOS using CoolTerm.</figcaption>
+</figure>
+
+  <h2 id="configuration-commands">Configuration Commands</h2>
+  <p>Kiwi serial commands are strings, identified by one or more command keywords.
+These command keywords are selected to be small, memorable mnemonics of the operation they perform.
+Most commands are made of one or two keywords, separated by a single space.</p>
+
+  <p>Some commands also accept input parameters, some of which may be optional.
+Required input parameters are indicated by <code class="language-plaintext highlighter-rouge">&lt;&gt;</code> symbols, and optional parameters are indicated by <code class="language-plaintext highlighter-rouge">[]</code>.
+The inputs are positional, meaning the position after the command keywords determines which parameter is set by a passed value.
+Commands are executed when the <kbd>Enter</kbd> or <kbd>Return</kbd> key is pressed.</p>
+
+  <p class="table-caption">Available configuration commands</p>
+
+  <table id="tbl-commands">
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>Description</th>
+        <th>Inputs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="/#help"><code class="language-plaintext highlighter-rouge">help</code></a></td>
+        <td>Shows a help message describing what commands are available</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#ident-get"><code class="language-plaintext highlighter-rouge">ident get</code></a></td>
+        <td>Get the currently set identity for the Kiwi</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#ident-set"><code class="language-plaintext highlighter-rouge">ident set &lt;ID&gt;</code></a></td>
+        <td>Set a new identity</td>
+        <td><code class="language-plaintext highlighter-rouge">ID</code>: New identity string (12 characters max.)</td>
+      </tr>
+      <tr>
+        <td><a href="/#wifi-status"><code class="language-plaintext highlighter-rouge">wifi status</code></a></td>
+        <td>Current status of the Wi-Fi connection, and broadcast data rate if a connection has been established</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#wifi-ap"><code class="language-plaintext highlighter-rouge">wifi ap &lt;ssid&gt; [pw]</code></a></td>
+        <td>Kiwi creates a Wi-Fi access point</td>
+        <td><code class="language-plaintext highlighter-rouge">ssid</code>: Wi-Fi access point name (32 characters max.)<br /><code class="language-plaintext highlighter-rouge">pw</code>: Optional password for the access point (32 characters max.)</td>
+      </tr>
+      <tr>
+        <td><a href="/#wifi-cl"><code class="language-plaintext highlighter-rouge">wifi cl &lt;ssid&gt; [pw]</code></a></td>
+        <td>Kiwi joins a Wi-Fi network</td>
+        <td><code class="language-plaintext highlighter-rouge">ssid</code>: Name of the Wi-Fi network (32 characters max.)<br /><code class="language-plaintext highlighter-rouge">pw</code>: Optional password for the Wi-Fi network (32 characters max.)</td>
+      </tr>
+      <tr>
+        <td><a href="/#store"><code class="language-plaintext highlighter-rouge">store</code></a></td>
+        <td>Update the identity, or Wi-Fi configuration of Kiwi. This operation causes the device to reset.</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#reset"><code class="language-plaintext highlighter-rouge">reset</code></a></td>
+        <td>Trigger a software reset of the device</td>
+        <td>–</td>
+      </tr>
+      <tr>
+        <td><a href="/#clear"><code class="language-plaintext highlighter-rouge">clear</code></a></td>
+        <td>Use ANSI escape sequences to clear the terminal screen. This may not work on CoolTerm on Windows.</td>
+        <td>–</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="no_toc" id="help"><code class="language-plaintext highlighter-rouge">help</code></h3>
+  <p>The <code class="language-plaintext highlighter-rouge">help</code> command prints the available commands in the console.</p>
+
+  <h3 class="no_toc" id="identity-commands">Identity Commands</h3>
+  <p>Each Kiwi board stores a unique identity string (12 characters) on board.</p>
+
+  <h4 class="no_toc" id="ident-get"><code class="language-plaintext highlighter-rouge">ident get</code></h4>
+  <p>Typing in <code class="language-plaintext highlighter-rouge">ident get</code> in the console and pressing <kbd>Enter</kbd> or <kbd>Return</kbd> prints the currently set identity string on the console.</p>
+
+  <h4 class="no_toc" id="ident-set"><code class="language-plaintext highlighter-rouge">ident set</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">ident set</code> command takes a single parameter, the new identity to be set.
+For example, if you want to set the identity string to <code class="language-plaintext highlighter-rouge">MyKiwi</code>, execute the following command:</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; ident set MyKiwi
+</code></pre></div>  </div>
+  <p>Note, this does not update the identity string immediately.
+Execute the <code class="language-plaintext highlighter-rouge">store</code> command for the update to take effect.
+Identity strings must be alphanumeric, and can not contain a space.</p>
+
+  <h4 class="no_toc" id="wifi-status"><code class="language-plaintext highlighter-rouge">wifi status</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">wifi status</code> command does not take any parameters.
+This command outputs the current status of the Wi-Fi connection.
+For example, the Kiwi with device ID <code class="language-plaintext highlighter-rouge">Kiwi#0002</code>, set up in access point (Kiwi creates the Wi-Fi network) called <code class="language-plaintext highlighter-rouge">kiwi_ap</code> (this is what the Wi-Fi network shows up as in your PC/laptop/phone) without a password, returns the following output on <code class="language-plaintext highlighter-rouge">wifi status</code> command:</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; wifi status
+Device ID: Kiwi#0002
+WiFi Credentials:
+  Mode: Access Point
+  SSID: kiwi-ap
+  Open network
+Data rate: 23.195875 kbps, Packet rate: 123.711334 pkt/s
+</code></pre></div>  </div>
+  <p>If the Kiwi is unable to create the access point, or join a Wi-Fi network, it will report <code class="language-plaintext highlighter-rouge">WiFi not ready</code> instead of showing a data rate.</p>
+
+  <h4 class="no_toc" id="wifi-ap"><code class="language-plaintext highlighter-rouge">wifi ap</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">wifi ap</code> command configures the Kiwi to host a Wi-Fi hotspot for you to connect to.
+Kiwi broadcasts its measurements over this Wi-Fi hotspot.
+This command takes two parameters:</p>
+  <ul>
+    <li><code class="language-plaintext highlighter-rouge">ssid</code>: The service-set identifier (SSID) is the name of the Wi-Fi hotspot Kiwi creates.</li>
+    <li><code class="language-plaintext highlighter-rouge">pw</code>: An optional password for the Wi-Fi hotspot. If <code class="language-plaintext highlighter-rouge">pw</code> is not provided as an input, Kiwi will host an open network that can be joined without entering a password.</li>
+  </ul>
+
+  <p>For example, executing <code class="language-plaintext highlighter-rouge">kiwi ap kiwi-network</code> will configure the Kiwi to set up an open network hotspot that will show up as <code class="language-plaintext highlighter-rouge">kiwi-network</code> on your device.
+Executing <code class="language-plaintext highlighter-rouge">kiwi ap kiwi-private SecurePassword</code> will configure Kiwi to set up a network hotspot <code class="language-plaintext highlighter-rouge">kiwi-private</code> that will require <code class="language-plaintext highlighter-rouge">SecurePassword</code> for a device to join that network.</p>
+
+  <h4 class="no_toc" id="wifi-cl"><code class="language-plaintext highlighter-rouge">wifi cl</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">wifi cl</code> command configures the Kiwi to connect to an open, or WPA/WPA2<span class="cite-ref" data-ref="ref-wpa"></span> protected network.
+Most home/private networks use this form of authentication, where a passsword is entered to join the network.
+The eduroam<span class="cite-ref" data-ref="ref-eduroam"></span> network uses more complex authentication methods, and Kiwi can not join such a network.
+<code class="language-plaintext highlighter-rouge">wifi cl</code> command accepts the SSID (required) and password (optional) parameters.
+To connect Kiwi to <code class="language-plaintext highlighter-rouge">MyHomeWiFi</code> secured by <code class="language-plaintext highlighter-rouge">MySecurePassword</code>, execute the following command:</p>
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; wifi cl MyHomeWiFi MySecurePassword
+</code></pre></div>  </div>
+  <p>Omit the password if you are connecting to an open network.</p>
+
+  <blockquote class="callout-note collapsible collapsible-open">
+    <p><strong>Wi-Fi SSID and Password Formatting</strong>
+Wi-Fi SSID is an alphanumeric string of up to 32 characters, supporting characters <em>a–z</em>, <em>A–Z</em>, <em>0–9</em>, dashes (-) and underscores (_).
+Due to the positional parameter inputs to <code class="language-plaintext highlighter-rouge">wifi ap</code> and <code class="language-plaintext highlighter-rouge">wifi cl</code> commands, any space in the SSID will cause the part before the space to be interpreted as the SSID and the part after the space as the password.
+Special characters are <strong>not</strong> supported.</p>
+
+    <p>Wi-Fi passwords are at most 32 characters long.</p>
+  </blockquote>
+
+  <h4 class="no_toc" id="store"><code class="language-plaintext highlighter-rouge">store</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">store</code> command stores any changes to Kiwi configuration (identity or Wi-Fi configuration), and resets the device for the settings to take effect.</p>
+
+  <h4 class="no_toc" id="reset"><code class="language-plaintext highlighter-rouge">reset</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">reset</code> command triggers a software reset of the Kiwi.
+The <code class="language-plaintext highlighter-rouge">store</code> command uses this trigger to reload the new configuration.</p>
+
+  <h4 class="no_toc" id="clear"><code class="language-plaintext highlighter-rouge">clear</code></h4>
+  <p>The <code class="language-plaintext highlighter-rouge">clear</code> command sends a set of characters to the terminal to clear any previous commands and their outputs.
+This command may not work as intended in CoolTerm on Windows.</p>
+
+</section>
+
+
+      <footer class="site-footer">
+        <div class="site-footer__inner">
+          <span class="site-footer-owner">
+            <a href="https://github.com/chickadee-smallsat/kiwi">kiwi</a>
+            is maintained by
+            <a href="mailto:sunip_mukherjee@uml.edu">Sunip K. Mukherjee</a>.
+          </span>
+          <span class="site-footer-contact">
+            Contact us: <a href="mailto:kiwi@uml.edu">kiwi@uml.edu</a>
+          </span>
+          <div class="version-selector" aria-label="Documentation version selector">
+  <label class="version-selector__label" for="version-select">Version</label>
+  <select id="version-select" class="version-selector__select">
+    <option value="" disabled selected>Loading versions...</option>
+  </select>
+</div>
+
+<script>
+(function () {
+  var baseurl = '/kiwi/v0.0.1';
+  var parts = baseurl.split('/').filter(Boolean);
+  var current = parts.length ? parts[parts.length - 1] : 'latest';
+  var docsRoot = parts.length > 1 ? '/' + parts.slice(0, -1).join('/') : (parts.length === 1 ? '/' + parts[0] : '');
+  var versionsUrl = (docsRoot || '') + '/versions.json';
+
+  function targetUrl(version) {
+    var root = docsRoot || '';
+    return root + '/' + version + '/';
+  }
+
+  fetch(versionsUrl)
+    .then(function (res) {
+      return res.ok ? res.json() : [];
+    })
+    .catch(function () {
+      return [];
+    })
+    .then(function (versions) {
+      var select = document.getElementById('version-select');
+      if (!select || !Array.isArray(versions) || !versions.length) {
+        return;
+      }
+
+      select.innerHTML = '';
+      versions.forEach(function (v, i) {
+        var option = document.createElement('option');
+        option.value = v;
+        option.textContent = i === 0 ? v + ' (latest)' : v;
+        option.selected = (v === current);
+        select.appendChild(option);
+      });
+
+      if (!versions.includes(current)) {
+        select.selectedIndex = 0;
+      }
+
+      select.addEventListener('change', function () {
+        window.location.href = targetUrl(select.value) + window.location.hash;
+      });
+    });
+})();
+</script>
+
+          <span class="site-footer-credits">Generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+          <p class="site-footer-disclaimer">&copy; 2026 LoCSST / UMass Lowell. LoCSST / UMass Lowell is not affiliated with any vendors or manufacturers for products linked in this document. Links are provided for reference only.</p>
+        </div>
+      </footer>
+    </main>
+    <aside class="theme-switcher" id="theme-switcher">
+  <button class="theme-switcher__toggle" id="theme-toggle"
+          aria-haspopup="true" aria-expanded="false" aria-controls="theme-panel"
+          aria-label="Color theme">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5
+               0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16
+               c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5
+               S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5
+               S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5
+               S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5
+               S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+    </svg>
+  </button>
+
+  <div class="theme-switcher__panel" id="theme-panel" hidden role="group" aria-label="Select color theme">
+    <p class="theme-switcher__heading">Color theme</p>
+
+    <button class="theme-opt" data-theme="default" aria-pressed="true">
+      <span class="theme-opt__dot" style="background:#0e3247;box-shadow:0 0 0 2px #7fd4f0"></span>
+      Default
+    </button>
+    <button class="theme-opt" data-theme="deuteranopia" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#0d2c52;box-shadow:0 0 0 2px #f5a428"></span>
+      Deuteranopia-friendly
+    </button>
+    <button class="theme-opt" data-theme="high-contrast" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#000;box-shadow:0 0 0 2px #ffff00"></span>
+      High Contrast
+    </button>
+    <button class="theme-opt" data-theme="monochrome" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#1e1e1e;box-shadow:0 0 0 2px #d0d0d0"></span>
+      Monochrome
+    </button>
+  </div>
+
+  <div aria-live="polite" aria-atomic="true" class="theme-switcher__announce" id="theme-announce"></div>
+</aside>
+
+<script>
+(function () {
+  var PREF_KEY = 'kiwi-color-theme';
+  var labels = {
+    'default': 'Default',
+    'deuteranopia': 'Deuteranopia-friendly',
+    'high-contrast': 'High Contrast',
+    'monochrome': 'Monochrome'
+  };
+
+  var root    = document.documentElement;
+  var toggle  = document.getElementById('theme-toggle');
+  var panel   = document.getElementById('theme-panel');
+  var opts    = document.querySelectorAll('.theme-opt');
+  var announce = document.getElementById('theme-announce');
+
+  function applyTheme(theme, shouldAnnounce) {
+    if (theme && theme !== 'default') {
+      root.dataset.theme = theme;
+    } else {
+      delete root.dataset.theme;
+      theme = 'default';
+    }
+    opts.forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.theme === theme));
+    });
+    if (shouldAnnounce && announce) {
+      announce.textContent = '';
+      // Force re-announcement with a slight delay
+      setTimeout(function () {
+        announce.textContent = 'Color theme changed to ' + (labels[theme] || theme);
+      }, 50);
+    }
+    try { localStorage.setItem(PREF_KEY, theme); } catch (e) {}
+    document.dispatchEvent(new CustomEvent('kiwi-theme', { detail: theme }));
+  }
+
+  // Sync button states with whatever theme was applied by the anti-FOUC script
+  var saved;
+  try { saved = localStorage.getItem(PREF_KEY) || 'default'; } catch (e) { saved = 'default'; }
+  applyTheme(saved, false);
+
+  // Toggle panel open/close
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var opening = panel.hidden;
+    panel.hidden = !opening;
+    toggle.setAttribute('aria-expanded', String(opening));
+    if (opening) {
+      // Focus first option when opening
+      var first = panel.querySelector('.theme-opt');
+      if (first) first.focus();
+    }
+  });
+
+  // Option selection
+  opts.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applyTheme(btn.dataset.theme, true);
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function (e) {
+    var sw = document.getElementById('theme-switcher');
+    if (sw && !sw.contains(e.target)) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !panel.hidden) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
+  });
+})();
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>tids: A TI-Style Datasheet Template for Typst | Kiwi: The Single-Board Satellite</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="tids: A TI-Style Datasheet Template for Typst" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:site_name" content="Kiwi: The Single-Board Satellite" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="tids: A TI-Style Datasheet Template for Typst" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Getting started manual for the Kiwi Single-Board Satellite.","headline":"tids: A TI-Style Datasheet Template for Typst","url":"/kiwi/v0.0.1/datasheet/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/kiwi/v0.0.1/assets/css/style.css">
+    <link rel="icon" href="/kiwi/v0.0.1/favicon.ico" type="image/x-icon">
+<script>try{var _kct=localStorage.getItem('kiwi-color-theme');if(_kct&&_kct!=='default')document.documentElement.dataset.theme=_kct;}catch(e){}</script>
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script>window.SITE_BASEURL = "/kiwi/v0.0.1";</script>
+<script src="/kiwi/v0.0.1/assets/js/manual.js" defer></script>
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">tids: A TI-Style Datasheet Template for Typst</h1>
+      <h2 class="project-tagline">Getting started manual for the Kiwi Single-Board Satellite.</h2>
+      
+        <a href="https://github.com/chickadee-smallsat/kiwi" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h1 id="tids-a-ti-style-datasheet-template-for-typst">tids: A TI-Style Datasheet Template for Typst</h1>
+
+<p>This project is an easy-to-use Typst electronic component datasheet template purposed
+for testing and showcasing the potential of using Typst for technical documentation writing.</p>
+
+<p><img src="/kiwi/v0.0.1/datasheet/gallery/demo.png" alt="Demo" /></p>
+
+<p><strong>If this project is helpful to you, please consider leaving a star⭐, you know the drill.</strong></p>
+
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>This is an open-source project created solely for demonstration purposes, with no intention of infringing on any trademarks. The author is not affiliated with TI in any way.</p>
+
+<h2 id="features">Features</h2>
+
+<ul>
+  <li><strong>Simple and User-friendly:</strong> Uses Typst format for easy readability and writing.</li>
+  <li><strong>Customizable:</strong> Can be customized for specific component specifications.</li>
+  <li><strong>Fast Compilation</strong>: It only takes one or two seconds to generate the PDF, as opposed to LaTeX, which may take several minutes or even longer.</li>
+</ul>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<ol>
+  <li>Install Typst if you don’t have:
+    <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="n">winget</span><span class="w"> </span><span class="nx">install</span><span class="w"> </span><span class="nt">--id</span><span class="w"> </span><span class="nx">Typst.Typst</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+  <li>Clone this repository locally:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/oldrev/tids.git
+</code></pre></div>    </div>
+  </li>
+  <li>Build the PDF example:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> typst compile demo-ds.typ
+</code></pre></div>    </div>
+  </li>
+  <li>Check the generated <a href="demo-ds.pdf"><code class="language-plaintext highlighter-rouge">demo-ds.pdf</code></a> out.</li>
+</ol>
+
+<h2 id="usage">Usage</h2>
+
+<ol>
+  <li>Copy the template file <code class="language-plaintext highlighter-rouge">tids.typ</code> to the directory of your project.</li>
+  <li>Import the template and call <code class="language-plaintext highlighter-rouge">tids()</code> function:
+    <pre><code class="language-typst"> #import "tids.typ": tids
+
+ #show: doc =&gt; tids(ds_metadata: (
+         title: [YourDSTitle],
+         product: [YourProductName],
+         product_url: "https://github.com/oldrev/tids",
+         revision: [CurrentRevision],
+         publish_date: [PublishedOn]
+     ),
+     features: [features for the title page],
+     applications: [application information for the title page],
+     desc: [description content for the title page],
+     rev_list: [revision list],
+     doc: doc
+ )
+ // ... The content of your document
+</code></pre>
+    <p>See <a href="demo-ds.typ"><code class="language-plaintext highlighter-rouge">demo-ds.typ</code></a> for details.</p>
+  </li>
+</ol>
+
+<h2 id="contributions">Contributions</h2>
+
+<p>Feel free to contribute and raise issues. Please see the Contribution Guidelines for more information.</p>
+
+<h2 id="license">License</h2>
+
+<p>This project is licensed under the Apache 2.0 License.</p>
+
+
+      <footer class="site-footer">
+        <div class="site-footer__inner">
+          <span class="site-footer-owner">
+            <a href="https://github.com/chickadee-smallsat/kiwi">kiwi</a>
+            is maintained by
+            <a href="mailto:sunip_mukherjee@uml.edu">Sunip K. Mukherjee</a>.
+          </span>
+          <span class="site-footer-contact">
+            Contact us: <a href="mailto:kiwi@uml.edu">kiwi@uml.edu</a>
+          </span>
+          <div class="version-selector" aria-label="Documentation version selector">
+  <label class="version-selector__label" for="version-select">Version</label>
+  <select id="version-select" class="version-selector__select">
+    <option value="" disabled selected>Loading versions...</option>
+  </select>
+</div>
+
+<script>
+(function () {
+  var baseurl = '/kiwi/v0.0.1';
+  var parts = baseurl.split('/').filter(Boolean);
+  var current = parts.length ? parts[parts.length - 1] : 'latest';
+  var docsRoot = parts.length > 1 ? '/' + parts.slice(0, -1).join('/') : (parts.length === 1 ? '/' + parts[0] : '');
+  var versionsUrl = (docsRoot || '') + '/versions.json';
+
+  function targetUrl(version) {
+    var root = docsRoot || '';
+    return root + '/' + version + '/';
+  }
+
+  fetch(versionsUrl)
+    .then(function (res) {
+      return res.ok ? res.json() : [];
+    })
+    .catch(function () {
+      return [];
+    })
+    .then(function (versions) {
+      var select = document.getElementById('version-select');
+      if (!select || !Array.isArray(versions) || !versions.length) {
+        return;
+      }
+
+      select.innerHTML = '';
+      versions.forEach(function (v, i) {
+        var option = document.createElement('option');
+        option.value = v;
+        option.textContent = i === 0 ? v + ' (latest)' : v;
+        option.selected = (v === current);
+        select.appendChild(option);
+      });
+
+      if (!versions.includes(current)) {
+        select.selectedIndex = 0;
+      }
+
+      select.addEventListener('change', function () {
+        window.location.href = targetUrl(select.value) + window.location.hash;
+      });
+    });
+})();
+</script>
+
+          <span class="site-footer-credits">Generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+          <p class="site-footer-disclaimer">&copy; 2026 LoCSST / UMass Lowell. LoCSST / UMass Lowell is not affiliated with any vendors or manufacturers for products linked in this document. Links are provided for reference only.</p>
+        </div>
+      </footer>
+    </main>
+    <aside class="theme-switcher" id="theme-switcher">
+  <button class="theme-switcher__toggle" id="theme-toggle"
+          aria-haspopup="true" aria-expanded="false" aria-controls="theme-panel"
+          aria-label="Color theme">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5
+               0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16
+               c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5
+               S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5
+               S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5
+               S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5
+               S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+    </svg>
+  </button>
+
+  <div class="theme-switcher__panel" id="theme-panel" hidden role="group" aria-label="Select color theme">
+    <p class="theme-switcher__heading">Color theme</p>
+
+    <button class="theme-opt" data-theme="default" aria-pressed="true">
+      <span class="theme-opt__dot" style="background:#0e3247;box-shadow:0 0 0 2px #7fd4f0"></span>
+      Default
+    </button>
+    <button class="theme-opt" data-theme="deuteranopia" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#0d2c52;box-shadow:0 0 0 2px #f5a428"></span>
+      Deuteranopia-friendly
+    </button>
+    <button class="theme-opt" data-theme="high-contrast" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#000;box-shadow:0 0 0 2px #ffff00"></span>
+      High Contrast
+    </button>
+    <button class="theme-opt" data-theme="monochrome" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#1e1e1e;box-shadow:0 0 0 2px #d0d0d0"></span>
+      Monochrome
+    </button>
+  </div>
+
+  <div aria-live="polite" aria-atomic="true" class="theme-switcher__announce" id="theme-announce"></div>
+</aside>
+
+<script>
+(function () {
+  var PREF_KEY = 'kiwi-color-theme';
+  var labels = {
+    'default': 'Default',
+    'deuteranopia': 'Deuteranopia-friendly',
+    'high-contrast': 'High Contrast',
+    'monochrome': 'Monochrome'
+  };
+
+  var root    = document.documentElement;
+  var toggle  = document.getElementById('theme-toggle');
+  var panel   = document.getElementById('theme-panel');
+  var opts    = document.querySelectorAll('.theme-opt');
+  var announce = document.getElementById('theme-announce');
+
+  function applyTheme(theme, shouldAnnounce) {
+    if (theme && theme !== 'default') {
+      root.dataset.theme = theme;
+    } else {
+      delete root.dataset.theme;
+      theme = 'default';
+    }
+    opts.forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.theme === theme));
+    });
+    if (shouldAnnounce && announce) {
+      announce.textContent = '';
+      // Force re-announcement with a slight delay
+      setTimeout(function () {
+        announce.textContent = 'Color theme changed to ' + (labels[theme] || theme);
+      }, 50);
+    }
+    try { localStorage.setItem(PREF_KEY, theme); } catch (e) {}
+    document.dispatchEvent(new CustomEvent('kiwi-theme', { detail: theme }));
+  }
+
+  // Sync button states with whatever theme was applied by the anti-FOUC script
+  var saved;
+  try { saved = localStorage.getItem(PREF_KEY) || 'default'; } catch (e) { saved = 'default'; }
+  applyTheme(saved, false);
+
+  // Toggle panel open/close
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var opening = panel.hidden;
+    panel.hidden = !opening;
+    toggle.setAttribute('aria-expanded', String(opening));
+    if (opening) {
+      // Focus first option when opening
+      var first = panel.querySelector('.theme-opt');
+      if (first) first.focus();
+    }
+  });
+
+  // Option selection
+  opts.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applyTheme(btn.dataset.theme, true);
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function (e) {
+    var sw = document.getElementById('theme-switcher');
+    if (sw && !sw.contains(e.target)) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !panel.hidden) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
+  });
+})();
+</script>
+
+  </body>
+</html>

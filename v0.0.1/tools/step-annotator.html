@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step Slideshow Annotator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+/* ── Buttons ── */
+button { cursor: pointer; border: none; border-radius: 4px; font-size: 0.82rem; font-weight: 500; padding: 6px 12px; transition: background 0.15s, color 0.15s; font-family: inherit; line-height: 1.3; }
+.btn-primary   { background: #e94560; color: #fff; }
+.btn-primary:hover { background: #c0384f; }
+.btn-secondary { background: #0f3460; color: #e0e0e0; border: 1px solid #1a4a6e; }
+.btn-secondary:hover { background: #1a4a6e; }
+.btn-danger    { background: #7b241c; color: #fdd; border: 1px solid #a93226; }
+.btn-danger:hover { background: #a93226; }
+.btn-export    { background: #1e8449; color: #fff; }
+.btn-export:hover { background: #27ae60; }
+.btn-icon      { background: none; border: 1px solid #2a3a5e; color: #888; padding: 3px 7px; font-size: 0.75rem; }
+.btn-icon:hover { background: #1a4a6e; color: #e0e0e0; }
+
+/* ── Header ── */
+header {
+  background: #16213e;
+  padding: 9px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #0f3460;
+  flex-shrink: 0;
+  z-index: 10;
+}
+header h1 { font-size: 1rem; font-weight: 700; color: #e94560; flex: 1; }
+.header-sep { width: 1px; height: 20px; background: #0f3460; }
+
+/* ── Main 3-column layout ── */
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* ── Steps panel (left) ── */
+.steps-panel {
+  width: 210px;
+  flex-shrink: 0;
+  background: #16213e;
+  border-right: 1px solid #0f3460;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.steps-panel__hdr {
+  padding: 8px 10px;
+  border-bottom: 1px solid #0f3460;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.steps-panel__hdr span { font-size: 0.72rem; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.07em; flex: 1; }
+#steps-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── Step card ── */
+.step-card {
+  background: #0f1b2d;
+  border: 1.5px solid #1a4a6e;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  position: relative;
+}
+.step-card:hover { border-color: #7ec8e3; }
+.step-card.selected { border-color: #e94560; background: #1a0e20; }
+
+.step-card__thumb {
+  width: 100%;
+  height: 90px;
+  background: #0a1628;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.step-card__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.step-card__placeholder { color: #2a3a5e; font-size: 2.2rem; }
+.step-card__num {
+  position: absolute; top: 4px; left: 4px;
+  background: #e94560; color: white;
+  font-size: 0.68rem; font-weight: 700;
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.step-card__info {
+  padding: 5px 6px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.step-card__title { font-size: 0.72rem; color: #ccc; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.step-card__acts { display: flex; gap: 2px; flex-shrink: 0; }
+
+/* ── Canvas area (center) ── */
+.canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #111827;
+  position: relative;
+}
+
+.tool-bar {
+  background: #16213e;
+  border-bottom: 1px solid #0f3460;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.tool-btn {
+  width: 34px; height: 32px;
+  background: #0f3460;
+  border: 1.5px solid #1a4a6e;
+  color: #bbb;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s;
+}
+.tool-btn:hover { background: #1a4a6e; color: #e0e0e0; }
+.tool-btn.active { background: #e94560; border-color: #e94560; color: #fff; }
+.tool-sep { width: 1px; height: 22px; background: #0f3460; margin: 0 3px; }
+.tool-label { font-size: 0.72rem; color: #666; }
+#zoom-slider { width: 90px; accent-color: #e94560; vertical-align: middle; }
+#zoom-pct { font-size: 0.75rem; color: #888; min-width: 36px; }
+#tool-hint { font-size: 0.72rem; color: #555; margin-left: auto; font-style: italic; }
+
+.canvas-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+/* No-step placeholder */
+.no-step-placeholder {
+  color: #2a3a5e;
+  font-size: 0.9rem;
+  margin: auto;
+  text-align: center;
+  line-height: 2;
+}
+
+/* Drop zone */
+.drop-zone {
+  min-width: 400px;
+  min-height: 300px;
+  border: 2px dashed #2a3a5e;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+  user-select: none;
+}
+.drop-zone.drag-over { border-color: #e94560; background: rgba(233,69,96,0.06); }
+.drop-zone__inner { text-align: center; color: #555; font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; }
+.drop-zone__icon { font-size: 2.8rem; }
+
+/* Viewport stage */
+.viewport-stage {
+  position: relative;
+  flex-shrink: 0;
+  background: #0a1020;
+  outline: 1px solid #1a2a4a;
+}
+.stage-img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+.stage-drop-zone {
+  position: absolute !important;
+  top: 0 !important; left: 0 !important;
+  width: 100% !important; height: 100% !important;
+  min-width: unset !important; min-height: unset !important;
+  border-radius: 0 !important;
+}
+.viewport-stage > svg.anno-svg {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
+}
+
+/* SVG tool cursors */
+.anno-svg.tool-select  { pointer-events: all; cursor: default; }
+.anno-svg.tool-callout,
+.anno-svg.tool-arrow,
+.anno-svg.tool-rect,
+.anno-svg.tool-label   { pointer-events: all; cursor: crosshair; }
+.anno-svg.tool-select .ann-g { cursor: pointer; }
+.anno-svg.tool-select .ann-g.selected { cursor: move; }
+
+/* ── Properties panel (right) ── */
+.props-panel {
+  width: 272px;
+  flex-shrink: 0;
+  background: #16213e;
+  border-left: 1px solid #0f3460;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.props-section {
+  padding: 11px 13px;
+  border-bottom: 1px solid #0f3460;
+}
+.props-section__title {
+  font-size: 0.68rem; font-weight: 700;
+  color: #555; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 10px;
+}
+
+/* ── Form ── */
+.form-group { margin-bottom: 9px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-group > label {
+  display: block;
+  font-size: 0.7rem; font-weight: 600;
+  color: #7a8ca0; margin-bottom: 3px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.form-group input[type=text],
+.form-group input[type=number],
+.form-group textarea {
+  width: 100%;
+  padding: 6px 8px;
+  background: #0f1b2d;
+  border: 1px solid #1a4a6e;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 0.82rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-group input:focus, .form-group textarea:focus { border-color: #e94560; }
+.form-group textarea { resize: vertical; min-height: 68px; }
+
+/* Color row */
+.color-row { display: flex; align-items: center; gap: 7px; }
+.color-row input[type=color] {
+  width: 32px; height: 28px; padding: 2px 3px;
+  background: #0f1b2d; border: 1px solid #1a4a6e;
+  border-radius: 4px; cursor: pointer; flex-shrink: 0;
+}
+.color-presets { display: flex; gap: 5px; flex-wrap: wrap; }
+.color-swatch {
+  width: 22px; height: 22px;
+  border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.1s, transform 0.1s;
+}
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch.active { border-color: #fff; }
+
+/* Callout notes list */
+.callout-note-row {
+  display: flex; align-items: flex-start;
+  gap: 6px; margin-bottom: 6px;
+}
+.callout-note-row:last-child { margin-bottom: 0; }
+.callout-badge {
+  width: 20px; height: 20px; border-radius: 50%;
+  color: white; font-size: 0.68rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 3px;
+}
+.callout-note-row input {
+  flex: 1;
+  background: #0f1b2d; border: 1px solid #1a4a6e;
+  border-radius: 4px; color: #e0e0e0;
+  font-size: 0.78rem; padding: 4px 6px;
+  outline: none; font-family: inherit;
+}
+.callout-note-row input:focus { border-color: #e94560; }
+.callout-note-color {
+  width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px;
+  border: none; border-radius: 3px; padding: 0; cursor: pointer;
+  background: none;
+}
+
+.empty-state { color: #444; font-size: 0.78rem; text-align: center; padding: 12px 0; line-height: 1.7; }
+.hint-text { font-size: 0.72rem; color: #555; margin-top: 7px; line-height: 1.5; }
+
+/* ── Scrollbar styling ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1a4a6e; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2a5a8e; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#9998; Step Slideshow Annotator</h1>
+  <button class="btn-secondary" onclick="loadProject()">&#128194; Load Project</button>
+  <button class="btn-secondary" onclick="saveProject()">&#128190; Save Project</button>
+  <div class="header-sep"></div>
+  <button class="btn-export" onclick="exportSlideshow()">&#9654; Export Slideshow HTML</button>
+</header>
+
+<div class="main">
+
+  <!-- ── Steps Panel ── -->
+  <aside class="steps-panel">
+    <div class="steps-panel__hdr">
+      <span>Steps</span>
+      <button class="btn-primary" style="padding:3px 9px;font-size:0.78rem" onclick="addStep()">+ Add</button>
+    </div>
+    <div id="steps-list"></div>
+  </aside>
+
+  <!-- ── Canvas Area ── -->
+  <div class="canvas-area">
+    <div class="tool-bar">
+      <button class="tool-btn active" id="tool-select"  data-tool="select"  onclick="setTool('select')"  title="Select / Move (V)">&#9654;</button>
+      <button class="tool-btn"        id="tool-callout" data-tool="callout" onclick="setTool('callout')" title="Numbered Callout (C)">&#9312;</button>
+      <button class="tool-btn"        id="tool-arrow"   data-tool="arrow"   onclick="setTool('arrow')"   title="Arrow (A) — drag">&#8594;</button>
+      <button class="tool-btn"        id="tool-rect"    data-tool="rect"    onclick="setTool('rect')"    title="Highlight Box (R) — drag">&#9633;</button>
+      <button class="tool-btn"        id="tool-label"   data-tool="label"   onclick="setTool('label')"   title="Text Label (L)">T</button>
+      <div class="tool-sep"></div>
+      <span class="tool-label">Zoom</span>
+      <input type="range" id="zoom-slider" min="20" max="250" value="100" step="5" oninput="onZoomSlider(this.value)">
+      <span id="zoom-pct">100%</span>
+      <button class="btn-icon" onclick="fitZoom()" title="Fit to view">&#x2922;</button>
+      <div class="tool-sep"></div>
+      <span class="tool-label">Ratio</span>
+      <select id="ar-select" onchange="onARChange(this.value)" style="background:#0f1b2d;border:1px solid #1a4a6e;color:#e0e0e0;border-radius:4px;padding:3px 6px;font-size:0.75rem;font-family:inherit">
+        <option value="16:9" selected>16:9</option>
+        <option value="4:3">4:3</option>
+        <option value="3:2">3:2</option>
+        <option value="1:1">1:1</option>
+        <option value="21:9">21:9</option>
+      </select>
+      <span id="tool-hint"></span>
+    </div>
+    <div class="canvas-scroll" id="canvas-scroll">
+      <div class="no-step-placeholder" id="no-step-msg">
+        Add a step using the panel on the left<br>to get started.
+      </div>
+      <!-- Viewport stage (visible when step is selected) -->
+      <div class="viewport-stage" id="viewport-stage" style="display:none">
+        <!-- Drop zone shown when step has no image -->
+        <div class="drop-zone stage-drop-zone" id="drop-zone" style="display:none"
+             onclick="triggerUpload()"
+             ondragover="e=event;e.preventDefault();e.currentTarget.classList.add('drag-over')"
+             ondragleave="event.currentTarget.classList.remove('drag-over')"
+             ondrop="onImageDrop(event)">
+          <div class="drop-zone__inner">
+            <div class="drop-zone__icon">&#128444;</div>
+            <div>Drop an image here</div>
+            <button class="btn-secondary" style="pointer-events:auto" onclick="event.stopPropagation();triggerUpload()">Browse&hellip;</button>
+          </div>
+        </div>
+        <!-- Image (shown when step has an image) -->
+        <img id="step-img" class="stage-img" alt="" style="display:none">
+        <!-- SVG annotation overlay -->
+        <svg id="anno-svg" class="anno-svg tool-select" xmlns="http://www.w3.org/2000/svg"
+             onmousedown="onSVGMouseDown(event)"
+             onmousemove="onSVGMouseMove(event)"
+             onmouseup="onSVGMouseUp(event)">
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Properties Panel ── -->
+  <aside class="props-panel" id="props-panel">
+
+    <!-- Step properties -->
+    <div class="props-section" id="step-props" style="display:none">
+      <div class="props-section__title">Step</div>
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="p-step-title" placeholder="Step title…" oninput="onStepTitleChange(this.value)">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="p-step-desc" rows="4" placeholder="Instructions for this step…" oninput="onStepDescChange(this.value)"></textarea>
+      </div>
+      <button class="btn-secondary" style="width:100%;margin-top:2px" onclick="triggerUpload()">&#128444; Replace Image</button>
+    </div>
+
+    <!-- Annotation properties (shown when annotation is selected) -->
+    <div class="props-section" id="ann-props" style="display:none">
+      <div class="props-section__title" id="ann-props-title">Annotation</div>
+
+      <div class="form-group" id="ann-label-group" style="display:none">
+        <label id="ann-label-lbl">Label</label>
+        <input type="text" id="p-ann-label" placeholder="Text…" oninput="onAnnLabelChange(this.value)">
+      </div>
+
+      <div class="form-group">
+        <label>Color</label>
+        <div class="color-row">
+          <input type="color" id="p-ann-color" value="#e94560" oninput="onAnnColorChange(this.value)">
+          <div class="color-presets" id="color-presets"></div>
+        </div>
+      </div>
+
+      <button class="btn-danger" style="width:100%;margin-top:4px" onclick="deleteSelectedAnnotation()">&#x2715; Delete Annotation</button>
+    </div>
+
+    <!-- Callout notes (shown when step has callouts) -->
+    <div class="props-section" id="callout-notes-section" style="display:none">
+      <div class="props-section__title">Callout Notes</div>
+      <div id="callout-notes-list"></div>
+      <p class="hint-text">Each numbered callout on the image can have a note shown in the exported slideshow.</p>
+    </div>
+
+    <!-- Empty state -->
+    <div class="props-section" id="props-empty">
+      <p class="empty-state">Select a step to edit its properties and add annotations.</p>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="img-upload"  accept="image/*" style="display:none" onchange="onImageUploadInput(event)">
+<input type="file" id="json-upload" accept=".json"   style="display:none" onchange="onJsonUpload(event)">
+
+<script>
+'use strict';
+
+// ─── Constants ───────────────────────────────────────────────────────────────
+
+const PRESET_COLORS = ['#e94560','#f9a825','#26a69a','#42a5f5','#ab47bc','#ef5350','#ffffff'];
+
+// ─── State ────────────────────────────────────────────────────────────────────
+
+let steps          = [];          // [{id, title, desc, imageDataUrl, natW, natH, annotations:[]}]
+let selStepId      = null;        // selected step id
+let selAnnId       = null;        // selected annotation id
+let activeTool     = 'select';
+let zoom           = 1.0;
+let _nextStepId    = 1;
+let _nextAnnId     = 1;
+
+// Viewport dimensions (virtual pixels; default 16:9)
+let viewportW = 1600, viewportH = 900;
+
+// Drawing in progress
+let drawState = null;             // {type, startNx, startNy, endNx, endNy}
+
+// Drag-to-move state
+let dragState = null;             // {annId, origAnn, startNx, startNy}
+
+// ─── ID generation ────────────────────────────────────────────────────────────
+
+const genStepId = () => 's' + (_nextStepId++);
+const genAnnId  = () => 'a' + (_nextAnnId++);
+
+// ─── Accessors ────────────────────────────────────────────────────────────────
+
+function getStep(id)        { return steps.find(s => s.id === id) || null; }
+function currentStep()      { return getStep(selStepId); }
+function currentAnns()      { const s = currentStep(); return s ? s.annotations : []; }
+function selectedAnn()      { const s = currentStep(); if (!s || !selAnnId) return null; return s.annotations.find(a => a.id === selAnnId) || null; }
+
+function calloutCount(step) { return step.annotations.filter(a => a.type === 'callout').length; }
+
+function assignCalloutNumbers(step) {
+  let n = 1;
+  step.annotations.forEach(a => { if (a.type === 'callout') a.number = n++; });
+}
+
+// ─── Steps CRUD ───────────────────────────────────────────────────────────────
+
+function addStep() {
+  const id = genStepId();
+  const num = steps.length + 1;
+  steps.push({ id, title: 'Step ' + num, desc: '', imageDataUrl: null, natW: 0, natH: 0, annotations: [] });
+  selectStep(id);
+  renderStepsList();
+}
+
+function deleteStep(id, e) {
+  e && e.stopPropagation();
+  if (!confirm('Delete this step and all its annotations?')) return;
+  const idx = steps.findIndex(s => s.id === id);
+  if (idx === -1) return;
+  steps.splice(idx, 1);
+  if (selStepId === id) {
+    selStepId = steps.length ? steps[Math.min(idx, steps.length - 1)].id : null;
+    selAnnId  = null;
+  }
+  renderAll();
+}
+
+function moveStep(id, dir, e) {
+  e && e.stopPropagation();
+  const idx = steps.findIndex(s => s.id === id);
+  const ni  = idx + dir;
+  if (ni < 0 || ni >= steps.length) return;
+  [steps[idx], steps[ni]] = [steps[ni], steps[idx]];
+  renderStepsList();
+}
+
+function selectStep(id) {
+  selStepId = id;
+  selAnnId  = null;
+  drawState = null;
+  dragState = null;
+  renderStepsList();
+  renderCanvas();
+  renderProps();
+}
+
+// ─── Annotations CRUD ─────────────────────────────────────────────────────────
+
+function addAnnotation(ann) {
+  const s = currentStep();
+  if (!s) return;
+  ann.id = genAnnId();
+  s.annotations.push(ann);
+  if (ann.type === 'callout') assignCalloutNumbers(s);
+  selAnnId = ann.id;
+  renderSVG();
+  renderProps();
+}
+
+function patchSelectedAnn(changes) {
+  const ann = selectedAnn();
+  if (!ann) return;
+  Object.assign(ann, changes);
+  renderSVG();
+  renderCalloutNotes();
+}
+
+function deleteSelectedAnnotation() {
+  const s = currentStep();
+  if (!s || !selAnnId) return;
+  s.annotations = s.annotations.filter(a => a.id !== selAnnId);
+  assignCalloutNumbers(s);
+  selAnnId = null;
+  renderSVG();
+  renderProps();
+}
+
+function selectAnnotation(id) {
+  selAnnId = id;
+  renderSVG();
+  renderProps();
+}
+
+// ─── Coordinate helpers ───────────────────────────────────────────────────────
+
+function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+// Convert client coords → normalized [0,1] relative to image natural dims
+function clientToNorm(clientX, clientY) {
+  const svg = document.getElementById('anno-svg');
+  const rect = svg.getBoundingClientRect();
+  return {
+    nx: clamp01((clientX - rect.left) / rect.width),
+    ny: clamp01((clientY - rect.top)  / rect.height)
+  };
+}
+
+// Normalized [0,1] → SVG pixel coords (viewBox = 0 0 viewportW viewportH)
+function normToSVG(nx, ny) {
+  return { x: nx * viewportW, y: ny * viewportH };
+}
+
+// ─── Tool selection ───────────────────────────────────────────────────────────
+
+const TOOL_HINTS = {
+  select:  'Click to select · Drag callout/label to move',
+  callout: 'Click to place a numbered callout',
+  arrow:   'Click and drag to draw an arrow',
+  rect:    'Click and drag to draw a highlight box',
+  label:   'Click to place a text label',
+};
+
+function setTool(tool) {
+  activeTool = tool;
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === tool));
+  const svg = document.getElementById('anno-svg');
+  svg.setAttribute('class', 'anno-svg tool-' + tool);
+  document.getElementById('tool-hint').textContent = TOOL_HINTS[tool] || '';
+  // Clear draw/drag state when switching tools
+  drawState = null;
+  dragState = null;
+  svg.querySelectorAll('.ann-preview').forEach(el => el.remove());
+  if (tool !== 'select') { selAnnId = null; renderSVG(); renderProps(); }
+}
+
+// ─── Zoom ─────────────────────────────────────────────────────────────────────
+
+function onZoomSlider(val) {
+  zoom = parseInt(val) / 100;
+  document.getElementById('zoom-pct').textContent = val + '%';
+  applyZoom();
+}
+
+function applyZoom() {
+  const stage = document.getElementById('viewport-stage');
+  if (!stage || stage.style.display === 'none') return;
+  stage.style.width = Math.round(viewportW * zoom) + 'px';
+}
+
+function fitZoom() {
+  const scroll = document.getElementById('canvas-scroll');
+  const availW = scroll.clientWidth  - 48;
+  const availH = scroll.clientHeight - 48;
+  const fit = Math.min(availW / viewportW, availH / viewportH, 1.0);
+  const pct = Math.round(fit * 100);
+  zoom = fit;
+  document.getElementById('zoom-slider').value = pct;
+  document.getElementById('zoom-pct').textContent = pct + '%';
+  applyZoom();
+}
+
+function updateStageAR() {
+  const stage = document.getElementById('viewport-stage');
+  stage.style.aspectRatio = viewportW + ' / ' + viewportH;
+  updateSVGViewBox();
+}
+
+function onARChange(val) {
+  const [w, h] = val.split(':').map(Number);
+  viewportW = w * 100;
+  viewportH = h * 100;
+  updateStageAR();
+  fitZoom();
+  renderSVG();
+}
+
+// ─── Image upload ─────────────────────────────────────────────────────────────
+
+function triggerUpload() {
+  if (!selStepId) { alert('Select a step first.'); return; }
+  document.getElementById('img-upload').click();
+}
+
+function onImageUploadInput(e) {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (file) loadImageFile(file);
+}
+
+function onImageDrop(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) loadImageFile(file);
+}
+
+function loadImageFile(file) {
+  const s = currentStep();
+  if (!s) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    s.imageDataUrl = ev.target.result;
+    // Pre-load to get natural dimensions
+    const img = new Image();
+    img.onload = () => {
+      s.natW = img.naturalWidth;
+      s.natH = img.naturalHeight;
+      renderCanvas();
+      renderStepsList(); // refresh thumb
+      setTimeout(fitZoom, 50);
+    };
+    img.src = s.imageDataUrl;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── SVG rendering ────────────────────────────────────────────────────────────
+
+const NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs) {
+  const el = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function renderCanvas() {
+  const s        = currentStep();
+  const noMsg    = document.getElementById('no-step-msg');
+  const stage    = document.getElementById('viewport-stage');
+  const img      = document.getElementById('step-img');
+  const dropZone = document.getElementById('drop-zone');
+
+  if (!s) {
+    noMsg.style.display   = '';
+    stage.style.display   = 'none';
+    return;
+  }
+  noMsg.style.display = 'none';
+  stage.style.display = '';
+
+  if (!s.imageDataUrl) {
+    img.style.display      = 'none';
+    dropZone.style.display = 'flex';
+    updateSVGViewBox();
+    renderSVG();
+    return;
+  }
+
+  dropZone.style.display = 'none';
+  img.style.display      = '';
+
+  // Load image if changed
+  if (img.dataset.stepId !== s.id) {
+    img.dataset.stepId = s.id;
+    img.src = s.imageDataUrl;
+    img.onload = () => {
+      s.natW = img.naturalWidth;
+      s.natH = img.naturalHeight;
+      applyZoom();
+      updateSVGViewBox();
+      renderSVG();
+    };
+  } else {
+    applyZoom();
+    updateSVGViewBox();
+    renderSVG();
+  }
+}
+
+function updateSVGViewBox() {
+  const svg = document.getElementById('anno-svg');
+  svg.setAttribute('viewBox', `0 0 ${viewportW} ${viewportH}`);
+}
+
+function renderSVG() {
+  const s   = currentStep();
+  const svg = document.getElementById('anno-svg');
+  // Remove existing annotations (keep preview elements)
+  [...svg.querySelectorAll('.ann-g')].forEach(el => el.remove());
+  if (!s) return;
+
+  s.annotations.forEach(ann => {
+    const g = buildAnnSVG(ann, s, ann.id === selAnnId);
+    if (g) svg.appendChild(g);
+  });
+}
+
+function buildAnnSVG(ann, step, isSelected) {
+  const natW = viewportW, natH = viewportH;
+  const color  = ann.color || '#e94560';
+  const hiColor = '#ffe040';
+  const stroke  = isSelected ? hiColor : color;
+  const sw      = Math.max(1.5, natW * 0.0025);
+
+  const g = svgEl('g', {});
+  g.classList.add('ann-g');
+  if (isSelected) g.classList.add('selected');
+  g.dataset.id = ann.id;
+
+  if (ann.type === 'callout') {
+    const x = ann.cx * natW, y = ann.cy * natH;
+    const r = Math.max(14, Math.min(natW, natH) * 0.028);
+    // Hit area (larger, transparent)
+    const hit = svgEl('circle', { cx: x, cy: y, r: r + 6, fill: 'transparent' });
+    hit.dataset.annId = ann.id;
+    // Circle
+    const circ = svgEl('circle', { cx: x, cy: y, r,
+      fill: stroke,
+      stroke: isSelected ? '#fff' : 'none',
+      'stroke-width': isSelected ? sw : 0 });
+    // Number text
+    const txt = svgEl('text', { x, y,
+      'text-anchor': 'middle', 'dominant-baseline': 'central',
+      fill: 'white',
+      'font-size': r * 1.1, 'font-weight': '700',
+      'font-family': '"Space Grotesk",system-ui,-apple-system,sans-serif',
+      'pointer-events': 'none' });
+    txt.textContent = ann.number ?? '?';
+    g.append(hit, circ, txt);
+
+  } else if (ann.type === 'arrow') {
+    const x1 = ann.x1 * natW, y1 = ann.y1 * natH;
+    const x2 = ann.x2 * natW, y2 = ann.y2 * natH;
+    const arrowParts = buildArrowGeom(x1, y1, x2, y2, natW);
+    if (!arrowParts) return null;
+    const { lx2, ly2, w1x, w1y, w2x, w2y } = arrowParts;
+    // Wide transparent hitbox
+    const hit = svgEl('line', { x1, y1, x2, y2, stroke: 'transparent', 'stroke-width': sw * 10 });
+    hit.dataset.annId = ann.id;
+    const line = svgEl('line', { x1, y1, x2: lx2, y2: ly2,
+      stroke, 'stroke-width': sw, 'stroke-linecap': 'round' });
+    const head = svgEl('polygon', { points: `${x2},${y2} ${w1x},${w1y} ${w2x},${w2y}`, fill: stroke });
+    g.append(hit, line, head);
+
+  } else if (ann.type === 'rect') {
+    const rx = ann.x * natW, ry = ann.y * natH;
+    const rw = ann.w * natW, rh = ann.h * natH;
+    const dashLen = Math.max(6, natW * 0.012);
+    const rect = svgEl('rect', { x: rx, y: ry, width: rw, height: rh,
+      fill: color + '28',
+      stroke, 'stroke-width': sw,
+      'stroke-dasharray': `${dashLen} ${dashLen * 0.6}`,
+      rx: natW * 0.004 });
+    rect.dataset.annId = ann.id;
+    if (isSelected) {
+      rect.setAttribute('stroke', hiColor);
+      rect.setAttribute('stroke-dasharray', 'none');
+    }
+    g.append(rect);
+
+  } else if (ann.type === 'label') {
+    const x = ann.cx * natW, y = ann.cy * natH;
+    const fs = Math.max(12, natW * 0.018);
+    const textContent = ann.text || 'Label';
+    const pad = fs * 0.45;
+    const estW = textContent.length * fs * 0.58 + pad * 2;
+    const estH = fs * 1.5;
+    const bg = svgEl('rect', { x: x - pad, y: y - estH * 0.78, width: estW, height: estH,
+      rx: pad * 0.5, fill: '#16213e', 'fill-opacity': 0.9,
+      stroke, 'stroke-width': isSelected ? sw : 0 });
+    bg.dataset.annId = ann.id;
+    const txt = svgEl('text', { x: x, y: y,
+      fill: stroke,
+      'font-size': fs, 'font-weight': '700',
+      'font-family': '"Space Grotesk",system-ui,-apple-system,sans-serif' });
+    txt.textContent = textContent;
+    txt.dataset.annId = ann.id;
+    g.append(bg, txt);
+  }
+
+  // Click to select (only matters in select tool — tool class controls pointer-events)
+  g.addEventListener('mousedown', onAnnMouseDown);
+  return g;
+}
+
+function buildArrowGeom(x1, y1, x2, y2, natW) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.sqrt(dx * dx + dy * dy);
+  if (len < 5) return null;
+  const ux = dx / len, uy = dy / len;
+  const H = Math.max(16, natW * 0.04);   // head length (SVG units)
+  const W = Math.max(7,  natW * 0.016);  // head half-width
+  const lx2 = x2 - ux * H;
+  const ly2 = y2 - uy * H;
+  return {
+    lx2, ly2,
+    w1x: lx2 - uy * W, w1y: ly2 + ux * W,
+    w2x: lx2 + uy * W, w2y: ly2 - ux * W,
+  };
+}
+
+// ─── SVG Mouse Events ─────────────────────────────────────────────────────────
+
+function onAnnMouseDown(e) {
+  if (activeTool !== 'select') return;
+  e.stopPropagation();
+  const annId = e.currentTarget.dataset.id;
+  selectAnnotation(annId);
+
+  // Start drag for moveable types
+  const ann = selectedAnn();
+  if (!ann) return;
+  if (ann.type === 'callout' || ann.type === 'label') {
+    const { nx, ny } = clientToNorm(e.clientX, e.clientY);
+    const anchorNx = ann.type === 'callout' ? ann.cx : ann.cx;
+    const anchorNy = ann.type === 'callout' ? ann.cy : ann.cy;
+    dragState = {
+      annId, type: ann.type,
+      offsetNx: nx - anchorNx,
+      offsetNy: ny - anchorNy,
+    };
+    e.preventDefault();
+  } else if (ann.type === 'arrow') {
+    const { nx, ny } = clientToNorm(e.clientX, e.clientY);
+    dragState = {
+      annId, type: 'arrow',
+      origX1: ann.x1, origY1: ann.y1, origX2: ann.x2, origY2: ann.y2,
+      startNx: nx, startNy: ny,
+    };
+    e.preventDefault();
+  } else if (ann.type === 'rect') {
+    const { nx, ny } = clientToNorm(e.clientX, e.clientY);
+    dragState = {
+      annId, type: 'rect',
+      origX: ann.x, origY: ann.y,
+      startNx: nx, startNy: ny,
+    };
+    e.preventDefault();
+  }
+}
+
+function onSVGMouseDown(e) {
+  if (e.target.closest('.ann-g')) return; // handled by annotation
+  const s = currentStep();
+  if (!s || !s.imageDataUrl) return;
+  const { nx, ny } = clientToNorm(e.clientX, e.clientY);
+
+  if (activeTool === 'select') {
+    selAnnId = null;
+    renderSVG();
+    renderProps();
+    return;
+  }
+  if (activeTool === 'callout') {
+    addAnnotation({ type: 'callout', cx: nx, cy: ny, label: '', color: '#e94560' });
+    return;
+  }
+  if (activeTool === 'label') {
+    addAnnotation({ type: 'label', cx: nx, cy: ny, text: 'Label', color: '#e0e0e0' });
+    return;
+  }
+  // Arrow / rect: start drag
+  drawState = { type: activeTool, startNx: nx, startNy: ny, endNx: nx, endNy: ny };
+  e.preventDefault();
+}
+
+function onSVGMouseMove(e) {
+  if (dragState) {
+    const { nx, ny } = clientToNorm(e.clientX, e.clientY);
+    const s   = currentStep();
+    const ann = s && s.annotations.find(a => a.id === dragState.annId);
+    if (!ann) { dragState = null; return; }
+
+    if (dragState.type === 'callout' || dragState.type === 'label') {
+      ann.cx = clamp01(nx - dragState.offsetNx);
+      ann.cy = clamp01(ny - dragState.offsetNy);
+    } else if (dragState.type === 'arrow') {
+      const dnx = nx - dragState.startNx, dny = ny - dragState.startNy;
+      ann.x1 = clamp01(dragState.origX1 + dnx);
+      ann.y1 = clamp01(dragState.origY1 + dny);
+      ann.x2 = clamp01(dragState.origX2 + dnx);
+      ann.y2 = clamp01(dragState.origY2 + dny);
+    } else if (dragState.type === 'rect') {
+      const dnx = nx - dragState.startNx, dny = ny - dragState.startNy;
+      ann.x = clamp01(dragState.origX + dnx);
+      ann.y = clamp01(dragState.origY + dny);
+    }
+    renderSVG();
+    return;
+  }
+
+  if (!drawState) return;
+  const { nx, ny } = clientToNorm(e.clientX, e.clientY);
+  drawState.endNx = nx;
+  drawState.endNy = ny;
+  renderDrawPreview();
+}
+
+function onSVGMouseUp(e) {
+  if (dragState) { dragState = null; return; }
+  if (!drawState) return;
+  const { startNx, startNy, endNx, endNy } = drawState;
+  const dx = endNx - startNx, dy = endNy - startNy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist > 0.01) {
+    if (drawState.type === 'arrow') {
+      addAnnotation({ type: 'arrow', x1: startNx, y1: startNy, x2: endNx, y2: endNy, color: '#e94560' });
+    } else if (drawState.type === 'rect') {
+      const x = Math.min(startNx, endNx), y = Math.min(startNy, endNy);
+      addAnnotation({ type: 'rect', x, y, w: Math.abs(dx), h: Math.abs(dy), color: '#e94560' });
+    }
+  }
+  drawState = null;
+  document.getElementById('anno-svg').querySelectorAll('.ann-preview').forEach(el => el.remove());
+}
+
+// Global mousemove/up to handle dragging outside SVG
+window.addEventListener('mousemove', e => { if (dragState || drawState) onSVGMouseMove(e); });
+window.addEventListener('mouseup',   e => { if (dragState || drawState) onSVGMouseUp(e); });
+
+// Keyboard shortcuts
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const map = { v: 'select', c: 'callout', a: 'arrow', r: 'rect', l: 'label' };
+  if (map[e.key]) { setTool(map[e.key]); return; }
+  if ((e.key === 'Delete' || e.key === 'Backspace') && selAnnId) {
+    e.preventDefault();
+    deleteSelectedAnnotation();
+  }
+});
+
+function renderDrawPreview() {
+  const s = currentStep();
+  if (!s || !drawState) return;
+  const svg = document.getElementById('anno-svg');
+  svg.querySelectorAll('.ann-preview').forEach(el => el.remove());
+
+  const natW = viewportW, natH = viewportH;
+  const x1 = drawState.startNx * natW, y1 = drawState.startNy * natH;
+  const x2 = drawState.endNx   * natW, y2 = drawState.endNy   * natH;
+  const color = '#e94560';
+  const sw = Math.max(1.5, natW * 0.0025);
+  const dashLen = Math.max(6, natW * 0.012);
+
+  const g = svgEl('g', {});
+  g.classList.add('ann-preview');
+  g.style.pointerEvents = 'none';
+  g.style.opacity = '0.7';
+
+  if (drawState.type === 'arrow') {
+    const geom = buildArrowGeom(x1, y1, x2, y2, natW);
+    if (geom) {
+      const { lx2, ly2, w1x, w1y, w2x, w2y } = geom;
+      g.append(
+        svgEl('line', { x1, y1, x2: lx2, y2: ly2, stroke: color, 'stroke-width': sw, 'stroke-dasharray': `${dashLen} ${dashLen * 0.6}`, 'stroke-linecap': 'round' }),
+        svgEl('polygon', { points: `${x2},${y2} ${w1x},${w1y} ${w2x},${w2y}`, fill: color })
+      );
+    }
+  } else if (drawState.type === 'rect') {
+    const rx = Math.min(x1, x2), ry = Math.min(y1, y2);
+    g.append(svgEl('rect', { x: rx, y: ry, width: Math.abs(x2 - x1), height: Math.abs(y2 - y1),
+      fill: color + '20', stroke: color, 'stroke-width': sw, 'stroke-dasharray': `${dashLen} ${dashLen * 0.6}`, rx: natW * 0.004 }));
+  }
+
+  svg.appendChild(g);
+}
+
+// ─── Properties panel rendering ───────────────────────────────────────────────
+
+function renderProps() {
+  const s   = currentStep();
+  const ann = selectedAnn();
+
+  // Toggle sections
+  document.getElementById('step-props').style.display          = s   ? '' : 'none';
+  document.getElementById('ann-props').style.display           = ann ? '' : 'none';
+  document.getElementById('callout-notes-section').style.display = (s && calloutCount(s) > 0) ? '' : 'none';
+  document.getElementById('props-empty').style.display         = !s  ? '' : 'none';
+
+  // Step fields
+  if (s) {
+    document.getElementById('p-step-title').value = s.title;
+    document.getElementById('p-step-desc').value  = s.desc;
+  }
+
+  // Annotation fields
+  if (ann) {
+    const typeLabels = { callout: 'Callout', arrow: 'Arrow', rect: 'Highlight Box', label: 'Text Label' };
+    document.getElementById('ann-props-title').textContent = typeLabels[ann.type] || 'Annotation';
+
+    const labelGroup = document.getElementById('ann-label-group');
+    const labelInput = document.getElementById('p-ann-label');
+    const labelLbl   = document.getElementById('ann-label-lbl');
+
+    if (ann.type === 'label') {
+      labelGroup.style.display = '';
+      labelLbl.textContent = 'Text';
+      labelInput.value = ann.text || '';
+    } else if (ann.type === 'callout') {
+      // Note is managed in callout notes section; hide label field
+      labelGroup.style.display = 'none';
+    } else {
+      labelGroup.style.display = 'none';
+    }
+
+    document.getElementById('p-ann-color').value = ann.color || '#e94560';
+    renderColorPresets(ann.color);
+  }
+
+  renderCalloutNotes();
+}
+
+function renderColorPresets(activeColor) {
+  const container = document.getElementById('color-presets');
+  container.innerHTML = '';
+  PRESET_COLORS.forEach(c => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch' + (c === activeColor ? ' active' : '');
+    sw.style.background = c;
+    sw.title = c;
+    sw.onclick = () => { onAnnColorChange(c); document.getElementById('p-ann-color').value = c; renderColorPresets(c); };
+    container.appendChild(sw);
+  });
+}
+
+function renderCalloutNotes() {
+  const s = currentStep();
+  const container = document.getElementById('callout-notes-list');
+  container.innerHTML = '';
+  if (!s) return;
+  const callouts = s.annotations.filter(a => a.type === 'callout');
+  if (callouts.length === 0) return;
+  callouts.forEach(ann => {
+    const row = document.createElement('div');
+    row.className = 'callout-note-row';
+    const badge = document.createElement('div');
+    badge.className = 'callout-badge';
+    badge.style.background = ann.color || '#e94560';
+    badge.textContent = ann.number;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'Note for callout ' + ann.number + '…';
+    input.value = ann.label || '';
+    input.oninput = () => { ann.label = input.value; };
+    const colorPick = document.createElement('input');
+    colorPick.type = 'color';
+    colorPick.className = 'callout-note-color';
+    colorPick.title = 'Label text color';
+    colorPick.value = ann.labelColor || '#e0e0e0';
+    colorPick.oninput = () => { ann.labelColor = colorPick.value; };
+    row.append(badge, input, colorPick);
+    container.appendChild(row);
+  });
+}
+
+// ─── Steps list rendering ─────────────────────────────────────────────────────
+
+function renderStepsList() {
+  const list = document.getElementById('steps-list');
+  list.innerHTML = '';
+  if (steps.length === 0) {
+    const p = document.createElement('p');
+    p.className = 'empty-state';
+    p.textContent = 'No steps yet. Click "+ Add" to begin.';
+    list.appendChild(p);
+    return;
+  }
+  steps.forEach((s, idx) => {
+    const card = document.createElement('div');
+    card.className = 'step-card' + (s.id === selStepId ? ' selected' : '');
+    card.onclick = () => selectStep(s.id);
+
+    const thumb = document.createElement('div');
+    thumb.className = 'step-card__thumb';
+    if (s.imageDataUrl) {
+      const img = document.createElement('img');
+      img.src = s.imageDataUrl;
+      thumb.appendChild(img);
+    } else {
+      thumb.innerHTML = '<span class="step-card__placeholder">&#9974;</span>';
+    }
+    const num = document.createElement('div');
+    num.className = 'step-card__num';
+    num.textContent = idx + 1;
+    thumb.appendChild(num);
+
+    const info = document.createElement('div');
+    info.className = 'step-card__info';
+
+    const title = document.createElement('div');
+    title.className = 'step-card__title';
+    title.textContent = s.title || ('Step ' + (idx + 1));
+
+    const acts = document.createElement('div');
+    acts.className = 'step-card__acts';
+    const btnUp  = document.createElement('button');
+    btnUp.className  = 'btn-icon'; btnUp.textContent = '↑'; btnUp.title = 'Move up';
+    btnUp.onclick = e => moveStep(s.id, -1, e);
+    const btnDn  = document.createElement('button');
+    btnDn.className  = 'btn-icon'; btnDn.textContent = '↓'; btnDn.title = 'Move down';
+    btnDn.onclick = e => moveStep(s.id, +1, e);
+    const btnDel = document.createElement('button');
+    btnDel.className = 'btn-icon'; btnDel.textContent = '✕'; btnDel.title = 'Delete step';
+    btnDel.style.color = '#e94560';
+    btnDel.onclick = e => deleteStep(s.id, e);
+    acts.append(btnUp, btnDn, btnDel);
+
+    info.append(title, acts);
+    card.append(thumb, info);
+    list.appendChild(card);
+  });
+}
+
+// ─── Render all ───────────────────────────────────────────────────────────────
+
+function renderAll() {
+  renderStepsList();
+  renderCanvas();
+  renderProps();
+}
+
+// ─── Property change handlers ─────────────────────────────────────────────────
+
+function onStepTitleChange(val) {
+  const s = currentStep(); if (s) { s.title = val; renderStepsList(); }
+}
+function onStepDescChange(val) {
+  const s = currentStep(); if (s) s.desc = val;
+}
+function onAnnLabelChange(val) {
+  const ann = selectedAnn();
+  if (!ann) return;
+  if (ann.type === 'label') patchSelectedAnn({ text: val });
+  else patchSelectedAnn({ label: val });
+}
+function onAnnColorChange(val) {
+  patchSelectedAnn({ color: val });
+  renderColorPresets(val);
+}
+
+// ─── Save / Load project ──────────────────────────────────────────────────────
+
+function saveProject() {
+  const data = JSON.stringify({ viewportW, viewportH, steps, _nextStepId, _nextAnnId }, null, 2);
+  downloadText(data, 'slideshow-project.json', 'application/json');
+}
+
+function loadProject() {
+  document.getElementById('json-upload').click();
+}
+
+function onJsonUpload(e) {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data.steps)) throw new Error('Invalid project file');
+      steps       = data.steps;
+      _nextStepId = data._nextStepId || (steps.length + 1);
+      _nextAnnId  = data._nextAnnId  || 1;
+      selStepId   = steps.length ? steps[0].id : null;
+      selAnnId    = null;
+      if (data.viewportW && data.viewportH) {
+        viewportW = data.viewportW;
+        viewportH = data.viewportH;
+        // Try to match known AR preset in the dropdown
+        const sel = document.getElementById('ar-select');
+        const match = Array.from(sel.options).find(o => {
+          const [w, h] = o.value.split(':').map(Number);
+          return w * 100 === viewportW && h * 100 === viewportH;
+        });
+        if (match) sel.value = match.value;
+        updateStageAR();
+      }
+      // Recalculate max IDs to avoid collision
+      steps.forEach(s => {
+        const num = parseInt(s.id.slice(1));
+        if (num >= _nextStepId) _nextStepId = num + 1;
+        s.annotations.forEach(a => {
+          const n2 = parseInt(a.id.slice(1));
+          if (n2 >= _nextAnnId) _nextAnnId = n2 + 1;
+        });
+      });
+      renderAll();
+      // Reload the first step's image dimensions
+      if (selStepId) {
+        const s = currentStep();
+        if (s && s.imageDataUrl) {
+          const img = new Image();
+          img.onload = () => { s.natW = img.naturalWidth; s.natH = img.naturalHeight; renderCanvas(); setTimeout(fitZoom, 50); };
+          img.src = s.imageDataUrl;
+        }
+      }
+    } catch (err) {
+      alert('Error loading project: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ─── Export slideshow ─────────────────────────────────────────────────────────
+
+function exportSlideshow() {
+  if (steps.length === 0) { alert('Add at least one step before exporting.'); return; }
+  const missImg = steps.find(s => !s.imageDataUrl);
+  if (missImg) {
+    if (!confirm(`Step "${missImg.title}" has no image. Export anyway?`)) return;
+  }
+
+  // Serialize steps (annotation coords are normalized [0,1] relative to viewport dims)
+  const stepsData = steps.map((s, idx) => ({
+    index: idx,
+    title: s.title,
+    desc:  s.desc,
+    imageDataUrl: s.imageDataUrl || '',
+    annotations: s.annotations.map(a => ({ ...a })),
+  }));
+
+  const html = buildSlideshowHTML(viewportW, viewportH, stepsData);
+  downloadText(html, 'slideshow.html', 'text/html');
+}
+
+function buildSlideshowHTML(vpW, vpH, stepsData) {
+  const dataJson = JSON.stringify(stepsData);
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slideshow</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  background: #111827;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.nav-bar {
+  background: #16213e;
+  border-bottom: 1px solid #0f3460;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  user-select: none;
+}
+.nav-btn {
+  background: #0f3460;
+  border: 1px solid #1a4a6e;
+  color: #e0e0e0;
+  border-radius: 5px;
+  width: 32px; height: 30px;
+  font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.12s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.nav-btn:hover:not(:disabled) { background: #1a4a6e; }
+.nav-btn:disabled { opacity: 0.35; cursor: default; }
+.step-counter { font-size: 0.78rem; color: #888; min-width: 60px; text-align: center; flex-shrink: 0; }
+.step-dots { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.step-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #2a3a5e;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background 0.15s, transform 0.15s;
+}
+.step-dot.active { background: #e94560; transform: scale(1.3); }
+.content-row {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.image-area {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  min-width: 0;
+  min-height: 0;
+}
+/* Viewport stage: sized by JS to maintain fixed AR */
+.viewport-stage {
+  position: relative;
+  background: #0a1020;
+  flex-shrink: 0;
+}
+.viewport-stage > img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+.viewport-stage > .no-image {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: #444; font-size: 0.85rem;
+  white-space: nowrap;
+}
+.anno-svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+.info-panel {
+  background: #16213e;
+  border-left: 1px solid #0f3460;
+  padding: 10px 16px;
+  width: 280px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+.step-title { font-size: 0.95rem; font-weight: 700; color: #e94560; margin-bottom: 4px; }
+.step-desc  { font-size: 0.82rem; color: #e0e0e0; line-height: 1.55; margin-bottom: 6px; white-space: pre-wrap; }
+.callout-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.callout-item { display: flex; align-items: flex-start; gap: 7px; font-size: 0.8rem; color: #e0e0e0; line-height: 1.45; }
+.callout-badge {
+  width: 18px; height: 18px; border-radius: 50%;
+  color: white; font-size: 0.65rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1a4a6e; border-radius: 3px; }
+.step-title code, .step-desc code, .callout-item code { font-family: ui-monospace,'Cascadia Code',Menlo,monospace; font-size:0.875em; background:rgba(255,255,255,0.1); padding:0.1em 0.35em; border-radius:3px; color:#7ec8e3; }
+/* ── Mobile: description below image ─────────────────────────── */
+@media (max-width: 640px) {
+  .content-row { flex-direction: column; overflow-y: auto; }
+  .info-panel { width: 100%; border-left: none; border-top: 1px solid #0f3460; flex-shrink: 0; }
+}
+/* ── Lightbox ─────────────────────────────────────────────────── */
+.viewport-stage { cursor: zoom-in; }
+.sld-lightbox {
+  position: fixed; inset: 0; z-index: 9000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.88); backdrop-filter: blur(6px);
+  opacity: 0; pointer-events: none; transition: opacity 200ms ease;
+}
+.sld-lightbox.is-open { opacity: 1; pointer-events: auto; }
+.sld-lightbox__content {
+  position: relative;
+  max-width: calc(100vw - 3rem); max-height: calc(100svh - 3rem);
+  transform: scale(0.94); transition: transform 200ms ease;
+}
+.sld-lightbox.is-open .sld-lightbox__content { transform: scale(1); }
+.sld-lightbox__img {
+  display: block;
+  max-width: calc(100vw - 3rem); max-height: calc(100svh - 3rem);
+  border-radius: 0.5rem; object-fit: contain;
+}
+.sld-lightbox__svg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; overflow: visible;
+}
+.sld-lightbox__close {
+  position: fixed; top: 1rem; right: 1rem;
+  width: 2.2rem; height: 2.2rem; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.7);
+  color: #e0e0e0; font-size: 1.1rem; cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 150ms ease;
+}
+.sld-lightbox__close:hover { background: rgba(30,30,30,0.98); }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <button class="nav-btn" id="prev-btn" onclick="navigate(-1)" title="Previous (←)">&#8249;</button>
+  <span class="step-counter" id="step-counter"></span>
+  <div class="step-dots" id="step-dots"></div>
+  <button class="nav-btn" id="next-btn" onclick="navigate(+1)" title="Next (→)">&#8250;</button>
+</div>
+
+<div class="content-row">
+  <div class="image-area" id="image-area">
+    <div class="viewport-stage" id="viewport-stage">
+      <img id="slide-img" alt="" style="display:none">
+      <p class="no-image" id="no-image-msg" style="display:none">No image for this step.</p>
+      <svg id="slide-svg" class="anno-svg" xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 ${vpW} ${vpH}"></svg>
+    </div>
+  </div>
+  <div class="info-panel">
+    <div class="step-title" id="slide-title"></div>
+    <div class="step-desc"  id="slide-desc"></div>
+    <ul class="callout-list" id="slide-callouts"></ul>
+  </div>
+</div>
+
+<script>
+const SLIDESHOW = { viewportW: ${vpW}, viewportH: ${vpH}, steps: ${dataJson} };
+const vpW = SLIDESHOW.viewportW, vpH = SLIDESHOW.viewportH;
+const STEPS = SLIDESHOW.steps;
+const NS = 'http://www.w3.org/2000/svg';
+let current = 0;
+
+function svgEl(tag, attrs) {
+  const el = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function buildArrowGeom(x1, y1, x2, y2, refW) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.sqrt(dx * dx + dy * dy);
+  if (len < 5) return null;
+  const ux = dx / len, uy = dy / len;
+  const H = Math.max(16, refW * 0.04);
+  const W = Math.max(7, refW * 0.016);
+  const lx2 = x2 - ux * H, ly2 = y2 - uy * H;
+  return { lx2, ly2, w1x: lx2 - uy * W, w1y: ly2 + ux * W, w2x: lx2 + uy * W, w2y: ly2 - ux * W };
+}
+
+function positionStage() {
+  const area  = document.getElementById('image-area');
+  const stage = document.getElementById('viewport-stage');
+  const aw = area.clientWidth  - 24;
+  const ah = area.clientHeight - 24;
+  const sc = Math.min(aw / vpW, ah / vpH);
+  const w  = Math.max(1, Math.round(vpW * sc));
+  const h  = Math.max(1, Math.round(vpH * sc));
+  stage.style.width  = w + 'px';
+  stage.style.height = h + 'px';
+}
+
+function renderAnnotations(s, svg) {
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', '0 0 ' + vpW + ' ' + vpH);
+  const sw = Math.max(1.5, vpW * 0.0025);
+
+  s.annotations.forEach(ann => {
+    const color = ann.color || '#e94560';
+    if (ann.type === 'callout') {
+      const x = ann.cx * vpW, y = ann.cy * vpH;
+      const r = Math.max(14, Math.min(vpW, vpH) * 0.028);
+      const g = svgEl('g', {});
+      g.append(
+        svgEl('circle', { cx: x, cy: y, r, fill: color }),
+        Object.assign(svgEl('text', { x, y,
+          'text-anchor': 'middle', 'dominant-baseline': 'central',
+          fill: 'white', 'font-size': r * 1.1, 'font-weight': '700',
+          'font-family': '"Space Grotesk",system-ui,-apple-system,sans-serif' }),
+          { textContent: ann.number ?? '?' })
+      );
+      svg.appendChild(g);
+    } else if (ann.type === 'arrow') {
+      const x1 = ann.x1 * vpW, y1 = ann.y1 * vpH, x2 = ann.x2 * vpW, y2 = ann.y2 * vpH;
+      const geom = buildArrowGeom(x1, y1, x2, y2, vpW);
+      if (!geom) return;
+      const { lx2, ly2, w1x, w1y, w2x, w2y } = geom;
+      const g = svgEl('g', {});
+      g.append(
+        svgEl('line', { x1, y1, x2: lx2, y2: ly2, stroke: color, 'stroke-width': sw, 'stroke-linecap': 'round' }),
+        svgEl('polygon', { points: x2 + ',' + y2 + ' ' + w1x + ',' + w1y + ' ' + w2x + ',' + w2y, fill: color })
+      );
+      svg.appendChild(g);
+    } else if (ann.type === 'rect') {
+      const dashLen = Math.max(6, vpW * 0.012);
+      svg.appendChild(svgEl('rect', {
+        x: ann.x * vpW, y: ann.y * vpH,
+        width: ann.w * vpW, height: ann.h * vpH,
+        fill: color + '28', stroke: color,
+        'stroke-width': sw, 'stroke-dasharray': dashLen + ' ' + (dashLen * 0.6),
+        rx: vpW * 0.004
+      }));
+    } else if (ann.type === 'label') {
+      const x = ann.cx * vpW, y = ann.cy * vpH;
+      const fs = Math.max(12, vpW * 0.018);
+      const textContent = ann.text || '';
+      const pad = fs * 0.45;
+      const estW = textContent.length * fs * 0.58 + pad * 2;
+      const estH = fs * 1.5;
+      const g = svgEl('g', {});
+      g.append(
+        svgEl('rect', { x: x - pad, y: y - estH * 0.78, width: estW, height: estH, rx: pad * 0.5, fill: '#16213e', 'fill-opacity': 0.9 }),
+        Object.assign(svgEl('text', { x, y, fill: color, 'font-size': fs, 'font-weight': '700', 'font-family': '"Space Grotesk",system-ui,-apple-system,sans-serif' }),
+          { textContent })
+      );
+      svg.appendChild(g);
+    }
+  });
+}
+
+function parseInline(s) {
+  if (!s) return '';
+  var e = s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return e.replace(/\`([^\`]+)\`/g, '<code>$1</code>');
+}
+
+function renderStep(idx) {
+  const s = STEPS[idx];
+  document.getElementById('step-counter').textContent = (idx + 1) + ' / ' + STEPS.length;
+  document.getElementById('prev-btn').disabled = idx === 0;
+  document.getElementById('next-btn').disabled = idx === STEPS.length - 1;
+  document.querySelectorAll('.step-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+
+  const img      = document.getElementById('slide-img');
+  const noImgMsg = document.getElementById('no-image-msg');
+  const svg      = document.getElementById('slide-svg');
+
+  renderAnnotations(s, svg);
+
+  if (s.imageDataUrl) {
+    img.src = s.imageDataUrl;
+    img.style.display      = '';
+    noImgMsg.style.display = 'none';
+  } else {
+    img.style.display      = 'none';
+    noImgMsg.style.display = '';
+    svg.innerHTML = '';
+  }
+
+  document.getElementById('slide-title').innerHTML = parseInline(s.title || '');
+  document.getElementById('slide-desc').innerHTML  = parseInline(s.desc  || '');
+
+  const calloutList = document.getElementById('slide-callouts');
+  calloutList.innerHTML = '';
+  const callouts = s.annotations.filter(a => a.type === 'callout' && a.label);
+  callouts.forEach(ann => {
+    const li = document.createElement('li');
+    li.className = 'callout-item';
+    const badge = document.createElement('div');
+    badge.className = 'callout-badge';
+    badge.style.background = ann.color || '#e94560';
+    badge.textContent = ann.number;
+    const text = document.createElement('span');
+    text.innerHTML = parseInline(ann.label);
+    if (ann.labelColor) text.style.color = ann.labelColor;
+    li.append(badge, text);
+    calloutList.appendChild(li);
+  });
+}
+
+function navigate(dir) {
+  const next = current + dir;
+  if (next < 0 || next >= STEPS.length) return;
+  current = next;
+  renderStep(current);
+}
+
+function buildDots() {
+  const container = document.getElementById('step-dots');
+  container.innerHTML = '';
+  STEPS.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'step-dot' + (i === 0 ? ' active' : '');
+    btn.title = 'Step ' + (i + 1);
+    btn.onclick = () => { current = i; renderStep(i); };
+    container.appendChild(btn);
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp')   navigate(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(+1);
+});
+
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) navigate(dx < 0 ? +1 : -1);
+}, { passive: true });
+
+let _rsTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_rsTimer);
+  _rsTimer = setTimeout(positionStage, 100);
+});
+
+buildDots();
+positionStage();
+renderStep(0);
+
+// Broadcast aspect ratio to parent so it can size the iframe automatically
+if (window.parent !== window) {
+  window.parent.postMessage({ type: 'slideshowReady', viewportW: vpW, viewportH: vpH }, '*');
+}
+
+// Handle postMessage from parent page (sldref slide navigation + theme)
+var THEME_CSS_SLD = {
+  'deuteranopia':
+    ':root{--acc:#f5a428;--acc-soft:rgba(245,164,40,0.18);--nav-bg:#0d2c52;--panel-bg:#0d2c52;--border:#1a3a6e}' +
+    '.step-title{color:var(--acc)}.step-dot.active{background:var(--acc)}' +
+    '.nav-btn{background:#0d2c52;border-color:#1e3a6e}.nav-btn:hover:not(:disabled){background:#1e3a6e}' +
+    '.info-panel{background:var(--panel-bg);border-color:#1e3a6e}.nav-bar{background:var(--nav-bg);border-color:#1e3a6e}' +
+    '.step-title code,.step-desc code,.callout-item code{color:var(--acc)}',
+  'high-contrast':
+    'body{background:#000;color:#fff}.nav-bar{background:#000;border-color:#fff}.nav-btn{background:#000;border:1px solid #fff;color:#fff}' +
+    '.nav-btn:hover:not(:disabled){background:#222}.step-counter{color:#ccc}.step-dot{background:#444}.step-dot.active{background:#ff0;transform:scale(1.3)}' +
+    '.viewport-stage{background:#000}.info-panel{background:#000;border-color:#fff}' +
+    '.step-title{color:#ff0}.step-desc{color:#fff}.callout-item{color:#fff}' +
+    '.step-title code,.step-desc code,.callout-item code{color:#ff0;background:rgba(255,255,0,0.12)}',
+  'monochrome':
+    'body{background:#111;color:#e0e0e0}.nav-bar{background:#1a1a1a;border-color:#333}.nav-btn{background:#222;border-color:#444;color:#ccc}' +
+    '.nav-btn:hover:not(:disabled){background:#333}.step-dot{background:#333}.step-dot.active{background:#aaa}' +
+    '.viewport-stage{background:#000}.info-panel{background:#1a1a1a;border-color:#333}' +
+    '.step-title{color:#ddd}.step-desc{color:#bbb}.callout-item{color:#bbb}' +
+    '.step-title code,.step-desc code,.callout-item code{color:#ccc;background:rgba(255,255,255,0.08)}'
+};
+window.addEventListener('message', function(e) {
+  if (!e.data) return;
+  if (e.data.type === 'gotoSlide') {
+    var idx = (parseInt(e.data.slide, 10) || 1) - 1;
+    if (idx >= 0 && idx < STEPS.length) { current = idx; renderStep(current); }
+  }
+  if (e.data.type === 'setTheme') {
+    var t = e.data.theme || 'default';
+    var el = document.getElementById('_kiwi_theme_override');
+    if (!el) { el = document.createElement('style'); el.id = '_kiwi_theme_override'; document.head.appendChild(el); }
+    el.textContent = THEME_CSS_SLD[t] || '';
+  }
+});
+// ── Lightbox for slideshow images ─────────────────────────────
+(function() {
+  var lb = document.createElement('div');
+  lb.className = 'sld-lightbox';
+  lb.setAttribute('role', 'dialog');
+  lb.setAttribute('aria-modal', 'true');
+  lb.setAttribute('aria-label', 'View image');
+
+  var lbContent = document.createElement('div');
+  lbContent.className = 'sld-lightbox__content';
+
+  var lbImg = document.createElement('img');
+  lbImg.className = 'sld-lightbox__img';
+  lbImg.alt = '';
+
+  var lbSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  lbSvg.setAttribute('class', 'sld-lightbox__svg');
+  lbSvg.setAttribute('overflow', 'visible');
+
+  var lbClose = document.createElement('button');
+  lbClose.type = 'button';
+  lbClose.className = 'sld-lightbox__close';
+  lbClose.setAttribute('aria-label', 'Close image viewer');
+  lbClose.innerHTML = '&#x2715;';
+
+  lbContent.append(lbImg, lbSvg);
+  lb.append(lbContent, lbClose);
+  document.body.appendChild(lb);
+
+  var prevFocus = null;
+
+  function openLightbox() {
+    var s = STEPS[current];
+    if (!s || !s.imageDataUrl) return;
+    lbImg.src = s.imageDataUrl;
+    lbImg.alt = s.title || '';
+    renderAnnotations(s, lbSvg);
+    prevFocus = document.activeElement;
+    lb.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    lbClose.focus();
+  }
+
+  function closeLightbox() {
+    lb.classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (prevFocus) { prevFocus.focus(); prevFocus = null; }
+  }
+
+  document.getElementById('viewport-stage').addEventListener('click', openLightbox);
+  lbClose.addEventListener('click', closeLightbox);
+  lb.addEventListener('click', function(e) { if (e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && lb.classList.contains('is-open')) {
+      e.stopPropagation();
+      closeLightbox();
+    }
+  });
+})();
+<\/script>
+</body>
+</html>`;
+}
+
+// ─── Utility ──────────────────────────────────────────────────────────────────
+
+function downloadText(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─── Color presets init ───────────────────────────────────────────────────────
+
+function initColorPresets() {
+  // Rendered dynamically in renderProps; just init here for first load
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+
+function init() {
+  setTool('select');
+  updateStageAR();
+  fitZoom();
+  renderStepsList();
+  renderProps();
+  document.getElementById('tool-hint').textContent = TOOL_HINTS['select'];
+}
+
+init();
+</script>
+</body>
+</html>

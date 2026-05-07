@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kiwi: The Single-Board Satellite | Getting started manual for the Kiwi Single-Board Satellite.</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Kiwi: The Single-Board Satellite" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:site_name" content="Kiwi: The Single-Board Satellite" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kiwi: The Single-Board Satellite" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Getting started manual for the Kiwi Single-Board Satellite.","headline":"Kiwi: The Single-Board Satellite","url":"/kiwi/v0.0.1/sections/get-to-know.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/kiwi/v0.0.1/assets/css/style.css">
+    <link rel="icon" href="/kiwi/v0.0.1/favicon.ico" type="image/x-icon">
+<script>try{var _kct=localStorage.getItem('kiwi-color-theme');if(_kct&&_kct!=='default')document.documentElement.dataset.theme=_kct;}catch(e){}</script>
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script>window.SITE_BASEURL = "/kiwi/v0.0.1";</script>
+<script src="/kiwi/v0.0.1/assets/js/manual.js" defer></script>
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Kiwi: The Single-Board Satellite</h1>
+      <h2 class="project-tagline">Getting started manual for the Kiwi Single-Board Satellite.</h2>
+      
+        <a href="https://github.com/chickadee-smallsat/kiwi" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <section class="manual-sheet">
+
+  <h1 id="get-to-know-your-kiwi">Get to know your Kiwi</h1>
+
+  <p>Kiwi is a single-board satellite.
+Meaning, it is a printed-circuit board (PCB) with various components attached to it, performing different functions.
+The following sections will introduce you to various parts of a Kiwi - some that are visible, and some that are not.</p>
+
+  <h3 id="the-hardware">The Hardware</h3>
+
+  <p>The interactive diagram below shows the front and back of the Kiwi PCB.
+Click the rectangle around a component to see its designation, part number, and description.</p>
+
+  <div class="pcb-viewer-wrap">
+  <iframe src="/kiwi/v0.0.1/assets/media/kiwi-pcb-viewer.html?front=/kiwi/v0.0.1/pcb-annotation/kiwi_front.png&amp;back=/kiwi/v0.0.1/pcb-annotation/kiwi_back.png" title="Kiwi PCB Interactive Viewer" loading="lazy" scrolling="no" id="pcb-viewer-frame" onload="this.style.height=(this.contentWindow.document.body.scrollHeight+32)+'px'; (function(f){window.addEventListener('message',function(e){if(e.data&amp;&amp;e.data.type==='pcb-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+  </iframe>
+</div>
+
+  <p>The central component of the Kiwi is the Raspberry Pi RP2350B microcontroller, which serves as the “brain” of Kiwi, managing its operations in processing sensor data and handling communications.
+Kiwi contains a 2 MiB (1 MiB = 1024 KiB = 1024 × 1024 bytes) flash memory chip, which is used to store the software program executed by the microcontroller.
+Additional peripherals can be stacked on top of Kiwi through the 60-pin expansion sockets (<code class="language-plaintext highlighter-rouge">TOP1</code> and <code class="language-plaintext highlighter-rouge">TOP2</code>) and plugs (<code class="language-plaintext highlighter-rouge">BOT1</code> and <code class="language-plaintext highlighter-rouge">BOT2</code>).
+Kiwi also contains a variety of sensors, including an accelerometer, gyroscope, magnetometer, barometer, temperature sensor, air quality index (AQI) and humidity sensor, and light sensors on each side of the board.
+Kiwi has a built-in Wi-Fi (2.4 GHz) radio for wireless communication, and a USB port for power and configuration updates.
+There is also an on-board micro-SD card slot for additional data storage.</p>
+
+  <h3 id="the-firmware">The Firmware</h3>
+
+  <p>Firmware<span class="cite-ref" data-ref="ref-firmware"></span> is the software that runs on the microcontroller on-board the Kiwi, controlling its hardware functions and defining its operations.
+Kiwi comes preloaded with a firmware that collects data from various sensors and broadcasts them over Wi-Fi.</p>
+
+  <p>The firmware is upgradable (requires a computer and the <a href="https://www.raspberrypi.com/documentation/computers/debug-tool/">Raspberry Pi Debug Tool</a>).
+Custom firmware can be developed and flashed onto the Kiwi, allowing for custom behavior and functionality.
+A <a href="https://micropython.org/">MicroPython</a> interpreter is also available for the Kiwi, allowing users to write and execute Python code directly on the device.</p>
+
+  <h3 id="kiwi-plotter">Kiwi Plotter</h3>
+
+  <p><a href="https://github.com/chickadee-smallsat/kiwi-clients/releases/latest">Kiwi Plotter</a> is a free, cross-platform software that allows you to visualize, and collect data from various sensors on your Kiwi over Wi-Fi.
+Kiwi Plotter is available for Windows, macOS (ARM-based) and Linux (as an AppImage).</p>
+
+  <h4 id="windows-installation">Windows Installation</h4>
+  <p>Download <code class="language-plaintext highlighter-rouge">Kiwi Plotter Setup &lt;Version&gt; x64.zip</code>.
+Navigate to the location of the ZIP archive, and double-click on the file to open it.
+The archive contains a single file <code class="language-plaintext highlighter-rouge">Kiwi Plotter Setup &lt;Version&gt;-x64.exe</code>.
+Double-click on this file to open it.
+You will be presented with the Windows SmartScreen filter dialog, since the Kiwi Plotter installer is not signed by a digital signature.
+Click on “More Info”, then <ui-btn>Run Anyway</ui-btn> to proceed with the installation.
+<img src="assets/media/windows/windows_smart_screen.png" alt="Windows SmartScreen Filter" style="width: 50%" class="collapsible" />
+<img src="assets/media/windows/windows_smart_screen_run_anyway.png" alt="Windows SmartScreen Filter: Run Anyway" style="width: 50%" class="collapsible" />
+Upon installation, the Kiwi Plotter will start automatically.
+Kiwi Plotter can be opened later from the Start (<svg aria-label="Windows" role="img" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-0.15em"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.551H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.949"></path></svg>
+) menu.</p>
+
+  <blockquote class="callout-note">
+    <p><strong>Safety</strong>
+As long as it is downloaded from <a href="https://github.com/chickadee-smallsat/kiwi-clients/releases/latest">here</a>, it should be completely safe to install and execute.
+The source code for the plotter is available <a href="https://github.com/chickadee-smallsat/kiwi-clients">here</a>.
+Validate the SHA-256 checksum of the downloaded ZIP archive against the checksum posted with the release.</p>
+  </blockquote>
+
+  <h4 id="macos-installation">macOS Installation</h4>
+
+  <p>To install Kiwi Plotter on macOS, download <code class="language-plaintext highlighter-rouge">Kiwi Plotter-&lt;Version&gt;-arm64.dmg</code>, and open the DMG file.
+Follow the steps in <a class="sldref" href="#sld-mac-kiwi-plotter"></a>
+ to complete the installation.
+Kiwi Plotter can be opened later from the Applications folder, or from Launchpad.</p>
+
+  <div class="pcb-viewer-wrap" id="sld-mac-kiwi-plotter" data-slideshow="">
+  <iframe src="/kiwi/v0.0.1/assets/media/macos-kiwi-plotter.html" title="Kiwi Plotter macOS Installation" loading="lazy" scrolling="no" style="width:100%; border:none; display:block;">
+  </iframe>
+</div>
+
+</section>
+
+
+      <footer class="site-footer">
+        <div class="site-footer__inner">
+          <span class="site-footer-owner">
+            <a href="https://github.com/chickadee-smallsat/kiwi">kiwi</a>
+            is maintained by
+            <a href="mailto:sunip_mukherjee@uml.edu">Sunip K. Mukherjee</a>.
+          </span>
+          <span class="site-footer-contact">
+            Contact us: <a href="mailto:kiwi@uml.edu">kiwi@uml.edu</a>
+          </span>
+          <div class="version-selector" aria-label="Documentation version selector">
+  <label class="version-selector__label" for="version-select">Version</label>
+  <select id="version-select" class="version-selector__select">
+    <option value="" disabled selected>Loading versions...</option>
+  </select>
+</div>
+
+<script>
+(function () {
+  var baseurl = '/kiwi/v0.0.1';
+  var parts = baseurl.split('/').filter(Boolean);
+  var current = parts.length ? parts[parts.length - 1] : 'latest';
+  var docsRoot = parts.length > 1 ? '/' + parts.slice(0, -1).join('/') : (parts.length === 1 ? '/' + parts[0] : '');
+  var versionsUrl = (docsRoot || '') + '/versions.json';
+
+  function targetUrl(version) {
+    var root = docsRoot || '';
+    return root + '/' + version + '/';
+  }
+
+  fetch(versionsUrl)
+    .then(function (res) {
+      return res.ok ? res.json() : [];
+    })
+    .catch(function () {
+      return [];
+    })
+    .then(function (versions) {
+      var select = document.getElementById('version-select');
+      if (!select || !Array.isArray(versions) || !versions.length) {
+        return;
+      }
+
+      select.innerHTML = '';
+      versions.forEach(function (v, i) {
+        var option = document.createElement('option');
+        option.value = v;
+        option.textContent = i === 0 ? v + ' (latest)' : v;
+        option.selected = (v === current);
+        select.appendChild(option);
+      });
+
+      if (!versions.includes(current)) {
+        select.selectedIndex = 0;
+      }
+
+      select.addEventListener('change', function () {
+        window.location.href = targetUrl(select.value) + window.location.hash;
+      });
+    });
+})();
+</script>
+
+          <span class="site-footer-credits">Generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+          <p class="site-footer-disclaimer">&copy; 2026 LoCSST / UMass Lowell. LoCSST / UMass Lowell is not affiliated with any vendors or manufacturers for products linked in this document. Links are provided for reference only.</p>
+        </div>
+      </footer>
+    </main>
+    <aside class="theme-switcher" id="theme-switcher">
+  <button class="theme-switcher__toggle" id="theme-toggle"
+          aria-haspopup="true" aria-expanded="false" aria-controls="theme-panel"
+          aria-label="Color theme">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5
+               0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16
+               c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5
+               S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5
+               S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5
+               S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5
+               S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+    </svg>
+  </button>
+
+  <div class="theme-switcher__panel" id="theme-panel" hidden role="group" aria-label="Select color theme">
+    <p class="theme-switcher__heading">Color theme</p>
+
+    <button class="theme-opt" data-theme="default" aria-pressed="true">
+      <span class="theme-opt__dot" style="background:#0e3247;box-shadow:0 0 0 2px #7fd4f0"></span>
+      Default
+    </button>
+    <button class="theme-opt" data-theme="deuteranopia" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#0d2c52;box-shadow:0 0 0 2px #f5a428"></span>
+      Deuteranopia-friendly
+    </button>
+    <button class="theme-opt" data-theme="high-contrast" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#000;box-shadow:0 0 0 2px #ffff00"></span>
+      High Contrast
+    </button>
+    <button class="theme-opt" data-theme="monochrome" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#1e1e1e;box-shadow:0 0 0 2px #d0d0d0"></span>
+      Monochrome
+    </button>
+  </div>
+
+  <div aria-live="polite" aria-atomic="true" class="theme-switcher__announce" id="theme-announce"></div>
+</aside>
+
+<script>
+(function () {
+  var PREF_KEY = 'kiwi-color-theme';
+  var labels = {
+    'default': 'Default',
+    'deuteranopia': 'Deuteranopia-friendly',
+    'high-contrast': 'High Contrast',
+    'monochrome': 'Monochrome'
+  };
+
+  var root    = document.documentElement;
+  var toggle  = document.getElementById('theme-toggle');
+  var panel   = document.getElementById('theme-panel');
+  var opts    = document.querySelectorAll('.theme-opt');
+  var announce = document.getElementById('theme-announce');
+
+  function applyTheme(theme, shouldAnnounce) {
+    if (theme && theme !== 'default') {
+      root.dataset.theme = theme;
+    } else {
+      delete root.dataset.theme;
+      theme = 'default';
+    }
+    opts.forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.theme === theme));
+    });
+    if (shouldAnnounce && announce) {
+      announce.textContent = '';
+      // Force re-announcement with a slight delay
+      setTimeout(function () {
+        announce.textContent = 'Color theme changed to ' + (labels[theme] || theme);
+      }, 50);
+    }
+    try { localStorage.setItem(PREF_KEY, theme); } catch (e) {}
+    document.dispatchEvent(new CustomEvent('kiwi-theme', { detail: theme }));
+  }
+
+  // Sync button states with whatever theme was applied by the anti-FOUC script
+  var saved;
+  try { saved = localStorage.getItem(PREF_KEY) || 'default'; } catch (e) { saved = 'default'; }
+  applyTheme(saved, false);
+
+  // Toggle panel open/close
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var opening = panel.hidden;
+    panel.hidden = !opening;
+    toggle.setAttribute('aria-expanded', String(opening));
+    if (opening) {
+      // Focus first option when opening
+      var first = panel.querySelector('.theme-opt');
+      if (first) first.focus();
+    }
+  });
+
+  // Option selection
+  opts.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applyTheme(btn.dataset.theme, true);
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function (e) {
+    var sw = document.getElementById('theme-switcher');
+    if (sw && !sw.contains(e.target)) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !panel.hidden) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
+  });
+})();
+</script>
+
+  </body>
+</html>

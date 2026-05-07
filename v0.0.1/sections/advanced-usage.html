@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Kiwi: The Single-Board Satellite | Getting started manual for the Kiwi Single-Board Satellite.</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Kiwi: The Single-Board Satellite" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:description" content="Getting started manual for the Kiwi Single-Board Satellite." />
+<meta property="og:site_name" content="Kiwi: The Single-Board Satellite" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Kiwi: The Single-Board Satellite" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Getting started manual for the Kiwi Single-Board Satellite.","headline":"Kiwi: The Single-Board Satellite","url":"/kiwi/v0.0.1/sections/advanced-usage.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/kiwi/v0.0.1/assets/css/style.css">
+    <link rel="icon" href="/kiwi/v0.0.1/favicon.ico" type="image/x-icon">
+<script>try{var _kct=localStorage.getItem('kiwi-color-theme');if(_kct&&_kct!=='default')document.documentElement.dataset.theme=_kct;}catch(e){}</script>
+<script>MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script>window.SITE_BASEURL = "/kiwi/v0.0.1";</script>
+<script src="/kiwi/v0.0.1/assets/js/manual.js" defer></script>
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Kiwi: The Single-Board Satellite</h1>
+      <h2 class="project-tagline">Getting started manual for the Kiwi Single-Board Satellite.</h2>
+      
+        <a href="https://github.com/chickadee-smallsat/kiwi" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <section class="manual-sheet">
+
+  <h1 id="advanced-usage">Advanced Usage</h1>
+
+  <p>This section covers advanced topics for users who want to get more out of their Kiwi.</p>
+
+  <p>Datasheet for Kiwi is provided below.</p>
+
+  <div class="collapsible-fig">
+  <div class="collapsible-fig__body">
+    <div class="pdf-embed-wrap">
+      <iframe src="/kiwi/v0.0.1/assets/media/pdf-viewer.html?file=/kiwi/v0.0.1/datasheet/kiwi-mainboard-ds.pdf" style="height:700px" title="Kiwi Datasheet" loading="lazy" scrolling="no" onload="(function(f){window.addEventListener('message',function(e){if(e.data&amp;&amp;e.data.type==='pdf-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+      </iframe>
+    </div>
+  </div>
+  <button type="button" class="collapsible-fig__toggle" aria-expanded="false" onclick="var w=this.closest('.collapsible-fig');var o=w.classList.toggle('is-open');this.setAttribute('aria-expanded',String(o));">Kiwi Datasheet</button>
+</div>
+  <p class="pdf-embed-fallback">
+  <a href="/kiwi/v0.0.1/datasheet/kiwi-mainboard-ds.pdf" download="">Download Kiwi Datasheet</a>
+</p>
+
+  <h1 id="programming-your-kiwi">Programming your Kiwi</h1>
+
+  <p>Kiwi supports <a href="https://micropython.org/">MicroPython</a> out-of-the-box.
+MicroPython has been compiled for the Kiwi, and is available from <a href="https://github.com/chickadee-smallsat/kiwi-mainboard-micropython/releases/latest">here</a>.</p>
+
+  <h2 id="flashing-the-micropython-firmware">Flashing the MicroPython Firmware</h2>
+  <ul>
+    <li>Download the <code class="language-plaintext highlighter-rouge">micropython_&lt;MicroPythonVersion&gt;_kiwi_mb_revB0.uf2</code> file to your PC.</li>
+    <li>Keep the USB micro-B cable plugged into the Kiwi, but not into the PC.</li>
+    <li>With the <code class="language-plaintext highlighter-rouge">BOOTSEL</code> button held down (possibly with a small tool like a screwdriver), insert the cable into the PC.</li>
+    <li>Kiwi should show up as a removable storage device. Copy the downloaded <code class="language-plaintext highlighter-rouge">.uf2</code> firmware to it.</li>
+    <li>At this point, the removable storage should automatically be removed and the Kiwi should reboot.</li>
+  </ul>
+
+  <h2 id="micropython-on-your-kiwi">MicroPython on your Kiwi</h2>
+  <p>Use the <a href="https://thonny.org/">Thonny IDE</a> to write MicroPython code and execute it on your Kiwi.
+Thonny allows you to store code on your Kiwi and run it when the Kiwi is powered on.</p>
+
+  <blockquote class="callout-caution">
+    <p><strong>Kiwi Plotter will not work with MicroPython</strong>
+Installing MicroPython to Kiwi will remove the pre-loaded firmware Kiwi came with.
+This will break the data transmission functionality Kiwi previously offered, and your Kiwi will not transmit any data over Wi-Fi to Kiwi Plotter by default.</p>
+  </blockquote>
+
+  <h2 id="data-format-used-by-kiwi">Data Format used by Kiwi</h2>
+
+  <p>Kiwi broadcasts measurement packets over UDP on port <code class="language-plaintext highlighter-rouge">8099</code>.
+Currently, this is not configurable in the on-board Kiwi firmware, or the Kiwi Plotter, so any data broadcast to the plotter will have to be broadcast on this port.</p>
+
+  <p>Kiwi broadcasts data packets that are fixed-size 24-byte binary structures.
+All multi-byte values are <a href="https://en.wikipedia.org/wiki/Endianness"><strong>little-endian</strong></a>, or least-significant-byte first.
+This is in contrast to the typical network byte order (big-endian), since most consumer hardware, including the Kiwi, is little-endian.</p>
+
+  <h3 id="default-packet-layout">Default Packet Layout</h3>
+
+  <div class="pcb-viewer-wrap">
+  <iframe src="/kiwi/v0.0.1/assets/media/packet-layout.html" title="Kiwi Packet Layout" loading="lazy" scrolling="no" onload="this.style.height=(this.contentWindow.document.body.scrollHeight+32)+'px'; (function(f){window.addEventListener('message',function(e){if(e.data&amp;&amp;e.data.type==='packet-layout-resize')f.style.height=(e.data.height+32)+'px';});})(this);">
+  </iframe>
+</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Bytes</th>
+        <th>Size</th>
+        <th>Field</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0–1</td>
+        <td>2 B</td>
+        <td>Type</td>
+        <td>Measurement type code (<code class="language-plaintext highlighter-rouge">u16</code>)</td>
+      </tr>
+      <tr>
+        <td>2–13</td>
+        <td>12 B</td>
+        <td>Data</td>
+        <td>Measurement payload (layout varies by type)</td>
+      </tr>
+      <tr>
+        <td>14–21</td>
+        <td>8 B</td>
+        <td>Timestamp</td>
+        <td>Microseconds since device start (<code class="language-plaintext highlighter-rouge">u64</code>)</td>
+      </tr>
+      <tr>
+        <td>22–23</td>
+        <td>2 B</td>
+        <td>CRC</td>
+        <td>CRC-16/XMODEM over bytes 0–21 (<code class="language-plaintext highlighter-rouge">u16</code>)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="measurement-types">Measurement Types</h3>
+
+  <p>The type field identifies which sensor produced the data and how the 12-byte payload is laid out (<a class="tblref" href="#tbl-data-ids"></a>).</p>
+
+  <p class="table-caption">Table of type-field values identifying which sensor produced a data packet.</p>
+
+  <table id="tbl-data-ids">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Code</th>
+        <th>Bytes 2–13</th>
+        <th>Units</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Accelerometer</td>
+        <td><code class="language-plaintext highlighter-rouge">0xACC1</code></td>
+        <td>X (<code class="language-plaintext highlighter-rouge">f32</code>), Y (<code class="language-plaintext highlighter-rouge">f32</code>), Z (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>g</td>
+      </tr>
+      <tr>
+        <td>Gyroscope</td>
+        <td><code class="language-plaintext highlighter-rouge">0x6E50</code></td>
+        <td>X (<code class="language-plaintext highlighter-rouge">f32</code>), Y (<code class="language-plaintext highlighter-rouge">f32</code>), Z (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>°/s</td>
+      </tr>
+      <tr>
+        <td>Magnetometer</td>
+        <td><code class="language-plaintext highlighter-rouge">0x9A61</code></td>
+        <td>X (<code class="language-plaintext highlighter-rouge">f32</code>), Y (<code class="language-plaintext highlighter-rouge">f32</code>), Z (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>mG</td>
+      </tr>
+      <tr>
+        <td>Temperature</td>
+        <td><code class="language-plaintext highlighter-rouge">0x7E70</code></td>
+        <td>Label (8 B ASCII, null-padded), Value (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>°C</td>
+      </tr>
+      <tr>
+        <td>Barometer</td>
+        <td><code class="language-plaintext highlighter-rouge">0xB480</code></td>
+        <td>Temperature (<code class="language-plaintext highlighter-rouge">f32</code>), Pressure (<code class="language-plaintext highlighter-rouge">f32</code>), Altitude (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>°C / hPa / m</td>
+      </tr>
+      <tr>
+        <td>Humidity / AQI</td>
+        <td><code class="language-plaintext highlighter-rouge">0xF0AC</code></td>
+        <td>Temperature (<code class="language-plaintext highlighter-rouge">f32</code>), Humidity (<code class="language-plaintext highlighter-rouge">f32</code>), AQI (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>°C / % / —</td>
+      </tr>
+      <tr>
+        <td>Light</td>
+        <td><code class="language-plaintext highlighter-rouge">0x1A2B</code></td>
+        <td>Label (8 B ASCII, null-padded), Value (<code class="language-plaintext highlighter-rouge">f32</code>)</td>
+        <td>lux</td>
+      </tr>
+      <tr>
+        <td>Device ID</td>
+        <td><code class="language-plaintext highlighter-rouge">0x1D1D</code></td>
+        <td>ID string (12 B ASCII, null-padded)</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>The <strong>Temperature</strong> and <strong>Light</strong> types include an 8-character ASCII label (null-padded to 8 bytes, bytes 2–9) that identifies the specific sensor, followed by the value as an <code class="language-plaintext highlighter-rouge">f32</code> at bytes 10–13.
+The <strong>Device ID</strong> type carries a 12-character null-padded ASCII string identifying the device (e.g. <code class="language-plaintext highlighter-rouge">kiwi#0001</code>), with no numeric value.</p>
+
+  <blockquote class="callout-note">
+    <p><strong>AQI Data</strong>
+Due to the closed-source nature of the <a href="https://github.com/boschsensortec/BSEC-Arduino-library">AQI calculation algorithm (BSEC)</a> provided by Bosch Sensortech, it has not been integrated into the pre-loaded Kiwi firmware.
+AQI data is reported as raw resistance measurement from the gas sensor, heated up to 300°C.</p>
+  </blockquote>
+
+  <blockquote class="callout-tip">
+    <p><strong>Data Types</strong></p>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">u8</code>: Unsigned 8-bits of data (a byte). Also known as <code class="language-plaintext highlighter-rouge">unsigned char</code> or <code class="language-plaintext highlighter-rouge">uint8_t</code> in the C programming language. The Python equivalent is a <code class="language-plaintext highlighter-rouge">byte</code>.</li>
+      <li><code class="language-plaintext highlighter-rouge">u16</code>: Unsigned 16-bits of data (2 bytes). Also known as <code class="language-plaintext highlighter-rouge">unsigned short</code> or <code class="language-plaintext highlighter-rouge">uint16_t</code> in C. Python does not have a direct equivalent of this type. Use the <a href="https://docs.micropython.org/en/latest/library/struct.html"><code class="language-plaintext highlighter-rouge">struct</code></a> module to unpack a <code class="language-plaintext highlighter-rouge">u16</code> to an <code class="language-plaintext highlighter-rouge">int</code>, and vice-versa.</li>
+      <li><code class="language-plaintext highlighter-rouge">u64</code>: Unsigned 64-bits of data (8 bytes). Also known as <code class="language-plaintext highlighter-rouge">unsigned long long</code> or <code class="language-plaintext highlighter-rouge">uint64_t</code> in C. Python does not have a direct equivalent of this type.</li>
+      <li><code class="language-plaintext highlighter-rouge">f32</code>: A 32-bit, IEEE-758 floating point number. Also known as <code class="language-plaintext highlighter-rouge">float</code> in C. <code class="language-plaintext highlighter-rouge">float</code> in Python is usually 64-bits long, but MicroPython usually uses 32-bit floating point numbers by default.</li>
+    </ul>
+  </blockquote>
+
+  <h3 id="integrity-check">Integrity Check</h3>
+
+  <p>The last 2 bytes of every packet carry a <strong>CRC-16/XMODEM</strong> checksum computed over the first 22 bytes.
+Packets with a CRC mismatch should be discarded.</p>
+
+  <blockquote class="callout-note">
+    <p><strong>CRC-16/XMODEM</strong>
+A cyclic redundancy check (CRC) is an error-detecting code commonly used in digital networks and storage devices to detect accidental changes to digital data. 
+Blocks of data entering these systems get a short check value attached, based on the remainder of a polynomial division of their contents. 
+On retrieval, the calculation is repeated and, in the event the check values do not match, corrective action can be taken against data corruption.<span class="cite-ref" data-ref="ref-crc"></span>
+The specific polynomial used in the CRC-16/XMODEM algorithm, also known as the CRC-16 <a href="https://en.wikipedia.org/wiki/ITU-T">CCITT</a> algorithm, is \(x^{16} + x^{12} + x^{5} + 1\), or <code class="language-plaintext highlighter-rouge">0x1021</code>, and the accumulator is initialized to <code class="language-plaintext highlighter-rouge">0x0000</code>.</p>
+  </blockquote>
+
+  <h3 id="custom-data-packets">Custom Data Packets</h3>
+
+  <p>The reference implementation of the Kiwi software transmits data in 24-byte packets.
+If your Kiwi is flying as part of the Kiwi-50 experiment, the following are <strong>recommended</strong> to ensure successful data acquisition:</p>
+  <ul>
+    <li><strong>Broadcast UDP packets on port <code class="language-plaintext highlighter-rouge">8099</code>.</strong></li>
+    <li><strong>Adhere to the 24-byte packet size.</strong></li>
+    <li><strong>Maintain the CRC-16 bytes at the end of the packet.</strong></li>
+    <li><strong>Transmit the ID packet with your unique ID</strong>. No data will be routed until this ID is received (Kiwi-50 experiments). It is recommended to broadcast the ID packet at a regular interval, at most 4 times every minute (15 seconds interval), to ensure the device is identified quickly without lowering data throughput with too many ID packets.</li>
+    <li><strong>Use a custom ID (<code class="language-plaintext highlighter-rouge">u16</code>)</strong>. There are over 60,000 to choose from.</li>
+    <li>Implement a way to track the order of packets. UDP does not guarantee transmission or ordering of packets.</li>
+  </ul>
+
+  <h2 id="rust-on-your-kiwi">Rust on your Kiwi</h2>
+
+  <p>The <a href="https://rust-lang.org/">Rust Programming Language</a> is the primary intended programming language for a Kiwi.
+Rust is a memory-safe language that avoids many pitfalls of traditional system programming languages, such as C and C++, without any performance overhead.
+Rust also allows for powerful patterns, such as the asynchronous programming model (using keywords <code class="language-plaintext highlighter-rouge">async</code> and <code class="language-plaintext highlighter-rouge">await</code>, and an asynchronous executor).
+The asynchronous programming model is especially useful on the Kiwi, which is a resource-constrained embedded system and cannot run a full operating system that would take care of scheduling various tasks (reading multiple sensors, collecting the data, transmitting them over Wi-Fi, while waiting for USB commands for configuration updates, and more). 
+Kiwi leverages the <a href="https://embassy.dev/">embassy</a> framework to achieve this, which supports the Raspberry Pi RP2350B microcontroller very well.
+The pre-loaded firmware is written in Rust, and leverages embassy to implement a cooperative multi-tasking environment.</p>
+
+  <p>However, Rust development is more advanced and would be more difficult to introduce in this manual.
+Source code for the firmware pre-loaded in your Kiwi is available <a href="https://github.com/chickadee-smallsat/kiwi-firmware">here</a>.
+Documentation for the firmware is available on <a href="https://chickadee-smallsat.github.io/kiwi-firmware">GitHub pages</a>.</p>
+
+</section>
+
+
+      <footer class="site-footer">
+        <div class="site-footer__inner">
+          <span class="site-footer-owner">
+            <a href="https://github.com/chickadee-smallsat/kiwi">kiwi</a>
+            is maintained by
+            <a href="mailto:sunip_mukherjee@uml.edu">Sunip K. Mukherjee</a>.
+          </span>
+          <span class="site-footer-contact">
+            Contact us: <a href="mailto:kiwi@uml.edu">kiwi@uml.edu</a>
+          </span>
+          <div class="version-selector" aria-label="Documentation version selector">
+  <label class="version-selector__label" for="version-select">Version</label>
+  <select id="version-select" class="version-selector__select">
+    <option value="" disabled selected>Loading versions...</option>
+  </select>
+</div>
+
+<script>
+(function () {
+  var baseurl = '/kiwi/v0.0.1';
+  var parts = baseurl.split('/').filter(Boolean);
+  var current = parts.length ? parts[parts.length - 1] : 'latest';
+  var docsRoot = parts.length > 1 ? '/' + parts.slice(0, -1).join('/') : (parts.length === 1 ? '/' + parts[0] : '');
+  var versionsUrl = (docsRoot || '') + '/versions.json';
+
+  function targetUrl(version) {
+    var root = docsRoot || '';
+    return root + '/' + version + '/';
+  }
+
+  fetch(versionsUrl)
+    .then(function (res) {
+      return res.ok ? res.json() : [];
+    })
+    .catch(function () {
+      return [];
+    })
+    .then(function (versions) {
+      var select = document.getElementById('version-select');
+      if (!select || !Array.isArray(versions) || !versions.length) {
+        return;
+      }
+
+      select.innerHTML = '';
+      versions.forEach(function (v, i) {
+        var option = document.createElement('option');
+        option.value = v;
+        option.textContent = i === 0 ? v + ' (latest)' : v;
+        option.selected = (v === current);
+        select.appendChild(option);
+      });
+
+      if (!versions.includes(current)) {
+        select.selectedIndex = 0;
+      }
+
+      select.addEventListener('change', function () {
+        window.location.href = targetUrl(select.value) + window.location.hash;
+      });
+    });
+})();
+</script>
+
+          <span class="site-footer-credits">Generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+          <p class="site-footer-disclaimer">&copy; 2026 LoCSST / UMass Lowell. LoCSST / UMass Lowell is not affiliated with any vendors or manufacturers for products linked in this document. Links are provided for reference only.</p>
+        </div>
+      </footer>
+    </main>
+    <aside class="theme-switcher" id="theme-switcher">
+  <button class="theme-switcher__toggle" id="theme-toggle"
+          aria-haspopup="true" aria-expanded="false" aria-controls="theme-panel"
+          aria-label="Color theme">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5
+               0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16
+               c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5
+               S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5
+               S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5
+               S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5
+               S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+    </svg>
+  </button>
+
+  <div class="theme-switcher__panel" id="theme-panel" hidden role="group" aria-label="Select color theme">
+    <p class="theme-switcher__heading">Color theme</p>
+
+    <button class="theme-opt" data-theme="default" aria-pressed="true">
+      <span class="theme-opt__dot" style="background:#0e3247;box-shadow:0 0 0 2px #7fd4f0"></span>
+      Default
+    </button>
+    <button class="theme-opt" data-theme="deuteranopia" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#0d2c52;box-shadow:0 0 0 2px #f5a428"></span>
+      Deuteranopia-friendly
+    </button>
+    <button class="theme-opt" data-theme="high-contrast" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#000;box-shadow:0 0 0 2px #ffff00"></span>
+      High Contrast
+    </button>
+    <button class="theme-opt" data-theme="monochrome" aria-pressed="false">
+      <span class="theme-opt__dot" style="background:#1e1e1e;box-shadow:0 0 0 2px #d0d0d0"></span>
+      Monochrome
+    </button>
+  </div>
+
+  <div aria-live="polite" aria-atomic="true" class="theme-switcher__announce" id="theme-announce"></div>
+</aside>
+
+<script>
+(function () {
+  var PREF_KEY = 'kiwi-color-theme';
+  var labels = {
+    'default': 'Default',
+    'deuteranopia': 'Deuteranopia-friendly',
+    'high-contrast': 'High Contrast',
+    'monochrome': 'Monochrome'
+  };
+
+  var root    = document.documentElement;
+  var toggle  = document.getElementById('theme-toggle');
+  var panel   = document.getElementById('theme-panel');
+  var opts    = document.querySelectorAll('.theme-opt');
+  var announce = document.getElementById('theme-announce');
+
+  function applyTheme(theme, shouldAnnounce) {
+    if (theme && theme !== 'default') {
+      root.dataset.theme = theme;
+    } else {
+      delete root.dataset.theme;
+      theme = 'default';
+    }
+    opts.forEach(function (btn) {
+      btn.setAttribute('aria-pressed', String(btn.dataset.theme === theme));
+    });
+    if (shouldAnnounce && announce) {
+      announce.textContent = '';
+      // Force re-announcement with a slight delay
+      setTimeout(function () {
+        announce.textContent = 'Color theme changed to ' + (labels[theme] || theme);
+      }, 50);
+    }
+    try { localStorage.setItem(PREF_KEY, theme); } catch (e) {}
+    document.dispatchEvent(new CustomEvent('kiwi-theme', { detail: theme }));
+  }
+
+  // Sync button states with whatever theme was applied by the anti-FOUC script
+  var saved;
+  try { saved = localStorage.getItem(PREF_KEY) || 'default'; } catch (e) { saved = 'default'; }
+  applyTheme(saved, false);
+
+  // Toggle panel open/close
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var opening = panel.hidden;
+    panel.hidden = !opening;
+    toggle.setAttribute('aria-expanded', String(opening));
+    if (opening) {
+      // Focus first option when opening
+      var first = panel.querySelector('.theme-opt');
+      if (first) first.focus();
+    }
+  });
+
+  // Option selection
+  opts.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applyTheme(btn.dataset.theme, true);
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    });
+  });
+
+  // Close on outside click
+  document.addEventListener('click', function (e) {
+    var sw = document.getElementById('theme-switcher');
+    if (sw && !sw.contains(e.target)) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !panel.hidden) {
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
+  });
+})();
+</script>
+
+  </body>
+</html>

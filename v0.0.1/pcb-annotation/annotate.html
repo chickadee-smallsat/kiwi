@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kiwi PCB Annotator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: #16213e;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #0f3460;
+    flex-shrink: 0;
+  }
+
+  header h1 { font-size: 1.1rem; font-weight: 600; color: #e94560; }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  button {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+
+  .btn-primary { background: #e94560; color: #fff; }
+  .btn-primary:hover { background: #c73652; }
+  .btn-secondary { background: #0f3460; color: #e0e0e0; border: 1px solid #1a5276; }
+  .btn-secondary:hover { background: #1a5276; }
+  .btn-danger { background: #7b241c; color: #fdd; border: 1px solid #a93226; }
+  .btn-danger:hover { background: #a93226; }
+  .btn-export { background: #1e8449; color: #fff; }
+  .btn-export:hover { background: #27ae60; }
+
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .canvas-area {
+    flex: 1;
+    overflow: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .boards-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .board-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .board-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .canvas-wrapper {
+    position: relative;
+    cursor: crosshair;
+    border: 2px solid #0f3460;
+    border-radius: 4px;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .canvas-wrapper canvas {
+    display: block;
+  }
+
+  /* SVG overlay sits on top of the image canvas */
+  .canvas-wrapper svg.overlay {
+    position: absolute;
+    top: 0; left: 0;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .canvas-wrapper svg.overlay rect.annotation {
+    pointer-events: all;
+    cursor: pointer;
+  }
+
+  .canvas-wrapper svg.overlay rect.annotation:hover {
+    stroke-width: 2.5;
+    filter: drop-shadow(0 0 4px rgba(233,69,96,0.7));
+  }
+
+  .canvas-wrapper svg.overlay rect.draw-preview {
+    pointer-events: none;
+    fill: rgba(233,69,96,0.15);
+    stroke: #e94560;
+    stroke-width: 1.5;
+    stroke-dasharray: 6 3;
+  }
+
+  .canvas-wrapper svg.overlay text.annotation-label {
+    pointer-events: all;
+    cursor: default;
+  }
+  body.ctrl-held .canvas-wrapper svg.overlay text.annotation-label {
+    cursor: grab;
+  }
+  body.ctrl-held.label-dragging .canvas-wrapper svg.overlay text.annotation-label {
+    cursor: grabbing;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    background: #16213e;
+    border-left: 1px solid #0f3460;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .sidebar-tabs {
+    display: flex;
+    border-bottom: 1px solid #0f3460;
+  }
+
+  .sidebar-tab {
+    flex: 1;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #888;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s;
+  }
+
+  .sidebar-tab.active {
+    color: #e94560;
+    border-bottom-color: #e94560;
+  }
+
+  .sidebar-pane {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: none;
+  }
+
+  .sidebar-pane.active { display: block; }
+
+  /* Form */
+  .form-group { margin-bottom: 12px; }
+  .form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #aaa;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 7px 9px;
+    background: #0f1b2d;
+    border: 1px solid #1a4a6e;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: #e94560; }
+  .form-group textarea { resize: vertical; min-height: 64px; }
+
+  .form-hint {
+    font-size: 0.72rem;
+    color: #666;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  /* Annotation list */
+  .annotation-list { display: flex; flex-direction: column; gap: 6px; }
+
+  .annotation-card {
+    background: #0f1b2d;
+    border: 1px solid #1a4a6e;
+    border-radius: 4px;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    position: relative;
+  }
+
+  .annotation-card:hover { border-color: #e94560; }
+  .annotation-card.selected { border-color: #e94560; background: #1a1030; }
+
+  .annotation-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .annotation-card__desig {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #e94560;
+  }
+
+  .annotation-card__board {
+    font-size: 0.7rem;
+    color: #666;
+    background: #0f3460;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .annotation-card__part {
+    font-size: 0.78rem;
+    color: #ccc;
+    margin-top: 2px;
+  }
+
+  .annotation-card__desc {
+    font-size: 0.73rem;
+    color: #888;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .annotation-card__del {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    line-height: 1;
+  }
+  .annotation-card__del:hover { color: #e94560; background: rgba(233,69,96,0.1); }
+
+  .empty-state {
+    color: #555;
+    font-size: 0.82rem;
+    text-align: center;
+    padding: 24px 0;
+    line-height: 1.7;
+  }
+
+  /* Status bar */
+  #status-bar {
+    background: #16213e;
+    border-top: 1px solid #0f3460;
+    padding: 4px 16px;
+    font-size: 0.72rem;
+    color: #666;
+    flex-shrink: 0;
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal {
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 8px;
+    padding: 20px;
+    width: 340px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal h2 { font-size: 1rem; margin-bottom: 14px; color: #e94560; }
+
+  .modal .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    justify-content: flex-end;
+  }
+
+  /* Scale controls */
+  .scale-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: #888;
+  }
+  .scale-row input[type=range] {
+    flex: 1;
+    accent-color: #e94560;
+  }
+  #scale-label { min-width: 36px; text-align: right; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Kiwi PCB Annotator</h1>
+  <div class="toolbar">
+    <div class="scale-row">
+      <span>Zoom:</span>
+      <input type="range" id="scale-slider" min="0.3" max="2" step="0.05" value="1">
+      <span id="scale-label">100%</span>
+    </div>
+    <button class="btn-secondary" onclick="loadImages()">&#8635; Reload Images</button>
+    <button class="btn-secondary" onclick="loadAnnotations()">&#128194; Load JSON</button>
+    <button class="btn-secondary" onclick="saveAnnotations()">&#128190; Save JSON</button>
+    <button class="btn-export" onclick="exportViewer('embed')">&#9654; Export Viewer</button>
+    <button class="btn-export" style="background:#156e3a" onclick="exportViewer('linked')">&#128279; Export (linked)</button>
+  </div>
+</header>
+
+<div class="main">
+  <div class="canvas-area">
+    <div class="boards-row" id="boards-row">
+      <!-- Front board -->
+      <div class="board-panel">
+        <div class="board-label">Front</div>
+        <div class="canvas-wrapper" id="wrapper-front">
+          <canvas id="canvas-front"></canvas>
+          <svg class="overlay" id="svg-front"></svg>
+        </div>
+      </div>
+      <!-- Back board -->
+      <div class="board-panel">
+        <div class="board-label">Back</div>
+        <div class="canvas-wrapper" id="wrapper-back">
+          <canvas id="canvas-back"></canvas>
+          <svg class="overlay" id="svg-back"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" onclick="showTab('tab-edit',this)">Edit</button>
+      <button class="sidebar-tab" onclick="showTab('tab-list',this)">List</button>
+    </div>
+
+    <div class="sidebar-pane active" id="tab-edit">
+      <p class="form-hint" id="edit-hint">Draw a rectangle on either PCB image to create an annotation.</p>
+      <div id="edit-form" style="display:none">
+        <div class="form-group">
+          <label>Part Designation</label>
+          <input type="text" id="f-desig" placeholder="e.g. U1, R4, C12">
+        </div>
+        <div class="form-group">
+          <label>Part Number</label>
+          <input type="text" id="f-partnum" placeholder="e.g. STM32F405RGT6">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="f-desc" placeholder="Brief description of the component…"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn-primary" onclick="saveCurrentAnnotation()">Save</button>
+          <button class="btn-danger" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-pane" id="tab-list">
+      <div class="annotation-list" id="annotation-list">
+        <p class="empty-state">No annotations yet.<br>Draw rectangles on the PCB to add components.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="status-bar">Ready — draw a rectangle on a PCB image to annotate a component.</div>
+
+<!-- Edit existing annotation modal -->
+<div class="modal-backdrop" id="edit-modal">
+  <div class="modal">
+    <h2>Edit Annotation</h2>
+    <div class="form-group">
+      <label>Part Designation</label>
+      <input type="text" id="m-desig" placeholder="e.g. U1, R4, C12">
+    </div>
+    <div class="form-group">
+      <label>Part Number</label>
+      <input type="text" id="m-partnum" placeholder="e.g. STM32F405RGT6">
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="m-desc" placeholder="Brief description…"></textarea>
+    </div>
+    <div class="actions">
+      <button class="btn-danger" onclick="deleteModalAnnotation()">Delete</button>
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveModalAnnotation()">Save</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="file-input-images" accept="image/*" multiple style="display:none">
+<input type="file" id="file-input-json" accept=".json" style="display:none">
+
+<script>
+// ─── State ──────────────────────────────────────────────────────────────────
+
+const SIDES = ['front', 'back'];
+const images = { front: null, back: null };
+const imageSrcs = { front: null, back: null };  // original filename/path for linked export
+let annotations = [];     // [{id, side, x, y, w, h, designation, partNumber, description}]
+let nextId = 1;
+let scale = 1;
+
+// Drawing state
+let drawing = false;
+let drawSide = null;
+let drawStart = { x: 0, y: 0 };
+let drawCurrent = { x: 0, y: 0 };
+let pendingAnnotation = null;   // annotation being created (unsaved)
+let editingId = null;           // id of annotation open in modal
+let draggingLabel = null;       // {id, side, startMouseX, startMouseY, startLabelSVGX, startLabelSVGY}
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+
+function init() {
+  // Try to auto-load images — prefer ?front= / ?back= query params, fall back to defaults
+  const params = new URLSearchParams(window.location.search);
+  loadImageFromSrc('front', params.get('front') || 'kiwi_front.png');
+  loadImageFromSrc('back',  params.get('back')  || 'kiwi_back.png');
+
+  // Scale slider
+  const slider = document.getElementById('scale-slider');
+  slider.addEventListener('input', () => {
+    scale = parseFloat(slider.value);
+    document.getElementById('scale-label').textContent = Math.round(scale * 100) + '%';
+    rerenderAll();
+  });
+
+  // Global label drag handlers
+  document.addEventListener('mousemove', onLabelDragMove);
+  document.addEventListener('mouseup', onLabelDragEnd);
+
+  // Ctrl key tracking for grab cursor hint
+  document.addEventListener('keydown', e => { if (e.key === 'Control') document.body.classList.add('ctrl-held'); });
+  document.addEventListener('keyup',   e => { if (e.key === 'Control') document.body.classList.remove('ctrl-held'); });
+  window.addEventListener('blur', () => document.body.classList.remove('ctrl-held', 'label-dragging'));
+}
+
+// Compute scale so both boards fit side-by-side in the visible canvas area
+function computeFitScale() {
+  const canvasArea = document.querySelector('.canvas-area');
+  const availW = canvasArea.clientWidth - 64;  // padding + gap between boards
+  const perBoardW = availW / 2;
+  const maxNatW = Math.max(
+    images.front ? images.front.naturalWidth  : 1,
+    images.back  ? images.back.naturalWidth   : 1
+  );
+  const availH = window.innerHeight - 80;  // minus header
+  const maxNatH = Math.max(
+    images.front ? images.front.naturalHeight : 1,
+    images.back  ? images.back.naturalHeight  : 1
+  );
+  return Math.min(perBoardW / maxNatW, availH / maxNatH, 1);
+}
+
+function applyFitScale() {
+  const fit = computeFitScale();
+  // Round to 2 decimal places and clamp to slider range [0.05, 2]
+  scale = Math.max(0.05, Math.min(2, Math.round(fit * 100) / 100));
+  const slider = document.getElementById('scale-slider');
+  // Widen the min if needed
+  if (scale < parseFloat(slider.min)) slider.min = scale;
+  slider.value = scale;
+  document.getElementById('scale-label').textContent = Math.round(scale * 100) + '%';
+}
+
+function loadImageFromSrc(side, src) {
+  const img = new Image();
+  img.onload = () => {
+    images[side] = img;
+    imageSrcs[side] = src;  // remember relative path
+    // Recompute fit scale once we have at least one image
+    applyFitScale();
+    rerenderAll();
+    setStatus(`Loaded ${src}`);
+  };
+  img.onerror = () => {
+    setStatus(`Could not auto-load ${src} — use Reload Images to pick manually`);
+  };
+  img.src = src;
+}
+
+// ─── Rendering ───────────────────────────────────────────────────────────────
+
+function rerenderAll() {
+  SIDES.forEach(s => rerenderSide(s));
+}
+
+function rerenderSide(side) {
+  const canvas = document.getElementById('canvas-' + side);
+  const svg = document.getElementById('svg-' + side);
+  const wrapper = document.getElementById('wrapper-' + side);
+  const img = images[side];
+
+  if (!img) {
+    canvas.width = 480;
+    canvas.height = 320;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#0f1b2d';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#333';
+    ctx.font = '14px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('No image — click Reload Images', canvas.width / 2, canvas.height / 2);
+  } else {
+    const w = Math.round(img.naturalWidth * scale);
+    const h = Math.round(img.naturalHeight * scale);
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
+  }
+
+  // Resize SVG overlay to match canvas
+  svg.setAttribute('width', canvas.width);
+  svg.setAttribute('height', canvas.height);
+  svg.setAttribute('viewBox', `0 0 ${canvas.width} ${canvas.height}`);
+
+  renderAnnotationsSVG(side);
+  setupCanvasEvents(side);
+}
+
+function renderAnnotationsSVG(side) {
+  const svg = document.getElementById('svg-' + side);
+  // Remove existing annotation rects (keep draw-preview if any)
+  [...svg.querySelectorAll('rect.annotation, text.annotation-label')].forEach(el => el.remove());
+
+  const sideAnnotations = annotations.filter(a => a.side === side);
+  sideAnnotations.forEach(a => {
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    const sx = a.x * scale, sy = a.y * scale, sw = a.w * scale, sh = a.h * scale;
+    rect.setAttribute('x', sx);
+    rect.setAttribute('y', sy);
+    rect.setAttribute('width', sw);
+    rect.setAttribute('height', sh);
+    rect.setAttribute('fill', 'rgba(233,69,96,0.12)');
+    rect.setAttribute('stroke', '#e94560');
+    rect.setAttribute('stroke-width', '1.5');
+    rect.classList.add('annotation');
+    rect.dataset.id = a.id;
+    rect.addEventListener('click', e => { e.stopPropagation(); openModal(a.id); });
+
+    // Label
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    const lx = (a.labelX !== undefined) ? a.labelX * scale : sx + 3;
+    const ly = (a.labelY !== undefined) ? a.labelY * scale : sy - 3;
+    text.setAttribute('x', lx);
+    text.setAttribute('y', ly);
+    text.setAttribute('fill', '#e94560');
+    text.setAttribute('font-size', Math.max(9, 11 * scale));
+    text.setAttribute('font-family', '"Space Grotesk", system-ui, sans-serif');
+    text.setAttribute('font-weight', '700');
+    text.classList.add('annotation-label');
+    text.dataset.id = a.id;
+    text.textContent = a.designation || '?';
+    text.addEventListener('click', e => { e.stopPropagation(); openModal(a.id); });
+    text.addEventListener('mousedown', e => {
+      if (!e.ctrlKey) return;
+      e.stopPropagation();
+      e.preventDefault();
+      startLabelDrag(e, a, side);
+    });
+
+    svg.appendChild(rect);
+    svg.appendChild(text);
+  });
+}
+
+// ─── Canvas mouse events ─────────────────────────────────────────────────────
+
+// Track abort controllers per side so we can cleanly remove old listeners
+const _canvasAborts = {};
+
+function setupCanvasEvents(side) {
+  // Cancel previous listeners for this side
+  if (_canvasAborts[side]) _canvasAborts[side].abort();
+  const ac = new AbortController();
+  _canvasAborts[side] = ac;
+  const { signal } = ac;
+
+  const w = document.getElementById('wrapper-' + side);
+
+  w.addEventListener('mousedown', e => onMouseDown(e, side), { signal });
+  w.addEventListener('mousemove', e => onMouseMove(e, side), { signal });
+  w.addEventListener('mouseup',   e => onMouseUp(e, side),   { signal });
+  w.addEventListener('mouseleave', e => { if (drawing && drawSide === side) cancelDrawing(side); }, { signal });
+}
+
+function getPos(e, side) {
+  const wrapper = document.getElementById('wrapper-' + side);
+  const rect = wrapper.getBoundingClientRect();
+  return {
+    x: (e.clientX - rect.left) / scale,
+    y: (e.clientY - rect.top) / scale
+  };
+}
+
+function onMouseDown(e, side) {
+  if (e.button !== 0) return;
+  // Don't start drawing if clicking an annotation rect or label
+  if (e.target.classList.contains('annotation')) return;
+  if (e.target.classList.contains('annotation-label')) return;
+  drawing = true;
+  drawSide = side;
+  drawStart = getPos(e, side);
+  drawCurrent = { ...drawStart };
+}
+
+function onMouseMove(e, side) {
+  if (!drawing || drawSide !== side) return;
+  drawCurrent = getPos(e, side);
+  renderPreview(side);
+}
+
+function onMouseUp(e, side) {
+  if (!drawing || drawSide !== side) return;
+  drawing = false;
+  drawCurrent = getPos(e, side);
+
+  const svg = document.getElementById('svg-' + side);
+  // Remove preview
+  const preview = svg.querySelector('.draw-preview');
+  if (preview) preview.remove();
+
+  const x = Math.min(drawStart.x, drawCurrent.x);
+  const y = Math.min(drawStart.y, drawCurrent.y);
+  const w = Math.abs(drawCurrent.x - drawStart.x);
+  const h = Math.abs(drawCurrent.y - drawStart.y);
+
+  if (w < 8 || h < 8) { drawSide = null; return; }
+
+  // Create pending annotation
+  pendingAnnotation = { id: nextId++, side, x, y, w, h, designation: '', partNumber: '', description: '' };
+
+  // Show edit form in sidebar
+  showTab('tab-edit', document.querySelector('.sidebar-tab'));
+  document.getElementById('edit-hint').style.display = 'none';
+  document.getElementById('edit-form').style.display = 'block';
+  document.getElementById('f-desig').value = '';
+  document.getElementById('f-partnum').value = '';
+  document.getElementById('f-desc').value = '';
+  document.getElementById('f-desig').focus();
+
+  // Render a pending rect
+  renderPendingRect(side);
+  setStatus(`Rectangle drawn on ${side} — fill in the annotation details and click Save.`);
+  drawSide = null;
+}
+
+function renderPreview(side) {
+  const svg = document.getElementById('svg-' + side);
+  let preview = svg.querySelector('.draw-preview');
+  if (!preview) {
+    preview = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    preview.classList.add('draw-preview');
+    svg.appendChild(preview);
+  }
+  const x = Math.min(drawStart.x, drawCurrent.x) * scale;
+  const y = Math.min(drawStart.y, drawCurrent.y) * scale;
+  const w = Math.abs(drawCurrent.x - drawStart.x) * scale;
+  const h = Math.abs(drawCurrent.y - drawStart.y) * scale;
+  preview.setAttribute('x', x);
+  preview.setAttribute('y', y);
+  preview.setAttribute('width', w);
+  preview.setAttribute('height', h);
+}
+
+function renderPendingRect(side) {
+  const svg = document.getElementById('svg-' + side);
+  let pending = svg.querySelector('.pending-rect');
+  if (!pending) {
+    pending = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    pending.classList.add('pending-rect');
+    pending.setAttribute('fill', 'rgba(255,200,0,0.15)');
+    pending.setAttribute('stroke', '#f1c40f');
+    pending.setAttribute('stroke-width', '1.5');
+    pending.setAttribute('stroke-dasharray', '5 3');
+    pending.setAttribute('pointer-events', 'none');
+    svg.appendChild(pending);
+  }
+  const a = pendingAnnotation;
+  pending.setAttribute('x', a.x * scale);
+  pending.setAttribute('y', a.y * scale);
+  pending.setAttribute('width', a.w * scale);
+  pending.setAttribute('height', a.h * scale);
+}
+
+function cancelDrawing(side) {
+  drawing = false;
+  const svg = document.getElementById('svg-' + side);
+  const preview = svg.querySelector('.draw-preview');
+  if (preview) preview.remove();
+}
+
+// ─── Label drag ──────────────────────────────────────────────────────────────
+
+function startLabelDrag(e, a, side) {
+  const sx = a.x * scale, sy = a.y * scale;
+  const startLabelSVGX = (a.labelX !== undefined) ? a.labelX * scale : sx + 3;
+  const startLabelSVGY = (a.labelY !== undefined) ? a.labelY * scale : sy - 3;
+  draggingLabel = {
+    id: a.id,
+    side,
+    startMouseX: e.clientX,
+    startMouseY: e.clientY,
+    startLabelSVGX,
+    startLabelSVGY,
+  };
+  document.body.classList.add('label-dragging');
+}
+
+function onLabelDragMove(e) {
+  if (!draggingLabel) return;
+  const dx = e.clientX - draggingLabel.startMouseX;
+  const dy = e.clientY - draggingLabel.startMouseY;
+  const newX = draggingLabel.startLabelSVGX + dx;
+  const newY = draggingLabel.startLabelSVGY + dy;
+  const svg = document.getElementById('svg-' + draggingLabel.side);
+  const textEl = svg.querySelector(`text.annotation-label[data-id="${draggingLabel.id}"]`);
+  if (textEl) {
+    textEl.setAttribute('x', newX);
+    textEl.setAttribute('y', newY);
+  }
+}
+
+function onLabelDragEnd(e) {
+  if (!draggingLabel) return;
+  const dx = e.clientX - draggingLabel.startMouseX;
+  const dy = e.clientY - draggingLabel.startMouseY;
+  const newX = draggingLabel.startLabelSVGX + dx;
+  const newY = draggingLabel.startLabelSVGY + dy;
+  const a = annotations.find(x => x.id === draggingLabel.id);
+  if (a) {
+    a.labelX = newX / scale;
+    a.labelY = newY / scale;
+    setStatus(`Label for "${a.designation || a.id}" repositioned — save JSON to persist.`);
+  }
+  document.body.classList.remove('label-dragging');
+  draggingLabel = null;
+}
+
+// ─── Annotation CRUD ─────────────────────────────────────────────────────────
+
+function saveCurrentAnnotation() {
+  if (!pendingAnnotation) return;
+  pendingAnnotation.designation = document.getElementById('f-desig').value.trim();
+  pendingAnnotation.partNumber = document.getElementById('f-partnum').value.trim();
+  pendingAnnotation.description = document.getElementById('f-desc').value.trim();
+
+  annotations.push(pendingAnnotation);
+  const side = pendingAnnotation.side;
+
+  // Remove pending visual
+  const svg = document.getElementById('svg-' + side);
+  const pending = svg.querySelector('.pending-rect');
+  if (pending) pending.remove();
+
+  pendingAnnotation = null;
+  document.getElementById('edit-form').style.display = 'none';
+  document.getElementById('edit-hint').style.display = '';
+
+  renderAnnotationsSVG(side);
+  renderList();
+  setStatus(`Annotation saved — ${annotations.length} total.`);
+}
+
+function cancelEdit() {
+  if (!pendingAnnotation) return;
+  const side = pendingAnnotation.side;
+  const svg = document.getElementById('svg-' + side);
+  const pending = svg.querySelector('.pending-rect');
+  if (pending) pending.remove();
+  pendingAnnotation = null;
+  document.getElementById('edit-form').style.display = 'none';
+  document.getElementById('edit-hint').style.display = '';
+  setStatus('Annotation cancelled.');
+}
+
+function openModal(id) {
+  const a = annotations.find(x => x.id === id);
+  if (!a) return;
+  editingId = id;
+  document.getElementById('m-desig').value = a.designation;
+  document.getElementById('m-partnum').value = a.partNumber;
+  document.getElementById('m-desc').value = a.description;
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+  editingId = null;
+}
+
+function saveModalAnnotation() {
+  const a = annotations.find(x => x.id === editingId);
+  if (!a) return;
+  a.designation = document.getElementById('m-desig').value.trim();
+  a.partNumber = document.getElementById('m-partnum').value.trim();
+  a.description = document.getElementById('m-desc').value.trim();
+  closeModal();
+  rerenderAll();
+  renderList();
+  setStatus('Annotation updated.');
+}
+
+function deleteModalAnnotation() {
+  const idx = annotations.findIndex(x => x.id === editingId);
+  if (idx === -1) return;
+  const side = annotations[idx].side;
+  annotations.splice(idx, 1);
+  closeModal();
+  renderAnnotationsSVG(side);
+  renderList();
+  setStatus('Annotation deleted.');
+}
+
+function deleteAnnotation(id) {
+  const idx = annotations.findIndex(x => x.id === id);
+  if (idx === -1) return;
+  const side = annotations[idx].side;
+  annotations.splice(idx, 1);
+  renderAnnotationsSVG(side);
+  renderList();
+  setStatus('Annotation deleted.');
+}
+
+// ─── List rendering ──────────────────────────────────────────────────────────
+
+function renderList() {
+  const container = document.getElementById('annotation-list');
+  if (annotations.length === 0) {
+    container.innerHTML = '<p class="empty-state">No annotations yet.<br>Draw rectangles on the PCB to add components.</p>';
+    return;
+  }
+  container.innerHTML = '';
+  [...annotations].sort((a, b) => (a.designation || '').localeCompare(b.designation || '')).forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'annotation-card';
+    card.dataset.id = a.id;
+    card.innerHTML = `
+      <div class="annotation-card__header">
+        <span class="annotation-card__desig">${esc(a.designation || '(unnamed)')}</span>
+        <span class="annotation-card__board">${a.side}</span>
+      </div>
+      <div class="annotation-card__part">${esc(a.partNumber || '—')}</div>
+      <div class="annotation-card__desc">${esc(a.description || '')}</div>
+      <button class="annotation-card__del" title="Delete" onclick="event.stopPropagation();deleteAnnotation(${a.id})">✕</button>
+    `;
+    card.addEventListener('click', () => openModal(a.id));
+    container.appendChild(card);
+  });
+}
+
+// ─── Tab switching ────────────────────────────────────────────────────────────
+
+function showTab(id, btn) {
+  document.querySelectorAll('.sidebar-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // Find the correct tab button
+  document.querySelectorAll('.sidebar-tab').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(id)) b.classList.add('active');
+  });
+}
+
+// ─── Save / Load JSON ─────────────────────────────────────────────────────────
+
+function saveAnnotations() {
+  const data = JSON.stringify({ annotations }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'kiwi-annotations.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  setStatus('Annotations saved to kiwi-annotations.json');
+}
+
+function loadAnnotations() {
+  const input = document.getElementById('file-input-json');
+  input.onchange = () => {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        annotations = data.annotations || [];
+        nextId = annotations.reduce((m, a) => Math.max(m, a.id + 1), 1);
+        rerenderAll();
+        renderList();
+        setStatus(`Loaded ${annotations.length} annotations from ${file.name}`);
+      } catch {
+        alert('Invalid JSON file.');
+      }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  };
+  input.click();
+}
+
+function loadImages() {
+  const input = document.getElementById('file-input-images');
+  input.multiple = true;
+  input.onchange = () => {
+    [...input.files].forEach(file => {
+      const side = file.name.toLowerCase().includes('back') ? 'back' : 'front';
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          images[side] = img;
+          imageSrcs[side] = file.name;  // remember filename for linked export
+          applyFitScale();
+          rerenderAll();
+          setStatus(`Loaded ${file.name} as ${side}`);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+    input.value = '';
+  };
+  input.click();
+}
+
+// ─── Export viewer ────────────────────────────────────────────────────────────
+
+function exportViewer(imageMode) {
+  if (!images.front && !images.back) {
+    alert('No images loaded — cannot export.');
+    return;
+  }
+
+  if (imageMode === 'linked') {
+    const missing = SIDES.filter(s => images[s] && !imageSrcs[s]);
+    if (missing.length) {
+      alert('Cannot use linked mode — no filename is known for: ' + missing.join(', ') + '.\nUse "Reload Images" to load files from disk.');
+      return;
+    }
+  }
+
+  // Convert images to data URLs at natural resolution
+  function imgToDataURL(img) {
+    if (!img) return null;
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    c.getContext('2d').drawImage(img, 0, 0);
+    return c.toDataURL('image/png');
+  }
+
+  const frontURL = imageMode === 'linked' ? 'null' : (images.front ? JSON.stringify(imgToDataURL(images.front)) : 'null');
+  const backURL  = imageMode === 'linked' ? 'null' : (images.back  ? JSON.stringify(imgToDataURL(images.back))  : 'null');
+  // For linked mode, store the fallback filename so the viewer works without query params too
+  const frontFallback = imageMode === 'linked' ? JSON.stringify(imageSrcs.front || '') : 'null';
+  const backFallback  = imageMode === 'linked' ? JSON.stringify(imageSrcs.back  || '') : 'null';
+  const frontW = images.front ? images.front.naturalWidth : 0;
+  const frontH = images.front ? images.front.naturalHeight : 0;
+  const backW = images.back ? images.back.naturalWidth : 0;
+  const backH = images.back ? images.back.naturalHeight : 0;
+
+  const annotationsJSON = JSON.stringify(annotations);
+  const exportFilename = imageMode === 'linked' ? 'kiwi-pcb-viewer-linked.html' : 'kiwi-pcb-viewer.html';
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kiwi PCB Interactive Viewer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Space Grotesk", system-ui, -apple-system, sans-serif; background: #1a1a2e; color: #e0e0e0; }
+  .boards-row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; justify-content: center; }
+  .board-panel { display: flex; flex-direction: column; gap: 6px; flex: 1 1 2in; min-width: 2in; }
+  .board-label { font-size: 0.75rem; font-weight: 700; color: #d8d8d8; text-transform: uppercase; letter-spacing: 0.08em; }
+  .board-img-wrap { position: relative; display: block; }
+  .board-img-wrap img { display: block; width: 100%; height: auto; border: 2px solid #0f3460; border-radius: 4px; }
+  .anno-region {
+    position: absolute;
+    cursor: pointer;
+    border: 1.5px solid #e94560;
+    background: rgba(233,69,96,0.08);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .anno-region:hover {
+    background: rgba(233,69,96,0.25);
+    border-color: #f97;
+    z-index: 5;
+  }
+  .anno-region:hover .anno-label { opacity: 1; }
+  .anno-region.is-highlighted {
+    background: rgba(255, 238, 0, 0.45);
+    border-color: #fff36a;
+    border-width: 3px;
+    border-style: solid;
+    z-index: 6;
+    animation: pcb-highlight-bloom 1.7s cubic-bezier(0.2, 0.75, 0.2, 1) forwards;
+  }
+  .anno-region.is-highlighted .anno-label { opacity: 1; }
+  @keyframes pcb-highlight-bloom {
+    0% {
+      transform: scale(1);
+      box-shadow:
+        0 0 0 2px rgba(255, 238, 0, 0.95),
+        0 0 10px rgba(255, 238, 0, 0.85),
+        0 0 24px rgba(255, 214, 0, 0.55);
+      filter: brightness(1.25) saturate(1.2);
+    }
+    38% {
+      transform: scale(1.02);
+      box-shadow:
+        0 0 0 4px rgba(255, 238, 0, 0.75),
+        0 0 20px rgba(255, 234, 0, 0.75),
+        0 0 42px rgba(255, 188, 0, 0.55);
+      filter: brightness(1.5) saturate(1.35);
+    }
+    72% {
+      transform: scale(1.01);
+      box-shadow:
+        0 0 0 3px rgba(255, 238, 0, 0.55),
+        0 0 16px rgba(255, 238, 0, 0.45),
+        0 0 30px rgba(255, 188, 0, 0.25);
+      filter: brightness(1.25) saturate(1.15);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow:
+        0 0 0 2px rgba(255, 238, 0, 0),
+        0 0 8px rgba(255, 238, 0, 0),
+        0 0 18px rgba(255, 188, 0, 0);
+      filter: brightness(1) saturate(1);
+    }
+  }
+  .anno-label {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: #e94560;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.15s;
+  }
+  /* Persistent popup */
+  #pcb-popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    background: #16213e;
+    border: 1px solid #e94560;
+    border-radius: 6px;
+    padding: 10px 14px;
+    max-width: 300px;
+    pointer-events: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  #pcb-popup .pp-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #pcb-popup .pp-close { background: none; border: none; color: #c0c0c0; font-size: 1rem; cursor: pointer; padding: 0; line-height: 1; flex-shrink: 0; }
+  #pcb-popup .pp-close:hover { color: #e94560; }
+  #pcb-popup .pp-desig { font-size: 1rem; font-weight: 700; color: #e94560; }
+  #pcb-popup .pp-partnum { font-size: 0.8rem; color: #e4e4e4; margin-top: 3px; }
+  #pcb-popup .pp-partnum a { color: #7ec8e3; }
+  #pcb-popup .pp-desc { font-size: 0.78rem; color: #d8d8d8; margin-top: 5px; line-height: 1.5; word-break: break-word; }
+  #pcb-popup .pp-desc a { color: #7ec8e3; }
+  #pcb-popup .pp-board { font-size: 0.7rem; color: #aaa; margin-top: 6px; }
+  /* Parts table */
+  .parts-section { padding: 0 16px 24px; }
+  .parts-section details { border: 1px solid #0f3460; border-radius: 6px; }
+  .parts-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  .parts-section summary {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #d8d8d8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    background: #16213e;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .parts-section summary::-webkit-details-marker { display: none; }
+  .parts-section summary::before { content: '▼'; font-size: 0.65rem; color: #e94560; transition: transform 0.2s; }
+  .parts-section details:not([open]) summary::before { transform: rotate(-90deg); }
+  .parts-section summary span.count { font-weight: 400; color: #aaa; font-size: 0.78rem; text-transform: none; letter-spacing: 0; }
+  .parts-table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 0.8rem; background: #0f1b2d; border-radius: 0 0 5px 5px; overflow: hidden; }
+  .parts-table th {
+    text-align: left;
+    padding: 7px 12px;
+    color: #c8c8c8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid #1a4a6e;
+    background: #111d35;
+  }
+  .parts-table td { padding: 7px 12px; border-bottom: 1px solid #162035; vertical-align: top; }
+  .parts-table tr:last-child td { border-bottom: none; }
+  .parts-table tr:hover td { background: #141e33; }
+  .parts-table .td-desig { font-weight: 700; color: #e94560; white-space: nowrap; }
+  .parts-table .td-board { color: #999; font-size: 0.72rem; white-space: nowrap; }
+  .parts-table .td-partnum { color: #e4e4e4; }
+  .parts-table .td-partnum a { color: #7ec8e3; }
+  .parts-table .td-desc { color: #d0d0d0; line-height: 1.5; }
+  .parts-table .td-desc a { color: #7ec8e3; }
+  .pp-desc code, .td-desc code, .td-partnum code {
+    font-family: ui-monospace, 'Cascadia Code', Menlo, monospace;
+    font-size: 0.875em; background: rgba(255,255,255,0.1);
+    padding: 0.1em 0.35em; border-radius: 3px; color: #7ec8e3;
+  }
+  /* Boards section */
+  .boards-section { padding: 16px 16px 0; }
+  .boards-section details { border: 1px solid #0f3460; border-radius: 6px; margin-bottom: 12px; }
+  .boards-section summary {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #d8d8d8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    background: #16213e;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .boards-section summary::-webkit-details-marker { display: none; }
+  .boards-section summary::before { content: '▼'; font-size: 0.65rem; color: #e94560; transition: transform 0.2s; }
+  .boards-section details:not([open]) summary::before { transform: rotate(-90deg); }
+  .boards-section .boards-row { padding: 12px; border-radius: 0 0 5px 5px; overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="boards-section">
+  <details open id="boards-details">
+    <summary>PCB Boards</summary>
+    <div class="boards-row" id="boards-row"></div>
+  </details>
+</div>
+<div class="parts-section">
+  <details open id="parts-details">
+    <summary>Parts list <span class="count" id="parts-count"></span></summary>
+    <div class="parts-table-scroll">
+    <table class="parts-table">
+      <thead><tr><th>Designation</th><th>Part Number</th><th>Description</th><th>Board</th></tr></thead>
+      <tbody id="parts-tbody"></tbody>
+    </table>
+    </div>
+  </details>
+</div>
+<div id="pcb-popup">
+  <div class="pp-header">
+    <div class="pp-desig" id="pp-desig"></div>
+    <button class="pp-close" onclick="closePopup()">&#x2715;</button>
+  </div>
+  <div class="pp-partnum" id="pp-partnum"></div>
+  <div class="pp-desc" id="pp-desc"></div>
+  <div class="pp-board" id="pp-board"></div>
+</div>
+<script>
+var ANNOTATIONS = ${annotationsJSON};
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var frontFallback = ${frontFallback};
+  var backFallback  = ${backFallback};
+  window.IMAGES = {
+    front: { url: ${frontURL} || params.get('front') || frontFallback || null, w: ${frontW}, h: ${frontH} },
+    back:  { url: ${backURL}  || params.get('back')  || backFallback  || null, w: ${backW},  h: ${backH} }
+  };
+})();
+
+function esc(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function buildBoard(side) {
+  var info = IMAGES[side];
+  if (!info || !info.url) return null;
+  var panel = document.createElement('div');
+  panel.className = 'board-panel';
+  var lbl = document.createElement('div');
+  lbl.className = 'board-label';
+  lbl.textContent = side.charAt(0).toUpperCase() + side.slice(1);
+  var wrap = document.createElement('div');
+  wrap.className = 'board-img-wrap';
+  wrap.id = 'wrap-' + side;
+  var img = document.createElement('img');
+  img.src = info.url;
+  img.alt = 'Kiwi PCB ' + side;
+  img.id = 'img-' + side;
+  img.onload = function() { positionRegions(side); };
+  wrap.appendChild(img);
+  panel.appendChild(lbl);
+  panel.appendChild(wrap);
+
+  // Regions
+  ANNOTATIONS.filter(function(a) { return a.side === side; }).forEach(function(a) {
+    var div = document.createElement('div');
+    div.className = 'anno-region';
+    div.dataset.id = a.id;
+    var lbl2 = document.createElement('div');
+    lbl2.className = 'anno-label';
+    lbl2.textContent = a.designation || '?';
+    div.appendChild(lbl2);
+    div.addEventListener('click', function(e) { e.stopPropagation(); showPopup(e, a); });
+    wrap.appendChild(div);
+  });
+
+  return panel;
+}
+
+function positionRegions(side) {
+  var img = document.getElementById('img-' + side);
+  var wrap = document.getElementById('wrap-' + side);
+  if (!img || !wrap) return;
+  var scaleX = img.clientWidth / IMAGES[side].w;
+  var scaleY = img.clientHeight / IMAGES[side].h;
+  ANNOTATIONS.filter(function(a) { return a.side === side; }).forEach(function(a) {
+    var div = wrap.querySelector('[data-id="' + a.id + '"]');
+    if (!div) return;
+    div.style.left   = (a.x * scaleX) + 'px';
+    div.style.top    = (a.y * scaleY) + 'px';
+    div.style.width  = (a.w * scaleX) + 'px';
+    div.style.height = (a.h * scaleY) + 'px';
+    // Apply custom label position if saved
+    var lbl2 = div.querySelector('.anno-label');
+    if (lbl2 && a.labelX !== undefined && a.labelY !== undefined) {
+      lbl2.style.left = ((a.labelX - a.x) * scaleX) + 'px';
+      lbl2.style.top  = ((a.labelY - a.y) * scaleY) + 'px';
+    }
+  });
+}
+
+var popup = document.getElementById('pcb-popup');
+function inlineCode(html) {
+  return html.replace(/\`([^\`]+)\`/g, '<code>$1</code>');
+}
+function linkify(text) {
+  if (!text) return '';
+  var parts = text.split(/(<a\\s+href="https?:\\/\\/[^"]*"[^>]*>[\\s\\S]*?<\\/a>)/gi);
+  return parts.map(function(part, i) {
+    if (i % 2 === 1) {
+      var m = part.match(/<a\\s+href="(https?:\\/\\/[^"]+)"[^>]*>([\\s\\S]*?)<\\/a>/i);
+      if (m) return '<a href="' + esc(m[1]) + '" target="_blank" rel="noopener">' + esc(m[2]) + '<\/a>';
+      return esc(part);
+    }
+    return part.split(/(\\[[^\\]]+\\]\\(https?:\\/\\/[^)]+\\)|https?:\\/\\/[^\\s<>"]+)/).map(function(p, j) {
+      if (j % 2 === 0) return inlineCode(esc(p));
+      var md = p.match(/^\\[([^\\]]+)\\]\\((https?:\\/\\/[^)]+)\\)$/);
+      if (md) return '<a href="' + esc(md[2]) + '" target="_blank" rel="noopener">' + esc(md[1]) + '<\/a>';
+      return '<a href="' + esc(p) + '" target="_blank" rel="noopener">' + esc(p) + '<\/a>';
+    }).join('');
+  }).join('');
+}
+function showPopup(e, a) {
+  document.getElementById('pp-desig').textContent = a.designation || '(unnamed)';
+  document.getElementById('pp-partnum').innerHTML = linkify(a.partNumber || '');
+  document.getElementById('pp-desc').innerHTML = linkify(a.description || '');
+  document.getElementById('pp-board').textContent = 'PCB: ' + (a.side === 'front' ? 'Front' : 'Back');
+  popup.style.display = 'block';
+  positionPopup(e);
+}
+function positionPopup(e) {
+  var x = e.clientX + 14, y = e.clientY + 14;
+  if (x + 310 > window.innerWidth) x = Math.max(4, e.clientX - 310);
+  if (y + 180 > window.innerHeight) y = Math.max(4, e.clientY - 180);
+  popup.style.left = x + 'px';
+  popup.style.top = y + 'px';
+}
+function closePopup() { popup.style.display = 'none'; }
+document.addEventListener('click', function(e) {
+  if (popup.style.display === 'block' && !popup.contains(e.target)) closePopup();
+});
+
+// Build
+var row = document.getElementById('boards-row');
+['front','back'].forEach(function(side) {
+  var panel = buildBoard(side);
+  if (panel) row.appendChild(panel);
+});
+
+// Reposition on resize
+window.addEventListener('resize', function() {
+  ['front','back'].forEach(positionRegions);
+});
+
+// Notify parent frame of height changes when sections are toggled
+function notifyParentHeight() {
+  window.parent.postMessage({ type: 'pcb-resize', height: document.body.scrollHeight }, '*');
+}
+['boards-details', 'parts-details'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('toggle', notifyParentHeight);
+});
+
+// Theme support via postMessage
+var THEME_CSS_PCB = {
+  'deuteranopia':
+    'body{background:#0d1e3c;color:#fff8e1}' +
+    '.board-img-wrap img{border-color:#1e3a6e}' +
+    '.anno-region{border-color:#f5a428;background:rgba(245,164,40,0.08)}' +
+    '.anno-region:hover{background:rgba(245,164,40,0.25);border-color:#f7c06e}' +
+    '.anno-label{background:#f5a428}' +
+    '#pcb-popup{background:#0d2c52;border-color:#f5a428}' +
+    '#pcb-popup .pp-desig{color:#f5a428}' +
+    '#pcb-popup .pp-close:hover{color:#f5a428}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#f5a428}' +
+    '.parts-table .td-desig{color:#f5a428}',
+  'high-contrast':
+    'body{background:#000;color:#fff}' +
+    '.board-img-wrap img{border-color:#fff}' +
+    '.anno-region{border-color:#ff0;background:rgba(255,255,0,0.07)}' +
+    '.anno-region:hover{background:rgba(255,255,0,0.2);border-color:#ffe}' +
+    '.anno-label{background:#7a7000;color:#ff0}' +
+    '#pcb-popup{background:#000;border-color:#ff0}' +
+    '#pcb-popup .pp-desig{color:#ff0}' +
+    '#pcb-popup .pp-close:hover{color:#ff0}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#ff0}' +
+    '.parts-section summary,.boards-section summary{background:#111;color:#fff}' +
+    '.parts-table{background:#000}.parts-table th{background:#111;color:#fff;border-color:#555}' +
+    '.parts-table td{border-color:#333}.parts-table tr:hover td{background:#1a1a1a}' +
+    '.parts-table .td-desig{color:#ff0}' +
+    '.parts-section details,.boards-section details{border-color:#555}',
+  'monochrome':
+    'body{background:#111;color:#e0e0e0}' +
+    '.board-img-wrap img{border-color:#444;filter:grayscale(1)}' +
+    '.anno-region{border-color:#aaa;background:rgba(170,170,170,0.07)}' +
+    '.anno-region:hover{background:rgba(170,170,170,0.2);border-color:#ccc}' +
+    '.anno-label{background:#555;color:#e0e0e0}' +
+    '#pcb-popup{background:#1a1a1a;border-color:#666}' +
+    '#pcb-popup .pp-desig{color:#ccc}' +
+    '#pcb-popup .pp-close:hover{color:#fff}' +
+    '.parts-section summary::before,.boards-section summary::before{color:#aaa}' +
+    '.parts-section summary,.boards-section summary{background:#1e1e1e;color:#d0d0d0}' +
+    '.parts-table{background:#111}.parts-table th{background:#1a1a1a;color:#bbb;border-color:#333}' +
+    '.parts-table td{border-color:#222}.parts-table tr:hover td{background:#181818}' +
+    '.parts-table .td-desig{color:#c0c0c0}' +
+    '.parts-section details,.boards-section details{border-color:#333}'
+};
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'setTheme') return;
+  var t = e.data.theme || 'default';
+  var el = document.getElementById('_kiwi_theme_override');
+  if (!el) { el = document.createElement('style'); el.id = '_kiwi_theme_override'; document.head.appendChild(el); }
+  el.textContent = THEME_CSS_PCB[t] || '';
+});
+
+// Parts table
+(function buildPartsTable() {
+  var tbody = document.getElementById('parts-tbody');
+  var countEl = document.getElementById('parts-count');
+  if (!tbody) return;
+  var sorted = ANNOTATIONS.slice().sort(function(a, b) {
+    if (a.side !== b.side) return a.side === 'front' ? -1 : 1;
+    return (a.designation || '').localeCompare(b.designation || '', undefined, { numeric: true, sensitivity: 'base' });
+  });
+  if (countEl) countEl.textContent = '(' + sorted.length + ')';
+  sorted.forEach(function(a) {
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="td-desig">' + esc(a.designation || '(unnamed)') + '<\/td>' +
+      '<td class="td-partnum">' + linkify(a.partNumber || '') + '<\/td>' +
+      '<td class="td-desc">' + linkify(a.description || '') + '<\/td>' +
+      '<td class="td-board">' + (a.side === 'front' ? 'Front' : 'Back') + '<\/td>';
+    tr.style.cursor = 'pointer';
+    tr.addEventListener('click', function(e) {
+      closePopup();
+      var region = document.querySelector('[data-id="' + a.id + '"]');
+      if (!region) return;
+      document.querySelectorAll('.anno-region.is-highlighted').forEach(function(el) {
+        el.classList.remove('is-highlighted');
+      });
+      region.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function() {
+        region.classList.add('is-highlighted');
+        region.addEventListener('animationend', function() {
+          region.classList.remove('is-highlighted');
+        }, { once: true });
+      }, 320);
+    });
+    tbody.appendChild(tr);
+  });
+})();
+<\/script>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = exportFilename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  const linkedNote = imageMode === 'linked' ? ' — place it alongside the image files.' : ' — place it in your assets folder and embed in index.md.';
+  setStatus(`Viewer exported as ${exportFilename}${linkedNote}`);
+}
+
+// ─── Utils ────────────────────────────────────────────────────────────────────
+
+function esc(s) {
+  if (!s) return '';
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function setStatus(msg) {
+  document.getElementById('status-bar').textContent = msg;
+}
+
+// ─── Start ────────────────────────────────────────────────────────────────────
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
