@@ -82,6 +82,20 @@ if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] && [[ "$SIGN_TAG" != "1" ]]; then
   exit 1
 fi
 
+# Pre-flight: if signing with the default key, verify GPG has a usable secret
+# key before touching anything. (When -u is given git handles key lookup itself.)
+if [[ "$SIGN_TAG" == "1" ]] && [[ -z "$SIGN_KEY" ]]; then
+  _gpg_key="$(git config user.signingkey 2>/dev/null || true)"
+  if [[ -z "$_gpg_key" ]]; then
+    _gpg_key="$(git config user.email 2>/dev/null || true)"
+  fi
+  if ! gpg --list-secret-keys "${_gpg_key:-}" &>/dev/null; then
+    echo "Error: no usable GPG secret key found for '${_gpg_key:-<unset>}'." >&2
+    echo "       Configure user.signingkey, or pass -u <keyid> to specify one." >&2
+    exit 1
+  fi
+fi
+
 # ── helpers ───────────────────────────────────────────────────────────────────
 
 local_tag_exists()     { git rev-parse "refs/tags/$1" &>/dev/null; }
