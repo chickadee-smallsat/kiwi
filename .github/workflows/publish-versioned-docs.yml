@@ -85,19 +85,19 @@ jobs:
           if [[ "$VERSION" != "latest" ]] && [[ ! -d "gh-pages/latest/assets" ]]; then
             mkdir -p "gh-pages/latest"
             cat > "gh-pages/latest/index.html" <<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=../${VERSION}/">
-  <title>Redirecting — Kiwi Docs</title>
-</head>
-<body>
-  <p>Redirecting to the latest pre-release documentation…</p>
-  <p><a href="../${VERSION}/">Continue to ${VERSION}</a></p>
-</body>
-</html>
-HTML
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0; url=../${VERSION}/">
+            <title>Redirecting — Kiwi Docs</title>
+          </head>
+          <body>
+            <p>Redirecting to the latest pre-release documentation…</p>
+            <p><a href="../${VERSION}/">Continue to ${VERSION}</a></p>
+          </body>
+          </html>
+          HTML
           fi
 
           if [[ -f gh-pages/versions.json ]]; then
