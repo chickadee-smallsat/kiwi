@@ -7,7 +7,7 @@
 #let i2c = [I#super([2])C]
 
 #let metadata = (
-  title: [Kiwi Mainboard Datasheet (Work In Progress)],
+  title: [Kiwi Mainboard Datasheet],
   product: "Kiwi Mainboard",
   product_url: "https://github.com/chickadee-smallsat/kiwi-mainboard",
 )

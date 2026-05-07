@@ -5,7 +5,7 @@
 This section covers advanced topics for users who want to get more out of their Kiwi.
 
 Datasheet for Kiwi is provided below.
-{% include pdf-embed.html src="/datasheet/kiwi-mainboard-ds.pdf" label="Kiwi Mainboard Datasheet" %}
+{% include pdf-embed.html src="/datasheet/kiwi-mainboard-ds.pdf" label="Kiwi Datasheet" %}
 
 # Programming your Kiwi
 
@@ -120,8 +120,9 @@ The asynchronous programming model is especially useful on the Kiwi, which is a 
 Kiwi leverages the [embassy](https://embassy.dev/) framework to achieve this, which supports the Raspberry Pi RP2350B microcontroller very well.
 The pre-loaded firmware is written in Rust, and leverages embassy to implement a cooperative multi-tasking environment.
 
-However, Rust development is more advanced and would be more difficult to introduce in a simple manual.
-Development of a [VSCode](https://code.visualstudio.com/) extension is in progress, that would simplify the process of starting development on your Kiwi using the Rust programming language.
-This document will be updated as these resources are made available.
+However, Rust development is more advanced and would be more difficult to introduce in this manual.
+Source code for the firmware pre-loaded in your Kiwi is available [here](https://github.com/chickadee-smallsat/kiwi-firmware).
+Documentation for the firmware is available on [GitHub pages](https://chickadee-smallsat.github.io/kiwi-firmware).
+
 
 </section>

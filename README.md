@@ -1,3 +1,3 @@
 # Kiwi: The Single-Board Satellite
 
-This repository contains the Kiwi getting-started manual (Jekyll site).
+Visit [Kiwi Manual](https://chickadee-smallsat.github.io/kiwi) for details.
