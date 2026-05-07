@@ -69,29 +69,53 @@ REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 
 cd "$REPO_ROOT"
 
+# ── pre-flight checks ────────────────────────────────────────────────────────
+
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "Error: there are uncommitted changes. Commit or stash them before re-publishing." >&2
+  exit 1
+fi
+
+# Solid releases (vX.Y.Z with no pre-release suffix) must be signed.
+if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] && [[ "$SIGN_TAG" != "1" ]]; then
+  echo "Error: solid release '$TAG' must be signed. Use --sign or -u <keyid>." >&2
+  exit 1
+fi
+
 # ── helpers ───────────────────────────────────────────────────────────────────
 
 local_tag_exists()     { git rev-parse "refs/tags/$1" &>/dev/null; }
 remote_tag_exists()    { git ls-remote --exit-code --tags  "$REMOTE" "refs/tags/$1" &>/dev/null; }
 remote_branch_exists() { git ls-remote --exit-code --heads "$REMOTE" "$1" &>/dev/null; }
 
-# ── 1. Remove existing tag ────────────────────────────────────────────────────
+# ── 1. Remove local tag so we can recreate it ────────────────────────────────
 
-if local_tag_exists "$TAG" || remote_tag_exists "$TAG"; then
-  echo "==> Tag '$TAG' exists — removing before re-publish"
-
-  if local_tag_exists "$TAG"; then
-    echo "    Deleting local tag '$TAG'"
-    git tag -d "$TAG"
-  fi
-
-  if remote_tag_exists "$TAG"; then
-    echo "    Deleting remote tag '$TAG'"
-    git push "$REMOTE" ":refs/tags/$TAG"
-  fi
+if local_tag_exists "$TAG"; then
+  echo "==> Deleting local tag '$TAG'"
+  git tag -d "$TAG"
 fi
 
-# ── 2. Undo the gh-pages commit for this tag ─────────────────────────────────
+# ── 2. Create the local tag (may fail if GPG key is not available) ────────────
+
+if [[ "$SIGN_TAG" == "1" ]]; then
+  if [[ -n "$SIGN_KEY" ]]; then
+    echo "==> Creating signed local tag '$TAG' (key: $SIGN_KEY)"
+    git tag -s -u "$SIGN_KEY" "$TAG"
+  else
+    echo "==> Creating signed local tag '$TAG' (default GPG key)"
+    git tag -s "$TAG"
+  fi
+else
+  echo "==> Creating local tag '$TAG'"
+  git tag "$TAG"
+fi
+
+# ── 3. Remove remote tag, undo gh-pages commit, and push ─────────────────────
+
+if remote_tag_exists "$TAG"; then
+  echo "==> Deleting remote tag '$TAG'"
+  git push "$REMOTE" ":refs/tags/$TAG"
+fi
 
 if remote_branch_exists gh-pages; then
   WORK_DIR="$(mktemp -d)"
@@ -149,20 +173,7 @@ else
   echo "==> No remote gh-pages branch found — skipping gh-pages cleanup"
 fi
 
-# ── 3. Recreate the tag and push to trigger CI ───────────────────────────────
-
-if [[ "$SIGN_TAG" == "1" ]]; then
-  if [[ -n "$SIGN_KEY" ]]; then
-    echo "==> Creating signed local tag '$TAG' (key: $SIGN_KEY)"
-    git tag -s -u "$SIGN_KEY" "$TAG"
-  else
-    echo "==> Creating signed local tag '$TAG' (default GPG key)"
-    git tag -s "$TAG"
-  fi
-else
-  echo "==> Creating local tag '$TAG'"
-  git tag "$TAG"
-fi
+# ── 4. Push tag to trigger CI ─────────────────────────────────────────────────
 
 echo "==> Pushing tag '$TAG' to '$REMOTE'"
 git push "$REMOTE" "$TAG"
